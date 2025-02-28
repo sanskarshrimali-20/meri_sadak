@@ -24,9 +24,6 @@ class AppColors {
   static const Color blueGradientColor2 =Color(0xFF211D5E);
   static const Color color_E77728 = Color(0xFFE77728);
   static const Color color_4E44E0 = Color(0xFF4E44E0);
-
-
-
-
+  static const Color selectImageColor = Color(0xFFBFC1C5);
 
 }

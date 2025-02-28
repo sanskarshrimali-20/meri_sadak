@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meri_sadak/constants/app_colors.dart';
 import 'package:meri_sadak/constants/app_font_weight.dart';
 
 class CustomTextWidget extends StatelessWidget {
@@ -25,8 +24,8 @@ class CustomTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style:TextStyle(color: AppColors.whiteColor, fontWeight: AppFontWeight.fontWeight400),
-      textAlign: textAlign,
+      style:TextStyle(color: color, fontSize: fontSize, fontWeight: AppFontWeight.fontWeight500),
+      textAlign: TextAlign.center,
     );
   }
 }

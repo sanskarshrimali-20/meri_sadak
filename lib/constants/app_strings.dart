@@ -67,4 +67,26 @@ class AppStrings {
   static const continues = "continue";
   static const previous = "Previous";
 
+  static const aboutTitle = 'About PMGSY';
+  static const aboutPMGSYHeading = 'About PMGSY';
+  static const aboutPMGSYSubHeading = "Pradhan Mantri Gram Sadak Yojana (PMGSY) was launched on 25 December 2000 by Government of India with the objective to provide single all-weather road connectivity to all eligible unconnected habitations of the designated population size in rural areas of the country.";
+  static const aboutPMGSYRoadIdentifyHeading = 'How to identify PMGSY Roads';
+  static const aboutPMGSYRoadIdentifySubHeading = 'Look for these sign boards on road side';
+  static const aboutPMGSYRoadNearbyHeading = 'Find Nearby PMGSY Roads';
+  static const aboutPMGSYRoadNearbySubHeading = 'Look for these sign boards on road side';
+
+  //----Upload image screen------
+  static const uploadImageHeading = 'Upload Image for Feedback';
+  static const uploadImageInstructions = "Kindly upload a well-visible road photo in .jpeg format with a size limit of 1MB.";
+  static const noImagesUploaded = 'No images uploaded.';
+  static const selectImagesText = 'Select Images';
+  static const openCameraText = 'Open Camera & Take Photo';
+  static const imagesUploaded = 'Uploaded Images';
+  static const clearAllImagesText = 'Clear All Images';
+  static const imageLimitText = 'Note: Maximum 3 images are allowed for feedback';
+  static const confirmLocationHeading = 'Confirm Your Location';
+  static const currentLocationLabel = 'Current Location:';
+  static const locationPermissionText = 'Location permission is required to fetch your location.';
+  static const noProfileImageAvailable ="No profile image available";
+
 }

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/screens/roadList/road_list_screen.dart';
-import 'package:meri_sadak/utils/device_size.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/custom_home_tabs.dart';
+import '../registerFeedback/register_feedback_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? userProfile;
@@ -25,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: AppColors.greyHundred,
+      backgroundColor: AppColors.whiteColor,
       appBar: MyAppBar.buildAppBar(
         AppStrings.appName,
         AppStrings.citizenFeedbackSystem,
@@ -45,6 +44,32 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SizedBox(
           child: Column(
             children: [
+              SizedBox(height: 20,),
+              Align(
+                alignment: Alignment.center,
+                // Aligns text to the right end
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterFeedbackScreen()));
+                  },
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppDimensions.di_24,
+                      vertical: AppDimensions.di_15,
+                    ),
+                    // Padding
+                    backgroundColor: AppColors.color_E77728,
+                    // Background color
+                    textStyle: TextStyle(
+                      fontSize: AppDimensions.di_18,
+                    ), // Text style
+                  ),
+                  child: Text(
+                    AppStrings.registerFeedback,
+                    style: TextStyle(color: AppColors.whiteColor),
+                  ),
+                ),
+              ),
               CustomHomeTabs(
                 label: AppStrings.sanctionedRoads,
                 onTap: (label, value) async {
