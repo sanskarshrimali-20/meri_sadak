@@ -21,15 +21,16 @@ class _SubmitFeedbackScreen extends State<SubmitFeedbackScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: AppDimensions.di_20),
+
+        SizedBox(height: AppDimensions.di_30),
 
         Text(
           AppStrings.wouldYouLikeTo,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: AppColors.textColor,
-            fontSize: AppDimensions.di_20,
-            fontWeight: FontWeight.w400,
+            fontSize: AppDimensions.di_18,
+            fontWeight: AppFontWeight.fontWeight500,
           ),
         ),
 
@@ -41,7 +42,7 @@ class _SubmitFeedbackScreen extends State<SubmitFeedbackScreen> {
               AppStrings.yesIWould,
               style: TextStyle(
                 fontSize: AppDimensions.di_18,
-                fontWeight: AppFontWeight.fontWeight400,
+                fontWeight: AppFontWeight.fontWeight500,
               ),
             ),
             Spacer(),
@@ -67,7 +68,7 @@ class _SubmitFeedbackScreen extends State<SubmitFeedbackScreen> {
               AppStrings.noIPrefer,
               style: TextStyle(
                 fontSize: AppDimensions.di_18,
-                fontWeight: AppFontWeight.fontWeight400,
+                fontWeight: AppFontWeight.fontWeight500,
               ),
             ),
             Spacer(),

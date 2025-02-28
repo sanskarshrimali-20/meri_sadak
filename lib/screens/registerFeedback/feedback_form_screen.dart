@@ -36,14 +36,16 @@ class _FeedbackFormScreen extends State<FeedbackFormScreen> {
     return SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 15,),
+
+            SizedBox(height: AppDimensions.di_20,),
+
             Row(
               children: [
                 Text(
                   AppStrings.pMGSYRoad,
                   style: TextStyle(
                     fontSize: AppDimensions.di_18,
-                    fontWeight: AppFontWeight.fontWeight400,
+                    fontWeight: AppFontWeight.fontWeight500,
                   ),
                 ),
                 Spacer(),
@@ -62,19 +64,19 @@ class _FeedbackFormScreen extends State<FeedbackFormScreen> {
                 ),
               ],
             ),
-            // Radio button 2
+
             Row(
               children: [
                 Text(
                   AppStrings.nonPMGSYRoad,
                   style: TextStyle(
                     fontSize: AppDimensions.di_18,
-                    fontWeight: AppFontWeight.fontWeight400,
+                    fontWeight: AppFontWeight.fontWeight500,
                   ),
                 ),
                 Spacer(),
                 SizedBox(
-                  height: 30, // Adjust the height to control the space for the radio button
+                  height: AppDimensions.di_30, // Adjust the height to control the space for the radio button
                   child: Radio<int>(
                     value: 2,
                     groupValue: _selectedValue,
