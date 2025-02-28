@@ -67,5 +67,4 @@ class AppStrings {
   static const continues = "continue";
   static const previous = "Previous";
 
-
 }
