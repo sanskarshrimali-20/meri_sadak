@@ -35,7 +35,7 @@ class CustomBodyWithGradient extends StatelessWidget {
         // Content of the screen (received as the child widget)
         Positioned.fill(
           child: Padding(
-            padding: const EdgeInsets.all(AppDimensions.di_8),
+            padding: const EdgeInsets.all(AppDimensions.di_16),
             child: child, // Here we render the passed child widget
           ),
         ),

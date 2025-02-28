@@ -4,6 +4,7 @@ import 'package:meri_sadak/constants/app_colors.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
+import 'package:meri_sadak/screens/aboutPmgsy/about_pmgsy.dart';
 import 'package:meri_sadak/screens/registerFeedback/register_feedback_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/drawer_widget.dart';
@@ -115,11 +116,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   title: AppStrings.rateUs,
                   icon: ImageAssetsPath.mail,
                   onClick: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegisterFeedbackScreen()),
-                    );
+
                   },
                 ),
 
@@ -148,7 +145,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 customDrawerWidget(
                   title: AppStrings.about,
                   icon: ImageAssetsPath.info,
-                  onClick: () {},
+                  onClick: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AboutPMGSY()),
+                    );
+                  },
                 ),
               ],
             ),

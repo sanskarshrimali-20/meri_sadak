@@ -22,6 +22,11 @@ class ImageAssetsPath {
   static const submit = "$folderPath/submit.svg";
   static const photo = "$folderPath/photo.svg";
   static const backArrow = "$folderPath/back_arrow.svg";
+  static const pmgsyBanner = "$folderPath/pmgsy_banner.png";
+  static const pmgsyAndPmgsySignBoards = "$folderPath/pmgsy_and_mmgsy_sign_boards.png";
+  // static const backArrow = "$folderPath/back_arrow.svg";
+  // static const backArrow = "$folderPath/back_arrow.svg";
+
 
 
 

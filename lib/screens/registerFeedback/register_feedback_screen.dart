@@ -5,13 +5,13 @@ import 'package:meri_sadak/constants/app_dimensions.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/registerFeedback/feedback_form_screen.dart';
 import 'package:meri_sadak/screens/registerFeedback/submit_feedback_screen.dart';
+import 'package:meri_sadak/screens/registerFeedback/upload_image_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:sadja_progress_stepper/sadja_progress_stepper.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_strings.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
-import 'image_upload_screen.dart';
 
 class RegisterFeedbackScreen extends StatefulWidget {
   const RegisterFeedbackScreen({super.key});
@@ -26,7 +26,6 @@ class _RegisterFeedbackScreen extends State<RegisterFeedbackScreen> {
   late List<StepItem> steps;
 
   isStepCompleted(int index, bool isStepCompleted, bool goBack) {
-
     if (index < 0 || index > 3) {
       return;
     }
@@ -57,7 +56,6 @@ class _RegisterFeedbackScreen extends State<RegisterFeedbackScreen> {
     });
 
     changeCurrentStep(newCurrentStep);
-
   }
 
   @override
@@ -121,7 +119,7 @@ class _RegisterFeedbackScreen extends State<RegisterFeedbackScreen> {
             color: _currentStep > 0 ? Colors.white : Colors.black,
           ),
         ),
-        content: ImageFormScreen(
+        content: UploadImageScreen(
           stepIndex: 1,
           isStepCompleted: isStepCompleted,
         ),
@@ -143,21 +141,19 @@ class _RegisterFeedbackScreen extends State<RegisterFeedbackScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColorGainsBoro,
       appBar: CustomAppBar(
         title: AppStrings.registerFeedback,
-        leadingIcon: ImageAssetsPath.backArrow
+        leadingIcon: ImageAssetsPath.backArrow,
       ),
       body: CustomBodyWithGradient(
-
-          child: SizedBox(
+        child: SizedBox(
           height: DeviceSize.getScreenHeight(context),
           child: Padding(
-            padding: EdgeInsets.all(AppDimensions.di_15),
+            padding: EdgeInsets.all(AppDimensions.di_5),
             child: Container(
               height: DeviceSize.getScreenHeight(context),
               decoration: BoxDecoration(
@@ -169,25 +165,22 @@ class _RegisterFeedbackScreen extends State<RegisterFeedbackScreen> {
 
               padding: EdgeInsets.all(AppDimensions.di_15),
 
-
-                    child: SizedBox(
-                      // padding: EdgeInsets.only(bottom: 10),
-                      // margin: EdgeInsets.symmetric(vertical: AppDimensions.di_20),
-                      height: DeviceSize.getScreenHeight(context)*0.80,
-                      child: SadjaProgressStepper(
-                        key: ValueKey("$_currentStep $_completedSteps"),
-                        steps: steps,
-                        currentStep: _currentStep,
-                        // Optional, default is 0
-                        completedSteps: _completedSteps,
-                        activeStepColor: AppColors.blueGradientColor1,
-                        completedStepColor: AppColors.color_E77728,
-                        incompleteStepColor: Colors.grey,
-                        onStepTapped: (step) => changeCurrentStep(step), // ✅
-                      ),
-
-                ),)
+              child: SizedBox(
+                height: DeviceSize.getScreenHeight(context) * 0.80,
+                child: SadjaProgressStepper(
+                  key: ValueKey("$_currentStep $_completedSteps"),
+                  steps: steps,
+                  currentStep: _currentStep,
+                  // Optional, default is 0
+                  completedSteps: _completedSteps,
+                  activeStepColor: AppColors.blueGradientColor1,
+                  completedStepColor: AppColors.color_E77728,
+                  incompleteStepColor: Colors.grey,
+                  onStepTapped: (step) => changeCurrentStep(step), // ✅
+                ),
               ),
+            ),
+          ),
         ),
       ),
     );
