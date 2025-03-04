@@ -25,5 +25,12 @@ class AppColors {
   static const Color color_E77728 = Color(0xFFE77728);
   static const Color color_4E44E0 = Color(0xFF4E44E0);
   static const Color selectImageColor = Color(0xFFBFC1C5);
+  static const Color color_F3F4F6 =  Color(0xFFF3F4F6);
+
+  static const Color app_bg_color = Color(0xFFE3E3E3);
+  static const Color textFieldBorderColor = Color(0xFFBFC1C5);
+  static const Color textFieldColor = Color(0xFFA9ACB114);
+
+
 
 }

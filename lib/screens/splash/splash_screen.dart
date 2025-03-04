@@ -24,7 +24,7 @@ class _SplashScreen extends State<SplashScreen> with SingleTickerProviderStateMi
     // Start the animation
     _controller.forward().then((_) async {
       // Check login status
-      Navigator.push(context,  MaterialPageRoute(
+      Navigator.pushReplacement(context,  MaterialPageRoute(
         builder: (context) =>
             LoginScreen(), // Pass the profile data
       ),);

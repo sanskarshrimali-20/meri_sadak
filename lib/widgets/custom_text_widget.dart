@@ -25,7 +25,7 @@ class CustomTextWidget extends StatelessWidget {
     return Text(
       text,
       style:TextStyle(color: color, fontSize: fontSize, fontWeight: AppFontWeight.fontWeight500),
-      textAlign: TextAlign.center,
+      textAlign: textAlign,
     );
   }
 }

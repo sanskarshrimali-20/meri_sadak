@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_colors.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
+import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/screens/home/home_screen.dart';
-import 'package:meri_sadak/screens/passwordChange/fogret_change_password_screen.dart';
+import 'package:meri_sadak/screens/passwordChange/forgot_change_password_screen.dart';
 import 'package:meri_sadak/screens/signUp/sign_up_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_container.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_textfield.dart';
+import 'package:meri_sadak/widgets/login_signup_bg_unactive.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
 import '../../widgets/custom_password_widget.dart';
+import '../../widgets/login_signup_bg_active.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,16 +31,14 @@ class _LoginScreen extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body: SingleChildScrollView( // Wrap everything in SingleChildScrollView
-
+      body: SingleChildScrollView(
+        // Wrap everything in SingleChildScrollView
         child: Column(
           children: [
             // Image covering the top 30% of the screen
             Stack(
               children: [
-
                 SizedBox(
                   width: double.infinity,
                   child: Image.asset(
@@ -48,7 +50,8 @@ class _LoginScreen extends State<LoginScreen> {
                 // Adjusting the container's height so it fills the remaining space
                 CustomLoginSignupContainer(
                   marginHeight: 0.40,
-                  height: DeviceSize.getScreenHeight(context), // Set remaining height for the container (full height - image height)
+                  height: DeviceSize.getScreenHeight(context),
+                  // Set remaining height for the container (full height - image height)
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -61,8 +64,9 @@ class _LoginScreen extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: AppDimensions.di_20), // Space between widgets
+                      SizedBox(height: AppDimensions.di_20),
 
+                      // Space between widgets
                       Container(
                         padding: const EdgeInsets.all(AppDimensions.di_16),
                         child: Column(
@@ -79,18 +83,24 @@ class _LoginScreen extends State<LoginScreen> {
                               hintText: AppStrings.password,
                               isPassword: true,
                               isPasswordVisible: _isPasswordVisible,
-                              togglePasswordVisibility: _togglePasswordVisibility,
+                              togglePasswordVisibility:
+                                  _togglePasswordVisibility,
                             ),
                             const SizedBox(height: AppDimensions.di_15),
 
                             Align(
-                              alignment: Alignment.centerRight, // Aligns text to the right end
+                              alignment: Alignment.centerRight,
+                              // Aligns text to the right end
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.push(context,  MaterialPageRoute(
-                                    builder: (context) =>
-                                        ForgetPasswordScreen(), // Pass the profile data
-                                  ),);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) =>
+                                              ForgotPasswordScreen(), // Pass the profile data
+                                    ),
+                                  );
                                 },
                                 child: Text(
                                   AppStrings.forgotPasswordQue,
@@ -99,31 +109,47 @@ class _LoginScreen extends State<LoginScreen> {
                                     fontSize: AppDimensions.di_16,
                                   ),
                                 ),
-                              )
+                              ),
                             ),
 
                             const SizedBox(height: AppDimensions.di_40),
 
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(context,  MaterialPageRoute(
-                                  builder: (context) =>
-                                      HomeScreen(), // Pass the profile data
-                                ),);
+                            CustomLoginSignupBgActiveWidget(
+                              text: AppStrings.login,
+                              fontSize: AppDimensions.di_20,
+                              fontWeight: AppFontWeight.fontWeight500,
+                              color: AppColors.whiteColor,
+                              textAlign: TextAlign.center,
+                              onClick: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) =>
+                                            HomeScreen(), // Pass the profile data
+                                  ),
+                                );
                               },
-                              child: Image.asset(ImageAssetsPath.loginSignupBtBgFill), // Your image path here
                             ),
 
                             const SizedBox(height: AppDimensions.di_20),
 
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(context,  MaterialPageRoute(
-                                  builder: (context) =>
-                                      SignUpScreen(), // Pass the profile data
-                                ),);
+                            CustomLoginSignupBgUnActiveWidget(
+                              text: AppStrings.signUp,
+                              fontSize: AppDimensions.di_20,
+                              fontWeight: AppFontWeight.fontWeight500,
+                              color: AppColors.black,
+                              textAlign: TextAlign.center,
+                              onClick: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) =>
+                                            SignUpScreen(), // Pass the profile data
+                                  ),
+                                );
                               },
-                              child: Image.asset(ImageAssetsPath.loginSignupBtBg),// Your image path here
                             ),
                           ],
                         ),

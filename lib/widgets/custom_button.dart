@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:meri_sadak/constants/app_dimensions.dart';
+import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'custom_text_widget.dart';
 
 class CustomButton extends StatelessWidget {
@@ -11,6 +13,7 @@ class CustomButton extends StatelessWidget {
   final double fontSize;
   final EdgeInsetsGeometry padding;
   final BorderRadiusGeometry borderRadius;
+  final double buttonWidth;
 
   const CustomButton({
     super.key,
@@ -20,9 +23,10 @@ class CustomButton extends StatelessWidget {
     this.iconColor = Colors.white,
     this.textColor = Colors.white,
     this.backgroundColor = Colors.blue,
-    this.fontSize = 15.0,
-    this.padding = const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+    this.fontSize =  AppDimensions.di_15,
+    this.padding = const EdgeInsets.symmetric(vertical:  AppDimensions.di_12, horizontal:  AppDimensions.di_24),
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
+    this.buttonWidth =  AppDimensions.di_100
   });
 
   @override
@@ -31,7 +35,7 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
-        minimumSize: const Size(100, 40),
+        minimumSize: Size(buttonWidth, AppDimensions.di_50),
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
         padding: padding,
       ),
@@ -39,7 +43,7 @@ class CustomButton extends StatelessWidget {
         text: text,
         fontSize: fontSize,
         color: textColor,
-        fontWeight: FontWeight.bold,
+        fontWeight: AppFontWeight.fontWeight500,
         textAlign: TextAlign.center,
         letterSpacing: 0.0,
       ),

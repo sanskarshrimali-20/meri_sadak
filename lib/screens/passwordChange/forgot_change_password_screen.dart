@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/login/login_screen.dart';
+import 'package:meri_sadak/screens/otpVerify/otp_screen.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
+import '../../constants/app_font_weight.dart';
 import '../../constants/app_strings.dart';
 import '../../utils/device_size.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
 import '../../widgets/custom_password_widget.dart';
+import '../../widgets/login_signup_bg_active.dart';
 
-class ForgetPasswordScreen extends StatefulWidget {
-  const ForgetPasswordScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreen();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreen();
 }
 
-class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
+class _ForgotPasswordScreen extends State<ForgotPasswordScreen> {
   bool _isPasswordVisible = false;
 
   final TextEditingController _usernameController = TextEditingController();
@@ -96,9 +99,24 @@ class _ForgetPasswordScreen extends State<ForgetPasswordScreen> {
 
                             const SizedBox(height: AppDimensions.di_40),
 
-                            Image.asset(
-                              ImageAssetsPath.loginSignupBtBgFill,
+                            CustomLoginSignupBgActiveWidget(
+                              text: AppStrings.submit,
+                              fontSize: AppDimensions.di_20,
+                              fontWeight: AppFontWeight.fontWeight500,
+                              color: AppColors.whiteColor,
+                              textAlign: TextAlign.center,
+                              onClick: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) =>
+                                        OtpValidationScreen(), // Pass the profile data
+                                  ),
+                                );
+                              },
                             ),
+
 
                             const SizedBox(height: AppDimensions.di_20),
 

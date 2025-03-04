@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
+import 'package:meri_sadak/screens/aboutPmgsy/about_pmgsy.dart';
 import 'package:meri_sadak/screens/roadList/road_list_screen.dart';
+import 'package:meri_sadak/widgets/custom_dropdown_field.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../widgets/app_bar.dart';
+import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/custom_home_tabs.dart';
 import '../registerFeedback/register_feedback_screen.dart';
@@ -18,13 +23,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _districtController = TextEditingController();
+  final TextEditingController _blockController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.app_bg_color,
       appBar: MyAppBar.buildAppBar(
         AppStrings.appName,
         AppStrings.citizenFeedbackSystem,
@@ -41,56 +50,103 @@ class _HomeScreenState extends State<HomeScreen> {
         child: const CustomDrawer(),
       ),
       body: SingleChildScrollView(
-        child: SizedBox(
+        child: Container(
+          padding: EdgeInsets.all(AppDimensions.di_16),
           child: Column(
             children: [
-              SizedBox(height: 20,),
-              Align(
-                alignment: Alignment.center,
-                // Aligns text to the right end
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterFeedbackScreen()));
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppDimensions.di_24,
-                      vertical: AppDimensions.di_15,
-                    ),
-                    // Padding
-                    backgroundColor: AppColors.color_E77728,
-                    // Background color
-                    textStyle: TextStyle(
-                      fontSize: AppDimensions.di_18,
-                    ), // Text style
-                  ),
-                  child: Text(
-                    AppStrings.registerFeedback,
-                    style: TextStyle(color: AppColors.whiteColor),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutPMGSY()));
+                },
+                child:Image.asset(
+                  ImageAssetsPath.pmgsyIg, // Path to your image in the assets folder
+                  fit: BoxFit.cover, // The image will cover the entire container
+                ) ,
+              ),
+              SizedBox(height: AppDimensions.di_20,),
+              Container(
+                padding: EdgeInsets.all(AppDimensions.di_16),
+                decoration: BoxDecoration(
+                  color: AppColors.whiteColor,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(AppDimensions.di_20), // Rounded corners
                   ),
                 ),
-              ),
-              CustomHomeTabs(
-                label: AppStrings.sanctionedRoads,
-                onTap: (label, value) async {
-                  openRoadListScreen(label, value);
-                },
-              ),
-              SizedBox(height: AppDimensions.di_15),
-              CustomHomeTabs(
-                label: AppStrings.completedRoads,
-                onTap: (label, value) async {
-                  openRoadListScreen(label, value);
-                },
-              ),
+                child: Column(
+                  children: [
 
-              SizedBox(height: AppDimensions.di_15),
-              CustomHomeTabs(
-                label: AppStrings.ongoingRoads,
-                onTap: (label, value) async {
-                  openRoadListScreen(label, value);
-                },
-              ),
+                    CustomDropdownField(
+                      hintText: AppStrings.selectState,
+                      textController: _stateController,
+                      items: [],
+                      dropdownHeight: AppDimensions.di_300,
+                      isRequired: false,
+                    ),
+
+                    CustomDropdownField(
+                      hintText: AppStrings.selectDistrict,
+                      textController: _districtController,
+                      items: [],
+                      dropdownHeight: AppDimensions.di_300,
+                      isRequired: false,
+                    ),
+
+                    CustomDropdownField(
+                      hintText: AppStrings.selectBlock,
+                      textController: _blockController,
+                      items: [],
+                      dropdownHeight: AppDimensions.di_300,
+                      isRequired: false,
+                    ),
+
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: CustomButton(
+                        text: AppStrings.submit,
+                        onPressed: () async {
+
+                        },
+                        icon: Icons.arrow_forward,
+                        iconColor: AppColors.whiteColor,
+                        textColor: AppColors.whiteColor,
+                        backgroundColor: AppColors.color_E77728,
+                        fontSize: AppDimensions.di_18,
+                        padding:
+                        EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
+                        borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                      ),
+                    ),
+
+                    SizedBox(height: AppDimensions.di_20,),
+
+                    CustomHomeTabs(
+                      label: AppStrings.sanctionedRoads,
+                      onTap: (label, value) async {
+                        openRoadListScreen(label, value);
+                      },
+                      image: ImageAssetsPath.sanctionIg,
+                    ),
+                    SizedBox(height: AppDimensions.di_15),
+                    CustomHomeTabs(
+                      label: AppStrings.completedRoads,
+                      onTap: (label, value) async {
+                        openRoadListScreen(label, value);
+                      },
+                      image: ImageAssetsPath.completedIg,
+                    ),
+
+                    SizedBox(height: AppDimensions.di_15),
+                    CustomHomeTabs(
+                      label: AppStrings.ongoingRoads,
+                      onTap: (label, value) async {
+                        openRoadListScreen(label, value);
+                      },
+                      image: ImageAssetsPath.ongoingIg,
+                    ),
+                  ],
+                ),
+              )
+
             ],
           ),
         )

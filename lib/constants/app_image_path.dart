@@ -4,8 +4,6 @@ class ImageAssetsPath {
   static const splashScreen = "$folderPath/splash_screen.png";
   static const loginBg = "$folderPath/login_bg.png";
   static const phone = "$folderPath/phone.svg";
-  static const loginSignupBtBgFill = "$folderPath/login_signup_bt_bg_fill.png";
-  static const loginSignupBtBg = "$folderPath/login_signup_bt_bg.png";
   static const forgetPasswordBg = "$folderPath/forget_password_bg.png";
   static const signupBg = "$folderPath/signup_bg.png";
   static const iconPerson = "$folderPath/icon_person.svg";
@@ -24,8 +22,13 @@ class ImageAssetsPath {
   static const backArrow = "$folderPath/back_arrow.svg";
   static const pmgsyBanner = "$folderPath/pmgsy_banner.png";
   static const pmgsyAndPmgsySignBoards = "$folderPath/pmgsy_and_mmgsy_sign_boards.png";
-  // static const backArrow = "$folderPath/back_arrow.svg";
-  // static const backArrow = "$folderPath/back_arrow.svg";
+  static const homeHeaderBg = "$folderPath/home_header_bg";
+  static const sanctionIg = "$folderPath/sanction_ig.svg";
+  static const ongoingIg = "$folderPath/ongoing_ig.svg";
+  static const completedIg = "$folderPath/completed_ig.svg";
+  static const pmgsyIg = "$folderPath/pmgsy_bg.png";
+
+
 
 
 
