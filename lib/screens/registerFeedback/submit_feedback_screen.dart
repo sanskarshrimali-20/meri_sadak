@@ -3,6 +3,8 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_font_weight.dart';
 import '../../constants/app_strings.dart';
+import '../../widgets/custom_button.dart';
+import '../../widgets/custom_text_widget.dart';
 
 class SubmitFeedbackScreen extends StatefulWidget {
   final int stepIndex;
@@ -24,26 +26,26 @@ class _SubmitFeedbackScreen extends State<SubmitFeedbackScreen> {
 
         SizedBox(height: AppDimensions.di_30),
 
-        Text(
-          AppStrings.wouldYouLikeTo,
+        CustomTextWidget(
+          text: AppStrings.wouldYouLikeTo,
+          fontSize: AppDimensions.di_18,
+          color: AppColors.blackMagicColor,
+          fontWeight: AppFontWeight.fontWeight500,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: AppColors.textColor,
-            fontSize: AppDimensions.di_18,
-            fontWeight: AppFontWeight.fontWeight500,
-          ),
+          // textAlign: AppFontSizeWeight.textAlignCenter,
+          // letterSpacing: AppFontSizeWeight.letterSpacing_0_0,
         ),
 
         SizedBox(height: AppDimensions.di_20),
 
         Row(
           children: [
-            Text(
-              AppStrings.yesIWould,
-              style: TextStyle(
-                fontSize: AppDimensions.di_18,
-                fontWeight: AppFontWeight.fontWeight500,
-              ),
+            CustomTextWidget(
+              text: AppStrings.yesIWould,
+              fontSize: AppDimensions.di_18,
+              color: AppColors.blackMagicColor,
+              fontWeight: AppFontWeight.fontWeight500,
+              textAlign: TextAlign.left,
             ),
             Spacer(),
             SizedBox(
@@ -64,12 +66,12 @@ class _SubmitFeedbackScreen extends State<SubmitFeedbackScreen> {
         // Radio button 2
         Row(
           children: [
-            Text(
-              AppStrings.noIPrefer,
-              style: TextStyle(
-                fontSize: AppDimensions.di_18,
-                fontWeight: AppFontWeight.fontWeight500,
-              ),
+            CustomTextWidget(
+              text: AppStrings.noIPrefer,
+              fontSize: AppDimensions.di_18,
+              color: AppColors.blackMagicColor,
+              fontWeight: AppFontWeight.fontWeight500,
+              textAlign: TextAlign.left,
             ),
             Spacer(),
             SizedBox(
@@ -88,36 +90,31 @@ class _SubmitFeedbackScreen extends State<SubmitFeedbackScreen> {
           ],
         ),
 
-        SizedBox(height: AppDimensions.di_20),
+        SizedBox(height: AppDimensions.di_30),
 
         Row(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              // Aligns text to the right end
-              child: TextButton(
-                onPressed: () {
+              child: CustomButton(
+                text: AppStrings.back,
+                onPressed: () async {
                   widget.isStepCompleted(
                     widget.stepIndex,
-                    false, true
+                    true,
+                    false,
                   );
                 },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppDimensions.di_24,
-                    vertical: AppDimensions.di_15,
-                  ),
-                  // Padding
-                  backgroundColor: AppColors.color_E77728,
-                  // Background color
-                  textStyle: TextStyle(
-                    fontSize: AppDimensions.di_18,
-                  ), // Text style
+                icon: Icons.arrow_forward,
+                iconColor: AppColors.whiteColor,
+                textColor: AppColors.whiteColor,
+                backgroundColor: AppColors.color_E77728,
+                fontSize: AppDimensions.di_18,
+                padding: EdgeInsets.symmetric(
+                  vertical: 06,
+                  horizontal: 15,
                 ),
-                child: Text(
-                  AppStrings.previous,
-                  style: TextStyle(color: AppColors.whiteColor),
-                ),
+                borderRadius: BorderRadius.circular(100),
               ),
             ),
 
@@ -125,34 +122,29 @@ class _SubmitFeedbackScreen extends State<SubmitFeedbackScreen> {
 
             Align(
               alignment: Alignment.centerRight,
-              // Aligns text to the right end
-              child: TextButton(
-                onPressed: () {
+              child: CustomButton(
+                text: AppStrings.submit,
+                onPressed: () async {
                   widget.isStepCompleted(
                     widget.stepIndex,
-                    false, false
+                    true,
+                    false,
                   );
                 },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppDimensions.di_24,
-                    vertical: AppDimensions.di_15,
-                  ),
-                  // Padding
-                  backgroundColor: AppColors.color_E77728,
-                  // Background color
-                  textStyle: TextStyle(
-                    fontSize: AppDimensions.di_18,
-                  ), // Text style
+                icon: Icons.arrow_forward,
+                iconColor: AppColors.whiteColor,
+                textColor: AppColors.whiteColor,
+                backgroundColor: AppColors.color_E77728,
+                fontSize: AppDimensions.di_18,
+                padding: EdgeInsets.symmetric(
+                  vertical: 06,
+                  horizontal: 15,
                 ),
-                child: Text(
-                  AppStrings.next,
-                  style: TextStyle(color: AppColors.whiteColor),
-                ),
+                borderRadius: BorderRadius.circular(100),
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }

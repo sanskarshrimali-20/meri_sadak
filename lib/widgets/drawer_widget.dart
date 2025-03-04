@@ -11,7 +11,7 @@ Widget customDrawerWidget({
   return GestureDetector(
     onTap: onClick, // Trigger the callback when clicked
     child: Container(
-      padding: EdgeInsets.only(left: AppDimensions.di_30, right: AppDimensions.di_30, top: AppDimensions.di_5, bottom: AppDimensions.di_5),
+      padding: EdgeInsets.only(left: AppDimensions.di_10, right: AppDimensions.di_10, top: AppDimensions.di_5, bottom: AppDimensions.di_5),
       child: Row(
         children: [
           // Image before text

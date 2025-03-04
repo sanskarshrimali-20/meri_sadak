@@ -102,36 +102,24 @@ class _RegisterFeedbackScreen extends State<RegisterFeedbackScreen> {
   void initState() {
     steps = [
       StepItem(
-        icon: IconButton(
-          onPressed: () {},
-          icon: SvgPicture.asset(ImageAssetsPath.edit),
-        ),
-        content: FeedbackFormScreen(
+        text: AppStrings.uploadImages,
+        icon: Icons.photo,
+        content: UploadImageScreen(
           stepIndex: 0,
           isStepCompleted: isStepCompleted,
         ),
       ),
       StepItem(
-        icon: IconButton(
-          onPressed: () {},
-          icon: SvgPicture.asset(
-            ImageAssetsPath.photo,
-            color: _currentStep > 0 ? Colors.white : Colors.black,
-          ),
-        ),
-        content: UploadImageScreen(
+        text: AppStrings.fillDetails,
+        icon: Icons.edit,
+        content: FeedbackFormScreen(
           stepIndex: 1,
           isStepCompleted: isStepCompleted,
         ),
       ),
       StepItem(
-        icon: IconButton(
-          onPressed: () {},
-          icon: SvgPicture.asset(
-            ImageAssetsPath.submit,
-            color: _currentStep > 1 ? Colors.white : Colors.black,
-          ),
-        ),
+        text: AppStrings.submit,
+        icon: Icons.save,
         content: SubmitFeedbackScreen(
           stepIndex: 2,
           isStepCompleted: isStepCompleted,
@@ -168,15 +156,24 @@ class _RegisterFeedbackScreen extends State<RegisterFeedbackScreen> {
               child: SizedBox(
                 height: DeviceSize.getScreenHeight(context) * 0.80,
                 child: SadjaProgressStepper(
+                  activeIconColor: AppColors.whiteColor,
+                  incompleteIconColor: AppColors.black,
                   key: ValueKey("$_currentStep $_completedSteps"),
                   steps: steps,
                   currentStep: _currentStep,
                   // Optional, default is 0
                   completedSteps: _completedSteps,
-                  activeStepColor: AppColors.blueGradientColor1,
+                  activeStepColor: AppColors.color_E77728,
                   completedStepColor: AppColors.color_E77728,
+                  activeLineColor: Colors.grey,
+                  incompleteLineColor: Colors.grey,
+                  completedLineColor: AppColors.color_E77728,
                   incompleteStepColor: Colors.grey,
-                  onStepTapped: (step) => changeCurrentStep(step), // ✅
+                  onStepTapped: (step) => changeCurrentStep(step),
+                  completedIconColor: AppColors.whiteColor,
+                  activeTextColor: AppColors.black,
+                  completedTextColor: AppColors.textFieldBorderColor,
+                  incompleteTextColor: AppColors.textFieldBorderColor, //
                 ),
               ),
             ),

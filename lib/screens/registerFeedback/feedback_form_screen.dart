@@ -3,6 +3,8 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_font_weight.dart';
 import '../../constants/app_strings.dart';
+import '../../widgets/custom_button.dart';
+import '../../widgets/custom_dropdown_field.dart';
 import '../../widgets/custom_spinner.dart';
 import '../../widgets/custom_text_field.dart';
 
@@ -37,9 +39,9 @@ class _FeedbackFormScreen extends State<FeedbackFormScreen> {
         child: Column(
           children: [
 
-            SizedBox(height: AppDimensions.di_20,),
+            SizedBox(height: AppDimensions.di_30,),
 
-            Row(
+           /* Row(
               children: [
                 Text(
                   AppStrings.pMGSYRoad,
@@ -109,17 +111,17 @@ class _FeedbackFormScreen extends State<FeedbackFormScreen> {
             ),
 
             SizedBox(height: AppDimensions.di_18),
-
-            CustomDropdownSearch(
+*/
+          /*  CustomDropdownSearch(
               labelText: AppStrings.categoryOfComplaint,
               hintText: AppStrings.selectCategoryOfComplaint,
               textController: _categoryComplaintController,
               items: [],
               dropdownHeight: 300,
               isRequired: true,
-            ),
+            ),*/
 
-            CustomDropdownSearch(
+           /* CustomDropdownSearch(
               labelText: AppStrings.state,
               hintText: AppStrings.selectState,
               textController: _stateController,
@@ -127,28 +129,53 @@ class _FeedbackFormScreen extends State<FeedbackFormScreen> {
               dropdownHeight: 200,
               isRequired: true,
               onChanged: (value) async {},
+            ),*/
+
+            CustomDropdownField(
+              hintText: AppStrings.selectState,
+              textController: _stateController,
+              items: [],
+              dropdownHeight: AppDimensions.di_300,
+              isRequired: true,
             ),
 
             // District dropdown
-            CustomDropdownSearch(
+           /* CustomDropdownSearch(
               labelText: AppStrings.district,
               hintText: AppStrings.selectDistrict,
               textController: _districtController,
               items: [''], // Show a fallback empty option if districts is empty
               dropdownHeight: 200,
               isRequired: true,
+            ),*/
+
+            CustomDropdownField(
+              hintText: AppStrings.selectDistrict,
+              textController: _districtController,
+              items: [],
+              dropdownHeight: AppDimensions.di_300,
+              isRequired: true,
             ),
 
-            CustomDropdownSearch(
+           /* CustomDropdownSearch(
               labelText: AppStrings.block,
               hintText: AppStrings.selectBlock,
               textController: _blockController,
               items: [''], // Show a fallback empty option if districts is empty
               dropdownHeight: 200,
               isRequired: true,
+            ),*/
+
+            CustomDropdownField(
+              hintText: AppStrings.selectBlock,
+              textController: _blockController,
+              items: [],
+              dropdownHeight: AppDimensions.di_300,
+              isRequired: false,
             ),
 
-            CustomDropdownSearch(
+
+           /* CustomDropdownSearch(
               labelText: AppStrings.village,
               hintText: AppStrings.selectVillage,
               textController: _villageController,
@@ -164,6 +191,14 @@ class _FeedbackFormScreen extends State<FeedbackFormScreen> {
               items: [''], // Show a fallback empty option if districts is empty
               dropdownHeight: 200,
               isRequired: true,
+            ),*/
+
+            CustomDropdownField(
+              hintText: AppStrings.selectCategoryOfComplaint,
+              textController: _stateController,
+              items: [],
+              dropdownHeight: AppDimensions.di_300,
+              isRequired: true,
             ),
 
             CustomTextField(
@@ -177,31 +212,60 @@ class _FeedbackFormScreen extends State<FeedbackFormScreen> {
               isRequired: false,
             ),
 
-            Align(
-              alignment: Alignment.centerRight,
-              // Aligns text to the right end
-              child: TextButton(
-                onPressed: () {
-                  widget.isStepCompleted(widget.stepIndex, true, false);
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppDimensions.di_24,
-                    vertical: AppDimensions.di_15,
-                  ),
-                  // Padding
-                  backgroundColor: AppColors.color_E77728,
-                  // Background color
-                  textStyle: TextStyle(
+            Row(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: CustomButton(
+                    text: AppStrings.back,
+                    onPressed: () async {
+                      widget.isStepCompleted(
+                        widget.stepIndex,
+                        true,
+                        false,
+                      );
+                    },
+                    icon: Icons.arrow_forward,
+                    iconColor: AppColors.whiteColor,
+                    textColor: AppColors.whiteColor,
+                    backgroundColor: AppColors.color_E77728,
                     fontSize: AppDimensions.di_18,
-                  ), // Text style
+                    padding: EdgeInsets.symmetric(
+                      vertical:  AppDimensions.di_6,
+                      horizontal:  AppDimensions.di_15,
+                    ),
+                    borderRadius: BorderRadius.circular( AppDimensions.di_100),
+                  ),
                 ),
-                child: Text(
-                  AppStrings.next,
-                  style: TextStyle(color: AppColors.whiteColor),
+
+                Spacer(),
+
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: CustomButton(
+                    text: AppStrings.next,
+                    onPressed: () async {
+                      widget.isStepCompleted(
+                        widget.stepIndex,
+                        true,
+                        false,
+                      );
+                    },
+                    icon: Icons.arrow_forward,
+                    iconColor: AppColors.whiteColor,
+                    textColor: AppColors.whiteColor,
+                    backgroundColor: AppColors.color_E77728,
+                    fontSize: AppDimensions.di_18,
+                    padding: EdgeInsets.symmetric(
+                      vertical:  AppDimensions.di_6,
+                      horizontal:  AppDimensions.di_15,
+                    ),
+                    borderRadius: BorderRadius.circular( AppDimensions.di_100),
+                  ),
                 ),
-              ),
+              ],
             ),
+
           ],
       ),
     );

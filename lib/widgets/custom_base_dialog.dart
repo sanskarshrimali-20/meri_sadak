@@ -62,7 +62,7 @@ void showCustomBaseDialog({
                     ),);*/
                     Navigator.pop(context);  // Dismiss the dialog
                   },
-                  child: Image.asset(ImageAssetsPath.loginSignupBtBgFill),// Your image path here
+                  child: Image.asset(ImageAssetsPath.logout),// Your image path here
                 ),
               ],
             ),

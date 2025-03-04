@@ -20,7 +20,10 @@ class AppStrings {
   static const email = "E-mail";
   static const confirmPassword = "Confirm Password";
   static const alreadyHaveAccount = "Already have an account?";
-  static const iAcceptTermCondition = "I accept Terms & conditions and  Privacy policy.";
+  static const iAccept = "I accept";
+  static const termsCondition = " Terms & conditions";
+  static const and = " and";
+  static const privacyPolicy = " \nPrivacy policy.";
   static const home = "Home";
   static const account = "Account";
   static const settings = "Settings";
@@ -66,6 +69,18 @@ class AppStrings {
   static const meriSadakApplication = "Meri Sadak application allows citizens to register a complaint regarding PMGSY and non PMGSY Roads.";
   static const continues = "continue";
   static const previous = "Previous";
+  static const back = "Back";
+  static const addressNRDDA = "National Rural Roads Development Agency, \n 5th Floor, NBCC Tower, \n Bhikaji Cama Place, \n New Delhi 110066.";
+  static const contactNumberOne = "+91-11-26714001";
+  static const contactNumberTwo = "+91-11-26714002";
+  static const emailId = "Email-Id: merisadakhelp@gmail.com";
+  static const timings = "Timings: 10:00 AM to 5:00 PM";
+  static const didntReceiveOtp = "Didn’t receive an OTP?";
+  static const resendOtp = " Resend OTP";
+  static const weHaveSend = "We have sent OTP on your number";
+  static const otpValidation = "OTP Validation";
+
+
 
   static const aboutTitle = 'About PMGSY';
   static const aboutPMGSYHeading = 'About PMGSY';
@@ -88,5 +103,6 @@ class AppStrings {
   static const currentLocationLabel = 'Current Location:';
   static const locationPermissionText = 'Location permission is required to fetch your location.';
   static const noProfileImageAvailable ="No profile image available";
+
 
 }
