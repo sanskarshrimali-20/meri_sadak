@@ -31,6 +31,11 @@ class AppColors {
   static const Color textFieldBorderColor = Color(0xFFBFC1C5);
   static const Color textFieldColor = Color(0xFFA9ACB114);
 
+  static const Color appBgOne = Color(0xFFFF3535);
+  static const Color appBgTwo = Color(0xFFFF3535);
+  static const Color appBgThree = Color(0xFFFF3535);
+  // #FE6B0A #E9E330
+
 
 
 }

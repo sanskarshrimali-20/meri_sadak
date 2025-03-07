@@ -769,10 +769,10 @@ packages:
     dependency: "direct main"
     description:
       name: sadja_progress_stepper
-      sha256: "5a879f85341fa363a607a4f57ac561d6ad2092eed17cda43c233e996da387444"
+      sha256: f510e21005812a109805847342092380eed635a819d7a9ae25124a0f376866f7
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.5"
   share_plus:
     dependency: "direct main"
     description:

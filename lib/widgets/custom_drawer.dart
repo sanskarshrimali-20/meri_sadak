@@ -6,11 +6,14 @@ import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/screens/aboutPmgsy/about_pmgsy.dart';
 import 'package:meri_sadak/screens/contactUs/contact_us.dart';
-import 'package:meri_sadak/screens/registerFeedback/register_feedback_screen.dart';
+import 'package:meri_sadak/screens/settings/setting_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:meri_sadak/widgets/drawer_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import '../screens/login/login_screen.dart';
+import '../utils/localization_provider.dart';
 import 'custom_base_dialog.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -28,6 +31,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final localizationProvider = Provider.of<LocalizationProvider>(context);
+
     return Drawer(
       width:
           DeviceSize.getScreenWidth(context) -
@@ -54,22 +59,31 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
               child: Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: AppDimensions.di_20),
-                    child: SvgPicture.asset(
-                     ImageAssetsPath.iconPerson, // Path to your image in the assets folder
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                      AppDimensions.di_8,
+                    ),
+                    // Optional rounded corners
+                    child: Image.asset(
+                      ImageAssetsPath.placeHolder,
+                      width: AppDimensions.di_80,
+                      height: AppDimensions.di_80,
                       fit: BoxFit.cover,
-                      color: AppColors.whiteColor,
-                      width: AppDimensions.di_60,
-                      height: AppDimensions.di_60,// The image will cover the entire container
                     ),
                   ),
-                  SizedBox(width:  AppDimensions.di_30,),
-                  Column(
-                    children: [
-                      SizedBox(height:  AppDimensions.di_50,),
-                      CustomTextWidget(text: "Sanskar Shrimali ", fontSize: AppDimensions.di_20, color: AppColors.whiteColor),
-                    ],
+                  SizedBox(width:  AppDimensions.di_10,),
+                  SizedBox(
+                    width: DeviceSize.getScreenWidth(context) * 0.45,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height:  AppDimensions.di_20,),
+                        CustomTextWidget(maxlines:1,text: localizationProvider.localizedStrings['name'] ?? 'Sanskar Shrimali', fontSize: AppDimensions.di_20, color: AppColors.whiteColor),
+                        SizedBox(height: AppDimensions.di_5,),
+                        CustomTextWidget(text: 'Phone No: 9087654321', fontSize: AppDimensions.di_14, color: AppColors.whiteColor, maxlines: 1,),
+                        CustomTextWidget(text: 'Email ID: sanskars@cdac.in', fontSize: AppDimensions.di_14, color: AppColors.whiteColor, maxlines: 1,),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -102,7 +116,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => RegisterFeedbackScreen()),
+                            builder: (context) => SettingScreen()),
                       );
                     },
                   ),
@@ -135,7 +149,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
                   customDrawerWidget(
                     title: AppStrings.share,
-                    icon: ImageAssetsPath.mail,
+                    icon: ImageAssetsPath.share,
                     onClick: () {
                       Share.share('Check out this awesome Flutter app!');
                     },
@@ -174,10 +188,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 title: Text(AppStrings.logout, style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: AppDimensions.di_18)),
 
                 onTap: () async {
-                  /* Navigator.pushReplacement(
+                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  );*/
+                  );
                 },
               ),
 

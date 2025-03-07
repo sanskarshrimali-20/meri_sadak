@@ -4,13 +4,17 @@ import '../constants/app_colors.dart';
 
 class CustomBodyWithGradient extends StatelessWidget {
   final Widget child; // Content to be displayed below the gradient
+  final double childHeight; // Custom height for the child
 
-  const CustomBodyWithGradient({super.key, required this.child});
+  const CustomBodyWithGradient({
+    super.key,
+    required this.child,
+    required this.childHeight,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      fit: StackFit.expand,
       children: [
         // Positioned Gradient Background
         Positioned(
@@ -33,10 +37,13 @@ class CustomBodyWithGradient extends StatelessWidget {
           ),
         ),
         // Content of the screen (received as the child widget)
-        Positioned.fill(
+        Positioned(
           child: Padding(
             padding: const EdgeInsets.all(AppDimensions.di_16),
-            child: child, // Here we render the passed child widget
+            child: SizedBox(
+              height: childHeight, // Custom height for the child
+              child: child, // Here we render the passed child widget
+            ),
           ),
         ),
       ],

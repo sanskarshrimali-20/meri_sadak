@@ -8,10 +8,11 @@ Widget customDrawerWidget({
   required String icon,
   required VoidCallback onClick, // Add the callback here
 }) {
-  return GestureDetector(
-    onTap: onClick, // Trigger the callback when clicked
-    child: Container(
+  return // Trigger the callback when clicked
+     Container(
       padding: EdgeInsets.only(left: AppDimensions.di_10, right: AppDimensions.di_10, top: AppDimensions.di_5, bottom: AppDimensions.di_5),
+       child: GestureDetector(
+         onTap: onClick,
       child: Row(
         children: [
           // Image before text

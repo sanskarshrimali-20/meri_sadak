@@ -225,8 +225,6 @@ class _FeedbackFormScreen extends State<FeedbackFormScreen> {
                         false,
                       );
                     },
-                    icon: Icons.arrow_forward,
-                    iconColor: AppColors.whiteColor,
                     textColor: AppColors.whiteColor,
                     backgroundColor: AppColors.color_E77728,
                     fontSize: AppDimensions.di_18,
@@ -251,8 +249,6 @@ class _FeedbackFormScreen extends State<FeedbackFormScreen> {
                         false,
                       );
                     },
-                    icon: Icons.arrow_forward,
-                    iconColor: AppColors.whiteColor,
                     textColor: AppColors.whiteColor,
                     backgroundColor: AppColors.color_E77728,
                     fontSize: AppDimensions.di_18,

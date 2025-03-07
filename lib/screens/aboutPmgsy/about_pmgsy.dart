@@ -40,14 +40,16 @@ class _AboutPMGSYState extends State<AboutPMGSY> {
       appBar: CustomAppBar(
         title: AppStrings.aboutTitle, leadingIcon: ImageAssetsPath.backArrow,),
       body: CustomBodyWithGradient(
+        childHeight: DeviceSize.getScreenHeight(context),
         child: ListView(
           children: [
             // Carousel Slider
             CustomCarouselSlider(
               imageList: [
                 ImageAssetsPath.pmgsyBanner,
-                ImageAssetsPath.pmgsyBanner,
-                ImageAssetsPath.pmgsyBanner,
+                ImageAssetsPath.pmgsyBannerOne,
+                ImageAssetsPath.pmgsyBannerTwo,
+                ImageAssetsPath.pmgsyBannerThree,
               ],
             ),
 

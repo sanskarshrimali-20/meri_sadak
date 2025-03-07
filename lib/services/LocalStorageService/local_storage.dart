@@ -83,4 +83,14 @@ class LocalSecureStorage {
     String? language = await _storage.read(key: 'languageCode');
     return language;
   }
+
+  Future<String?> getTheme({required String key}) async{
+    final isDark = await _storage.read(key: key) ?? 'false';
+    return isDark;
+  }
+
+  Future<void> setTheme({required String key,  required String value}) async {
+    await _storage.write(key: key, value: value);
+  }
+
 }

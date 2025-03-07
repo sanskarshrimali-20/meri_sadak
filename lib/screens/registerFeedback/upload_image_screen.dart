@@ -249,8 +249,6 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                       child: CustomButton(
                         text: AppStrings.clearAllImagesText,
                         onPressed: () => imagePickerProvider.clearImages(),
-                        icon: Icons.clear,
-                        iconColor: AppColors.blackMagicColor,
                         textColor: AppColors.blackMagicColor,
                         backgroundColor: Colors.white,
                         fontSize: AppDimensions.di_15,
@@ -270,8 +268,6 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                       onPressed: () async {
                         widget.isStepCompleted(widget.stepIndex, true, false);
                       },
-                      icon: Icons.arrow_forward,
-                      iconColor: AppColors.whiteColor,
                       textColor: AppColors.whiteColor,
                       backgroundColor: AppColors.color_E77728,
                       fontSize: AppDimensions.di_18,

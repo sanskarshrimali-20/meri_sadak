@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/otpVerify/otp_input_field.dart';
+import 'package:meri_sadak/screens/passwordChange/password_create_screen.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
@@ -12,7 +13,10 @@ import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/login_signup_bg_active.dart';
 
 class OtpValidationScreen extends StatefulWidget {
-  const OtpValidationScreen({super.key});
+
+  String type;
+
+  OtpValidationScreen({super.key, required this.type});
 
   @override
   State<OtpValidationScreen> createState() => _OtpValidationScreen();
@@ -83,7 +87,14 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                               color: AppColors.whiteColor,
                               textAlign: TextAlign.center,
                               onClick: () {
-
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) =>
+                                        PasswordCreateScreen(type: widget.type), // Pass the profile data
+                                  ),
+                                );
                               },
                             ),
 

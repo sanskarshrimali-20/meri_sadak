@@ -138,6 +138,7 @@ class _RegisterFeedbackScreen extends State<RegisterFeedbackScreen> {
         leadingIcon: ImageAssetsPath.backArrow,
       ),
       body: CustomBodyWithGradient(
+        childHeight: DeviceSize.getScreenHeight(context),
         child: SizedBox(
           height: DeviceSize.getScreenHeight(context),
           child: Padding(

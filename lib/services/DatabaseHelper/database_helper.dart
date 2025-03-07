@@ -25,7 +25,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'meri_sadak.db');
     return await openDatabase(
       path,
-      version: 5,
+      version: 6,
       onCreate: (db, version) async {
 
         await db.execute('PRAGMA foreign_keys = ON;');
@@ -86,6 +86,15 @@ class DatabaseHelper {
           synced TEXT DEFAULT 'false'
         )
        ''');
+
+        await db.execute('PRAGMA foreign_keys = ON;');
+        await db.execute('''
+        CREATE TABLE localization(
+          id INTEGER PRIMARY KEY,
+          language_code TEXT,
+          localized_data TEXT
+        )
+        ''');
       },
     );
   }

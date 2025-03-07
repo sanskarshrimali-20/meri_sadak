@@ -1,34 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meri_sadak/providerData/image_picker_provider.dart';
 import 'package:meri_sadak/providerData/permission_provider.dart';
+import 'package:meri_sadak/providerData/theme_provider.dart';
 import 'package:meri_sadak/screens/splash/splash_screen.dart';
+import 'package:meri_sadak/utils/localization_provider.dart';
+import 'package:meri_sadak/viewmodels/login/login_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
+import 'constants/app_theme.dart';
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+
+  final localizationProvider = LocalizationProvider();
+  await localizationProvider.initLocale();
+
+  final themeProvider = ThemeProvider();
+  await themeProvider.loadTheme();
+
+  runApp(MyApp(localizationProvider: localizationProvider, themeProvider:themeProvider));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
 
-  // This widget is the root of your application.
+  final LocalizationProvider localizationProvider;
+  final ThemeProvider themeProvider;
+
+  const MyApp({Key? key, required this.localizationProvider, required this.themeProvider});
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final _storage = const FlutterSecureStorage(); // Secure storage instance
+
+  bool isDarkMode = false; // Default theme mode
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => widget.localizationProvider),
         ChangeNotifierProvider(create: (_) => PermissionProvider()),
         ChangeNotifierProvider(create: (_) => ImagePickerProvider()),
+        ChangeNotifierProvider(create: (_) => widget.themeProvider),
+
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-          useMaterial3: true,
-        ),
-        home: SplashScreen(),
+      child: Consumer2<LocalizationProvider, ThemeProvider>(
+        builder: (context, languageProvider, themeProvider, child) {
+
+          return MaterialApp(
+            title: 'Meri Sadak',
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeProvider.themeMode, // Set the current theme mode
+            debugShowCheckedModeBanner: false,
+            navigatorKey: navigatorKey,
+            locale: languageProvider.locale,
+            supportedLocales: [
+              Locale('en'), // English
+              Locale('hi'), // Hindi
+            ],
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            home: SplashScreen(),
+          );
+        },
       ),
     );
   }
 }
+
+

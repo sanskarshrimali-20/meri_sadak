@@ -35,6 +35,7 @@ class AppStrings {
   static const selectState = "Select State";
   static const selectDistrict = "Select District";
   static const selectBlock = "Select Block";
+  static const selectRoadName = "Select Road Name";
   static const block = "Block";
   static const feedbackStatus = "Feedback Status";
   static const registerFeedback = "Register Feedback";
@@ -48,6 +49,7 @@ class AppStrings {
   static const categoryOfComplaint = "Category of Complaint";
   static const writeYourFeedback = "Write your feedback";
   static const feedback = "Feedback";
+  static const feedbackDummy = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type";
   static const next = "Next";
   static const howToIdentifyPMGSYRoads = "How to identify PMGSY Roads";
   static const nonPMGSYRoad = "Non PMGSY Road";
@@ -70,15 +72,21 @@ class AppStrings {
   static const continues = "continue";
   static const previous = "Previous";
   static const back = "Back";
-  static const addressNRDDA = "National Rural Roads Development Agency, \n 5th Floor, NBCC Tower, \n Bhikaji Cama Place, \n New Delhi 110066.";
+  static const addressNRDDA = "National Rural Roads Development Agency, 5th Floor, NBCC Tower, Bhikaji Cama Place, New Delhi 110066.";
   static const contactNumberOne = "+91-11-26714001";
   static const contactNumberTwo = "+91-11-26714002";
-  static const emailId = "Email-Id: merisadakhelp@gmail.com";
-  static const timings = "Timings: 10:00 AM to 5:00 PM";
+  static const emailId = "Email-Id:";
+  static const timings = "Timings:";
   static const didntReceiveOtp = "Didn’t receive an OTP?";
   static const resendOtp = " Resend OTP";
   static const weHaveSend = "We have sent OTP on your number";
   static const otpValidation = "OTP Validation";
+  static const selectLanguage = "Select Language";
+  static const resetPassword = "Reset Password";
+  static const createPassword = "Create Password";
+  static const enterRoadDetails = "Enter road details";
+  static const address = "Address";
+
 
 
 
@@ -94,7 +102,7 @@ class AppStrings {
   static const uploadImageHeading = 'Upload Image for Feedback';
   static const uploadImageInstructions = "Kindly upload a well-visible road photo in .jpeg format with a size limit of 1MB.";
   static const noImagesUploaded = 'No images uploaded.';
-  static const selectImagesText = 'Select Images';
+  static const selectImagesText = 'Select photos from your gallery';
   static const openCameraText = 'Open Camera & Take Photo';
   static const imagesUploaded = 'Uploaded Images';
   static const clearAllImagesText = 'Clear All Images';
@@ -103,6 +111,24 @@ class AppStrings {
   static const currentLocationLabel = 'Current Location:';
   static const locationPermissionText = 'Location permission is required to fetch your location.';
   static const noProfileImageAvailable ="No profile image available";
+
+  static const uploadRoadImages = "Upload the road images (Max 3)";
+  static const camera = "Camera";
+  static const gallery = "Gallery";
+  static const noOne = "NoOne";
+  static const preview = "Preview";
+  static const roadLocation = "Road location";
+
+  static const roadImages = "Road Images";
+
+  static const roadDetails = "Road Details";
+
+  static const edit = "Edit";
+
+  static const roadName = "Road Name";
+
+  static const location = "Location";
+
 
 
 }

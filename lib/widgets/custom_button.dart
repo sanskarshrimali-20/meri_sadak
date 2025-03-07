@@ -6,8 +6,6 @@ import 'custom_text_widget.dart';
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
-  final IconData icon;
-  final Color iconColor;
   final Color textColor;
   final Color backgroundColor;
   final double fontSize;
@@ -19,8 +17,6 @@ class CustomButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    required this.icon,
-    this.iconColor = Colors.white,
     this.textColor = Colors.white,
     this.backgroundColor = Colors.blue,
     this.fontSize =  AppDimensions.di_15,
