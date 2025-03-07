@@ -41,7 +41,7 @@ class CustomGestureContainer extends StatelessWidget {
             width: 1,
           ),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 20.44, horizontal: 12.77),
+        padding: const EdgeInsets.symmetric(vertical: 10.44, horizontal: 12.77),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

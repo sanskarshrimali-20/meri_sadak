@@ -6,13 +6,12 @@ import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/screens/home/home_screen.dart';
-import 'package:meri_sadak/screens/passwordChange/forgot_change_password_screen.dart';
+import 'package:meri_sadak/screens/passwordChange/forgot_reset_password_screen.dart';
 import 'package:meri_sadak/screens/signUp/sign_up_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_container.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_textfield.dart';
 import 'package:meri_sadak/widgets/login_signup_bg_unactive.dart';
-import '../../services/DatabaseHelper/database_helper.dart';
 import '../../widgets/custom_password_widget.dart';
 import '../../widgets/login_signup_bg_active.dart';
 
@@ -71,6 +70,7 @@ class _LoginScreen extends State<LoginScreen> {
                         padding: const EdgeInsets.all(AppDimensions.di_16),
                         child: Column(
                           children: [
+
                             customLoginSignupTextFieldWidget(
                               textEditController: _usernameController,
                               hintText: AppStrings.phoneNo,
@@ -86,6 +86,7 @@ class _LoginScreen extends State<LoginScreen> {
                               togglePasswordVisibility:
                                   _togglePasswordVisibility,
                             ),
+
                             const SizedBox(height: AppDimensions.di_15),
 
                             Align(
@@ -98,7 +99,7 @@ class _LoginScreen extends State<LoginScreen> {
                                     MaterialPageRoute(
                                       builder:
                                           (context) =>
-                                              ForgotPasswordScreen(), // Pass the profile data
+                                              ForgotResetPasswordScreen(type: AppStrings.forgotPassword), // Pass the profile data
                                     ),
                                   );
                                 },
@@ -121,7 +122,7 @@ class _LoginScreen extends State<LoginScreen> {
                               color: AppColors.whiteColor,
                               textAlign: TextAlign.center,
                               onClick: () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder:
@@ -163,30 +164,6 @@ class _LoginScreen extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  void saveLocalizationData() async {
-    final dbHelper = DatabaseHelper();
-
-    // English localization data
-    Map<String, String> enLocalization = {
-      "settings": "Settings",
-      "name": "Sanskar",
-      "general_settings": "General Settings",
-      // other English translations
-    };
-
-    // Hindi localization data
-    Map<String, String> hiLocalization = {
-      "settings": "सेटिंग्स",
-      "name": "संस्कार",
-      "general_settings": "सामान्य सेटिंग्स",
-      // other Hindi translations
-    };
-
-    // Save English and Hindi data
-    await dbHelper.insertLocalization('en', enLocalization);
-    await dbHelper.insertLocalization('hi', hiLocalization);
   }
 
   void _togglePasswordVisibility() {

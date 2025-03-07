@@ -10,22 +10,23 @@ import '../../utils/device_size.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
 import '../../widgets/custom_password_widget.dart';
+import '../../widgets/custom_text_widget.dart';
 import '../../widgets/login_signup_bg_active.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+class ForgotResetPasswordScreen extends StatefulWidget {
+
+  String type;
+
+  ForgotResetPasswordScreen({super.key, required this.type});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreen();
+  State<ForgotResetPasswordScreen> createState() => _ForgotResetPasswordScreen();
 }
 
-class _ForgotPasswordScreen extends State<ForgotPasswordScreen> {
-  bool _isPasswordVisible = false;
+class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
 
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmController =
-      TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneNoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +42,7 @@ class _ForgotPasswordScreen extends State<ForgotPasswordScreen> {
                   width: double.infinity,
                   child: Image.asset(
                     ImageAssetsPath.forgetPasswordBg,
-                    // Path to the background image
-                    fit:
-                        BoxFit
-                            .cover, // Make sure the image covers the container
+                    fit: BoxFit.cover, // Make sure the image covers the container
                   ),
                 ),
 
@@ -55,15 +53,9 @@ class _ForgotPasswordScreen extends State<ForgotPasswordScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Example: Add a TextField inside the white container
-                      Text(
-                        AppStrings.forgotPassword,
-                        style: TextStyle(
-                          color: AppColors.textColor,
-                          fontSize: AppDimensions.di_24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+
+                      CustomTextWidget(text: widget.type, fontSize: AppDimensions.di_24, color: AppColors.black),
+
                       SizedBox(height: AppDimensions.di_20), // Space between widgets
 
                       Container(
@@ -72,32 +64,36 @@ class _ForgotPasswordScreen extends State<ForgotPasswordScreen> {
                           children: [
 
                             customLoginSignupTextFieldWidget(
-                              textEditController: _usernameController,
+                              textEditController: _phoneNoController,
                               hintText: AppStrings.phoneNo,
                               icon: ImageAssetsPath.phone,
                             ),
+
                             const SizedBox(height: AppDimensions.di_20),
 
-                            customPasswordWidget(
-                              textEditController: _passwordController,
-                              hintText: AppStrings.enterNewPassword,
-                              isPassword: true,
-                              isPasswordVisible: _isPasswordVisible,
-                              togglePasswordVisibility:
-                                  _togglePasswordVisibility,
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Flexible(child: Divider()),
+                                CustomTextWidget(
+                                  text: ' or ',
+                                  fontSize: AppDimensions.di_16,
+                                  color: AppColors.black,
+                                  fontWeight: AppFontWeight.fontWeight500,
+                                ),
+                                Flexible(child: Divider()),
+                              ],
                             ),
+
                             const SizedBox(height: AppDimensions.di_20),
 
-                            customPasswordWidget(
-                              textEditController: _passwordConfirmController,
-                              hintText: AppStrings.confirmNewPassword,
-                              isPassword: true,
-                              isPasswordVisible: _isPasswordVisible,
-                              togglePasswordVisibility:
-                                  _togglePasswordVisibility,
+                            customLoginSignupTextFieldWidget(
+                              textEditController: _emailController,
+                              hintText: AppStrings.email,
+                              icon: ImageAssetsPath.mail,
                             ),
 
-                            const SizedBox(height: AppDimensions.di_40),
+                            const SizedBox(height: AppDimensions.di_20),
 
                             CustomLoginSignupBgActiveWidget(
                               text: AppStrings.submit,
@@ -111,33 +107,28 @@ class _ForgotPasswordScreen extends State<ForgotPasswordScreen> {
                                   MaterialPageRoute(
                                     builder:
                                         (context) =>
-                                        OtpValidationScreen(), // Pass the profile data
+                                        OtpValidationScreen(type: widget.type), // Pass the profile data
                                   ),
                                 );
                               },
                             ),
 
-
                             const SizedBox(height: AppDimensions.di_20),
 
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.arrow_back),
-                                  SizedBox(width: AppDimensions.di_2),
-                                  Text(
-                                    AppStrings.backToLogIn,
-                                    style: TextStyle(
-                                      color: AppColors.textColor,
-                                      fontSize: AppDimensions.di_14,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ],
+                            Visibility(
+                              visible: widget.type != AppStrings.resetPassword,  // Hide the GestureDetector if the type is "Reset"
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.arrow_back),
+                                    SizedBox(width: AppDimensions.di_2),
+                                    CustomTextWidget(text: AppStrings.backToLogIn, fontSize: AppDimensions.di_18, color: AppColors.black),
+                                  ],
+                                ),
                               ),
                             )
                           ],
@@ -152,11 +143,5 @@ class _ForgotPasswordScreen extends State<ForgotPasswordScreen> {
         ),
       ),
     );
-  }
-
-  void _togglePasswordVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
   }
 }

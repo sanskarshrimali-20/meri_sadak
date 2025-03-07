@@ -49,7 +49,7 @@ class _SubmitFeedbackScreen extends State<SubmitFeedbackScreen> {
             ),
             Spacer(),
             SizedBox(
-              height: 30, // Adjust the height to control the space for the radio button
+              height: AppDimensions.di_30, // Adjust the height to control the space for the radio button
               child: Radio<int>(
                 value: 1,
                 groupValue: _selectedValue,
@@ -105,16 +105,14 @@ class _SubmitFeedbackScreen extends State<SubmitFeedbackScreen> {
                     false,
                   );
                 },
-                icon: Icons.arrow_forward,
-                iconColor: AppColors.whiteColor,
                 textColor: AppColors.whiteColor,
                 backgroundColor: AppColors.color_E77728,
                 fontSize: AppDimensions.di_18,
                 padding: EdgeInsets.symmetric(
-                  vertical: 06,
-                  horizontal: 15,
+                  vertical: AppDimensions.di_6,
+                  horizontal: AppDimensions.di_15,
                 ),
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadius.circular(AppDimensions.di_100),
               ),
             ),
 
@@ -131,16 +129,14 @@ class _SubmitFeedbackScreen extends State<SubmitFeedbackScreen> {
                     false,
                   );
                 },
-                icon: Icons.arrow_forward,
-                iconColor: AppColors.whiteColor,
                 textColor: AppColors.whiteColor,
                 backgroundColor: AppColors.color_E77728,
                 fontSize: AppDimensions.di_18,
                 padding: EdgeInsets.symmetric(
-                  vertical: 06,
-                  horizontal: 15,
+                  vertical: AppDimensions.di_6,
+                  horizontal: AppDimensions.di_15,
                 ),
-                borderRadius: BorderRadius.circular(100),
+                borderRadius: BorderRadius.circular(AppDimensions.di_100),
               ),
             ),
           ],

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
+import 'package:meri_sadak/constants/app_font_weight.dart';
+
+import '../constants/app_colors.dart';
 
 class CustomTextField extends StatefulWidget {
   final String label;
@@ -15,6 +18,7 @@ class CustomTextField extends StatefulWidget {
   final VoidCallback? onTap;
   final String labelText;
   final bool isRequired;
+  final bool editable;
   final bool isNumberWithPrefix;
 
   const CustomTextField({
@@ -29,6 +33,7 @@ class CustomTextField extends StatefulWidget {
     this.controller,
     this.readOnly = false,
     this.onTap,
+    this.editable = true,
     required this.labelText,
     required this.isRequired,
     this.isNumberWithPrefix = false,
@@ -71,26 +76,24 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(widget.labelText,
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(width: AppDimensions.di_5),
+
             widget.isRequired
                 ? Text("*", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red))
                 : SizedBox.shrink(),
-          ],
-        ),
-        SizedBox(height: AppDimensions.di_8),
+
         Padding(
           padding: const EdgeInsets.only(bottom: AppDimensions.di_12),
           child: Container(
-            padding: const EdgeInsets.all(AppDimensions.di_4),
             decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(AppDimensions.di_12),
+              color: AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
+              borderRadius: BorderRadius.circular(AppDimensions.di_5),
+              border: Border.all(
+                color: AppColors.textFieldBorderColor, // First border color
+                width:  AppDimensions.di_1,
+              ),
             ),
             child: TextFormField(
+              enabled: widget.editable,
               controller: widget.controller,
               onChanged: (value) {
                 widget.onChanged?.call(value);
@@ -104,10 +107,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
               inputFormatters: inputFormatters,
               textCapitalization: TextCapitalization.words,
               decoration: InputDecoration(
-                hintText: widget.label,
-                border: InputBorder.none,
                 filled: true,
-                fillColor: Colors.grey[200],
+                fillColor:  AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
+                border: InputBorder.none,
+                hintText: widget.label,
+                hintStyle: TextStyle(color: AppColors.black.withAlpha(90), fontSize: AppDimensions.di_17, fontWeight: AppFontWeight.fontWeight400),
                 counterText: "",
                 // errorText: errorText, // Display error message here
               ),

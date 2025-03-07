@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: Colors.white,
-  //textTheme: lightTextTheme,
+  textTheme: lightTextTheme,
 );
 
 TextStyle lightTextStyle = TextStyle(
@@ -19,6 +19,7 @@ TextTheme lightTextTheme = TextTheme(
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   primaryColor: Colors.black,
+  textTheme: darkTextTheme
 );
 
 TextStyle darkTextStyle = TextStyle(

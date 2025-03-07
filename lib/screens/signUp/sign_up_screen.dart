@@ -10,6 +10,7 @@ import '../../utils/device_size.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
 import '../../widgets/custom_password_widget.dart';
+import '../../widgets/custom_text_widget.dart';
 import '../../widgets/login_signup_bg_active.dart';
 import '../home/home_screen.dart';
 import '../login/login_screen.dart';
@@ -56,15 +57,9 @@ class _SignUpScreen extends State<SignUpScreen>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Example: Add a TextField inside the white container
-                      Text(
-                        AppStrings.signUp,
-                        style: TextStyle(
-                          color: AppColors.textColor,
-                          fontSize: AppDimensions.di_24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+
+                      CustomTextWidget(text: AppStrings.signUp, fontSize: AppDimensions.di_24, color: AppColors.black),
+
                       SizedBox(height: AppDimensions.di_15), // Space between widgets
 
                       Container(
@@ -91,26 +86,8 @@ class _SignUpScreen extends State<SignUpScreen>{
                               hintText: AppStrings.phoneNo,
                               icon: ImageAssetsPath.phone,
                             ),
+
                             const SizedBox(height: AppDimensions.di_20),
-
-                            customPasswordWidget(
-                              textEditController: _passwordController,
-                              hintText: AppStrings.password,
-                              isPassword: true,
-                              isPasswordVisible: _isPasswordVisible,
-                              togglePasswordVisibility: _togglePasswordVisibility,
-                            ),
-                            const SizedBox(height: AppDimensions.di_20),
-
-                            customPasswordWidget(
-                              textEditController: _passwordConfirmController,
-                              hintText: AppStrings.confirmPassword,
-                              isPassword: true,
-                              isPasswordVisible: _isPasswordVisible,
-                              togglePasswordVisibility: _togglePasswordVisibility,
-                            ),
-
-                            SizedBox(height: AppDimensions.di_16,),
 
                             Row(
                               children: [

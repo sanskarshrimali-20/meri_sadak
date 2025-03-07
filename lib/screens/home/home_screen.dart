@@ -3,10 +3,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/screens/aboutPmgsy/about_pmgsy.dart';
+import 'package:meri_sadak/screens/registerFeedback/register_feedback_new_screen.dart';
 import 'package:meri_sadak/screens/roadList/road_list_screen.dart';
 import 'package:meri_sadak/widgets/custom_dropdown_field.dart';
+import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
+import '../../providerData/theme_provider.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drawer.dart';
@@ -31,9 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: AppColors.app_bg_color,
+      backgroundColor: themeProvider.themeMode == ThemeMode.light ? AppColors.app_bg_color : AppColors.black,
       appBar: MyAppBar.buildAppBar(
         AppStrings.appName,
         AppStrings.citizenFeedbackSystem,
@@ -54,7 +60,58 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.all(AppDimensions.di_16),
           child: Column(
             children: [
-              GestureDetector(
+              Align(
+                alignment: Alignment.center,
+                child: CustomButton(
+                  text: "New Register Feedback",
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RegisterFeedbackNewScreen()),
+                    );
+                  },
+                  textColor: AppColors.whiteColor,
+                  backgroundColor: AppColors.color_E77728,
+                  fontSize: AppDimensions.di_18,
+                  padding:
+                  EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
+                  borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                ),
+              ),
+
+              SizedBox(height: 20,),
+
+              Align(
+                alignment: Alignment.center,
+                child: CustomButton(
+                  text: "Old Register Feedback",
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RegisterFeedbackScreen()),
+                    );
+                  },
+                  textColor: AppColors.whiteColor,
+                  backgroundColor: AppColors.color_E77728,
+                  fontSize: AppDimensions.di_18,
+                  padding:
+                  EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
+                  borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                ),
+              ),
+
+              SizedBox(height: 20,),
+
+              Switch(
+                value: themeProvider.themeMode == ThemeMode.dark,
+                onChanged: (value) {
+                  themeProvider.toggleTheme(); // Toggle the theme on switch change
+                },
+              ),
+
+              /* GestureDetector(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutPMGSY()));
                 },
@@ -104,10 +161,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CustomButton(
                         text: AppStrings.submit,
                         onPressed: () async {
-
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegisterFeedbackNewScreen()),
+                          );
                         },
-                        icon: Icons.arrow_forward,
-                        iconColor: AppColors.whiteColor,
+                        textColor: AppColors.whiteColor,
+                        backgroundColor: AppColors.color_E77728,
+                        fontSize: AppDimensions.di_18,
+                        padding:
+                        EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
+                        borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                      ),
+                    ),
+
+                    SizedBox(height: 20,),
+
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: CustomButton(
+                        text: AppStrings.next,
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegisterFeedbackScreen()),
+                          );
+                        },
                         textColor: AppColors.whiteColor,
                         backgroundColor: AppColors.color_E77728,
                         fontSize: AppDimensions.di_18,
@@ -145,8 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-              )
-
+              )*/
             ],
           ),
         )

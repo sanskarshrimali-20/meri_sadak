@@ -57,10 +57,10 @@ class _CustomDropdownField extends State<CustomDropdownField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         widget.isRequired == true?Text("*", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red)): SizedBox.shrink(),
-        SizedBox(height: AppDimensions.di_8),
         Padding(
           padding: const EdgeInsets.only(bottom: AppDimensions.di_12),
           child: Container(
+            height: 40,
             decoration: BoxDecoration(
               color: AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
               borderRadius: BorderRadius.circular(AppDimensions.di_5),

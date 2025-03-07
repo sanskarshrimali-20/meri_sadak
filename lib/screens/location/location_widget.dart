@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:meri_sadak/constants/app_dimensions.dart';
+import 'package:meri_sadak/widgets/custom_text_widget.dart';
+
+import '../../constants/app_colors.dart';
 
 class CustomLocationWidget extends StatefulWidget {
   final String labelText;
@@ -48,7 +52,7 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
   // ignore: unused_field, prefer_final_fields
   bool _isSatellite = false;
   late LatLng markerPosition; // Tracks marker and circle position
-  final double allowedRadius = 500; // Radius in meters
+  final double allowedRadius = 350; // Radius in meters
   late LatLng initialPosition;
   final Distance distanceCalculator = const Distance();
 
@@ -69,12 +73,12 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
           children: [
             Text(
               widget.labelText,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: AppDimensions.di_16,fontWeight: FontWeight.bold),
             ),
             SizedBox(width: 5), // Space between text and image
             widget.isRequired == true
                 ? Text("*",
-                style: TextStyle(
+                style: TextStyle(fontSize: AppDimensions.di_16,
                     fontWeight: FontWeight.bold, color: Colors.red))
                 : SizedBox.shrink(),
             Spacer(), // This will push the next widget to the end
@@ -98,7 +102,15 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
           ],
         ),
         Container(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(AppDimensions.di_4),
+          decoration: BoxDecoration(
+            color: AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
+            borderRadius: BorderRadius.circular(AppDimensions.di_5),
+            border: Border.all(
+              color: AppColors.textFieldBorderColor, // First border color
+              width:  AppDimensions.di_1,
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -258,6 +270,17 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                 ),
               )
                   : Text("Map Could not be loaded"),
+
+              Padding(padding: EdgeInsets.all(AppDimensions.di_15), child: Container(
+                padding: EdgeInsets.all(AppDimensions.di_5),
+                decoration: BoxDecoration(
+                  color: AppColors.whiteColor,
+                  borderRadius: BorderRadius.all(Radius.circular(AppDimensions.di_5))
+                ),
+                child: CustomTextWidget(text: currentAddress, fontSize: AppDimensions.di_15,
+                    color: AppColors.black),
+              ),)
+
             ],
           ),
         ),

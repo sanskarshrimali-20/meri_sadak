@@ -4,7 +4,7 @@ import '../data/model/image_item_model.dart';
 
 class ImagePickerProvider extends ChangeNotifier {
   final ImagePicker _picker = ImagePicker();
-  List<ImageItem> _imageFiles = [];
+  final List<ImageItem> _imageFiles = [];
 
   List<ImageItem> get imageFiles => _imageFiles;
 
