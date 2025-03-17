@@ -12,7 +12,7 @@ class AppColors {
   static const Color buttonTextColor = Color(0xFFFFFFFF); // White text color
   static const Color toastBgColorGreen = Color(0xFF4CAF50); // Green background for success
   static const Color toastBgColorRed = Color(0xFFF44336); // Red background for error
-  static Color circularProgressIndicatorBgColor = Colors.blue.shade700;
+  static Color circularProgressIndicatorBgColor = Color(0xFF00458E);
   static const Color textColor = Color(0xFF292826);
   static const Color appColor = Color(0xFF453CC4);
 
@@ -20,8 +20,8 @@ class AppColors {
   static const Color blackMagicColor =Color(0xFF292826);
   static const Color bgColorGainsBoro =Color(0xFFE3E3E3);
 
-  static const Color blueGradientColor1 =Color(0xFF453CC4);
-  static const Color blueGradientColor2 =Color(0xFF211D5E);
+  static const Color blueGradientColor1 =Color(0xFF00458E);//static const Color blueGradientColor1 =Color(0xFF453CC4);
+  static const Color blueGradientColor2 =Color(0xFF000328);//static const Color blueGradientColor2 =Color(0xFF211D5E);
   static const Color color_E77728 = Color(0xFFE77728);
   static const Color color_4E44E0 = Color(0xFF4E44E0);
   static const Color selectImageColor = Color(0xFFBFC1C5);
@@ -34,7 +34,11 @@ class AppColors {
   static const Color appBgOne = Color(0xFFFF3535);
   static const Color appBgTwo = Color(0xFFFF3535);
   static const Color appBgThree = Color(0xFFFF3535);
+  static const Color greyTxt = Color(0xFF909090);
+  static const Color txtColor = Color(0xFF91908F);
   // #FE6B0A #E9E330
+
+
 
 
 

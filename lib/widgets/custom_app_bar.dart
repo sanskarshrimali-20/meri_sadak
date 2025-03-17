@@ -29,7 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Navigator.pop(context); // Open the drawer using the GlobalKey
         },
       ),
-      backgroundColor: const Color(0xff453CC4),
+      backgroundColor: AppColors.blueGradientColor1,//const Color(0xff453CC4),
       title: CustomTextWidget(
         text: title,
         fontSize: AppDimensions.di_24,

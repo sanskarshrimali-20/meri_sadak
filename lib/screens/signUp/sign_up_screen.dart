@@ -15,28 +15,29 @@ import '../../widgets/login_signup_bg_active.dart';
 import '../home/home_screen.dart';
 import '../login/login_screen.dart';
 
-class SignUpScreen extends StatefulWidget{
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState()  => _SignUpScreen();
+  State<SignUpScreen> createState() => _SignUpScreen();
 }
 
-class _SignUpScreen extends State<SignUpScreen>{
-
+class _SignUpScreen extends State<SignUpScreen> {
   bool _isPasswordVisible = false;
-  bool _isChecked = false;
+  bool _isChecked = true;
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmController = TextEditingController();
+  final TextEditingController _passwordConfirmController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView( // Wrap everything in SingleChildScrollView
+      body: SingleChildScrollView(
+        // Wrap everything in SingleChildScrollView
         child: Column(
           children: [
             // Image covering the top 30% of the screen
@@ -45,32 +46,51 @@ class _SignUpScreen extends State<SignUpScreen>{
                 SizedBox(
                   width: double.infinity,
                   child: Image.asset(
-                    ImageAssetsPath.signupBg, // Path to the background image
-                    fit: BoxFit.cover, // Make sure the image covers the container
+                    ImageAssetsPath.loginBg,
+                    //  ImageAssetsPath.signupBg, // Path to the background image
+                    fit:
+                        BoxFit
+                            .cover, // Make sure the image covers the container
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    top: DeviceSize.getScreenHeight(context) * 0.04,
+                  ), // Space for the image
+                  child: Center(
+                    child: Image.asset(
+                      ImageAssetsPath.splashScreenLogo,
+                      width: DeviceSize.getScreenWidth(context) * 0.5,
+                      height: DeviceSize.getScreenHeight(context) * 0.2,
+                    ),
                   ),
                 ),
 
                 // Adjusting the container's height so it fills the remaining space
                 CustomLoginSignupContainer(
                   marginHeight: 0.25,
-                  height: DeviceSize.getScreenHeight(context), // Set remaining height for the container (full height - image height)
+                  height: DeviceSize.getScreenHeight(context),
+                  // Set remaining height for the container (full height - image height)
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      CustomTextWidget(
+                        text: AppStrings.signUp,
+                        fontSize: AppDimensions.di_24,
+                        color: AppColors.black,
+                      ),
 
-                      CustomTextWidget(text: AppStrings.signUp, fontSize: AppDimensions.di_24, color: AppColors.black),
+                      SizedBox(height: AppDimensions.di_15),
 
-                      SizedBox(height: AppDimensions.di_15), // Space between widgets
-
+                      // Space between widgets
                       Container(
-                        padding: const EdgeInsets.all( AppDimensions.di_16),
+                        padding: const EdgeInsets.all(AppDimensions.di_16),
                         child: Column(
                           children: [
-
                             customLoginSignupTextFieldWidget(
                               textEditController: _fullNameController,
                               hintText: AppStrings.fullName,
-                              icon: ImageAssetsPath.iconPerson,
+                              icon: ImageAssetsPath.user,
                             ),
                             const SizedBox(height: AppDimensions.di_20),
 
@@ -83,7 +103,7 @@ class _SignUpScreen extends State<SignUpScreen>{
 
                             customLoginSignupTextFieldWidget(
                               textEditController: _phoneNoController,
-                              hintText: AppStrings.phoneNo,
+                              hintText: AppStrings.phoneNoOnly,
                               icon: ImageAssetsPath.phone,
                             ),
 
@@ -92,6 +112,8 @@ class _SignUpScreen extends State<SignUpScreen>{
                             Row(
                               children: [
                                 Checkbox(
+                                  checkColor: AppColors.whiteColor,
+                                  activeColor: AppColors.blueGradientColor1,
                                   value: _isChecked,
                                   onChanged: (bool? value) {
                                     setState(() {
@@ -102,38 +124,59 @@ class _SignUpScreen extends State<SignUpScreen>{
 
                                 RichText(
                                   text: TextSpan(
-                                    style: TextStyle(color: Colors.black, fontSize: AppDimensions.di_14), // Default text style
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: AppDimensions.di_14,
+                                    ),
+                                    // Default text style
                                     children: [
                                       TextSpan(text: AppStrings.iAccept),
                                       TextSpan(
                                         text: AppStrings.termsCondition,
-                                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Highlight color for the clickable text
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            Navigator.push(
-                                              // ignore: use_build_context_synchronously
-                                              context,
-                                              MaterialPageRoute(builder: (context) => const TermsConditionPrivacyPolicyScreen()),
-                                            );
-                                          },
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        // Highlight color for the clickable text
+                                        recognizer:
+                                            TapGestureRecognizer()
+                                              ..onTap = () {
+                                                Navigator.push(
+                                                  // ignore: use_build_context_synchronously
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder:
+                                                        (context) =>
+                                                            const TermsConditionPrivacyPolicyScreen(),
+                                                  ),
+                                                );
+                                              },
                                       ),
                                       TextSpan(text: AppStrings.and),
                                       TextSpan(
                                         text: AppStrings.privacyPolicy,
-                                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Highlight color for the clickable text
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            Navigator.push(
-                                              // ignore: use_build_context_synchronously
-                                              context,
-                                              MaterialPageRoute(builder: (context) => const TermsConditionPrivacyPolicyScreen()),
-                                            );
-                                          },
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        // Highlight color for the clickable text
+                                        recognizer:
+                                            TapGestureRecognizer()
+                                              ..onTap = () {
+                                                Navigator.push(
+                                                  // ignore: use_build_context_synchronously
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder:
+                                                        (context) =>
+                                                            const TermsConditionPrivacyPolicyScreen(),
+                                                  ),
+                                                );
+                                              },
                                       ),
                                     ],
                                   ),
                                 ),
-
                               ],
                             ),
 
@@ -151,7 +194,7 @@ class _SignUpScreen extends State<SignUpScreen>{
                                   MaterialPageRoute(
                                     builder:
                                         (context) =>
-                                        HomeScreen(), // Pass the profile data
+                                            HomeScreen(), // Pass the profile data
                                   ),
                                 );
                               },
@@ -161,20 +204,40 @@ class _SignUpScreen extends State<SignUpScreen>{
 
                             RichText(
                               text: TextSpan(
-                                style: TextStyle(color: Colors.black, fontSize: AppDimensions.di_14), // Default text style
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: AppDimensions.di_14,
+                                ),
+                                // Default text style
                                 children: [
-                                  TextSpan(text: AppStrings.alreadyHaveAccount),
+                                  TextSpan(
+                                    text: AppStrings.alreadyHaveAccount,
+                                    style: TextStyle(
+                                      color: AppColors.greyTxt,
+                                      fontWeight: AppFontWeight.fontWeight400,
+                                      fontSize: AppDimensions.di_15,
+                                    ),
+                                  ),
                                   TextSpan(
                                     text: AppStrings.loginWithSpace,
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Highlight color for the clickable text
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        Navigator.pushReplacement(
-                                          // ignore: use_build_context_synchronously
-                                          context,
-                                          MaterialPageRoute(builder: (context) => const LoginScreen()),
-                                        );
-                                      },
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    // Highlight color for the clickable text
+                                    recognizer:
+                                        TapGestureRecognizer()
+                                          ..onTap = () {
+                                            Navigator.pushReplacement(
+                                              // ignore: use_build_context_synchronously
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (context) =>
+                                                        const LoginScreen(),
+                                              ),
+                                            );
+                                          },
                                   ),
                                 ],
                               ),
