@@ -84,8 +84,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         Padding(
           padding: const EdgeInsets.only(bottom: AppDimensions.di_12),
           child: Container(
+            padding: const EdgeInsets.only( left: AppDimensions.di_5,right: AppDimensions.di_5),
             decoration: BoxDecoration(
-              color: AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
+             color: AppColors.textFieldBorderColor.withAlpha(12), // Use a neutral color or AppColors.greyHundred
               borderRadius: BorderRadius.circular(AppDimensions.di_5),
               border: Border.all(
                 color: AppColors.textFieldBorderColor, // First border color
@@ -107,8 +108,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
               inputFormatters: inputFormatters,
               textCapitalization: TextCapitalization.words,
               decoration: InputDecoration(
-                filled: true,
-                fillColor:  AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
+                //filled: true,
+               // fillColor:  AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
                 border: InputBorder.none,
                 hintText: widget.label,
                 hintStyle: TextStyle(color: AppColors.black.withAlpha(90), fontSize: AppDimensions.di_17, fontWeight: AppFontWeight.fontWeight400),

@@ -104,7 +104,7 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
         Container(
           padding: const EdgeInsets.all(AppDimensions.di_4),
           decoration: BoxDecoration(
-            color: AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
+            color: AppColors.textFieldBorderColor.withAlpha(12), // Use a neutral color or AppColors.greyHundred
             borderRadius: BorderRadius.circular(AppDimensions.di_5),
             border: Border.all(
               color: AppColors.textFieldBorderColor, // First border color

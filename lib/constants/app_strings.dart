@@ -7,7 +7,8 @@ class AppStrings {
   static const addressPattern = r"^[a-zA-Z0-9\s,.'-\/()]+$";
   static const login = "Log In";
   static const loginWithSpace = " Log In";
-  static const phoneNo = "Phone Number";
+  static const phoneNo = "Phone Number / Email ID";
+  static const phoneNoOnly = "Phone Number";
   static const password = "Password";
   static const forgotPasswordQue = "Forgot Password?";
   static const signUp = "Sign Up";
@@ -20,18 +21,22 @@ class AppStrings {
   static const email = "E-mail";
   static const confirmPassword = "Confirm Password";
   static const alreadyHaveAccount = "Already have an account?";
+  static const dontHaveAccount = "Dont have an account?";
   static const iAccept = "I accept";
   static const termsCondition = " Terms & conditions";
   static const and = " and";
   static const privacyPolicy = " \nPrivacy policy.";
   static const home = "Home";
+  static const appearance = "Appearance";
+  static const privacyAndSecurity = "Privacy & Security";
   static const account = "Account";
   static const settings = "Settings";
   static const contactUs = "Contact Us";
-  static const about = "About";
+  static const about = "About PMGSY";
+  static const aboutMeriSadak = "About Meri Sadak";
   static const logout = "Logout";
   static const rateUs = "Rate Us";
-  static const share = "Share";
+  static const share = "Share Us";
   static const selectState = "Select State";
   static const selectDistrict = "Select District";
   static const selectBlock = "Select Block";
@@ -66,7 +71,7 @@ class AppStrings {
   static const upgradation = "Upgradation";
   static const wouldYouLikeTo = "Would you like to be contacted by State Authorities for road details to speed up resolution?";
   static const yesIWould = "Yes, I would like to assist";
-  static const noIPrefer = "No, I prefer not to be contacted";
+  static const noIPrefer = "No,\nI prefer not to be contacted";
   static const welcome = "Welcome";
   static const meriSadakApplication = "Meri Sadak application allows citizens to register a complaint regarding PMGSY and non PMGSY Roads.";
   static const continues = "continue";
@@ -98,6 +103,25 @@ class AppStrings {
   static const aboutPMGSYRoadNearbyHeading = 'Find Nearby PMGSY Roads';
   static const aboutPMGSYRoadNearbySubHeading = 'Look for these sign boards on road side';
 
+  //----About Meri Sadak screen------
+  static const aboutMeriSadakHeading = 'About Meri Sadak';
+  static const aboutMeriSadakSubHeading = "Meri Sadak is a citizen-focused mobile application that enables users to register complaints and share feedback on PMGSY and non-PMGSY roads. Launched as part of the Government's Citizen Feedback System, the app promotes transparency and accountability in rural road infrastructure. Users can submit complaints by uploading images from onsite (on the road) or offsite (remote locations) and track their complaints until resolution. By bridging the gap between citizens and authorities, Meri Sadak ensures better road quality and improved rural connectivity.";
+
+//------App Version Screen------
+  static const appVersion = 'App Version';
+  static const appVersionText = '1.0.0';
+  static const appVersionDesc = "Meri Sadak 6.2.4 enhances performance, fixes bugs, and improves user experience. Citizens can register and track road complaints for PMGSY & non-PMGSY roads with image support. Check the Google Play Store for updates.";
+  static const appVersionUpdate = 'Check version update';
+
+  //-----Privacy and Security Screen----
+  static const privacyAndSecurityHeading = 'Privacy & Security';
+  static const managePermissions = 'Manage Permissions';
+  static const managePermissionsDesc = "Meri Sadak 6.2.4 enhances performance, fixes bugs, and improves user experience. Citizens can register and track road complaints for PMGSY & non-PMGSY roads with image support. Check the Google Play Store for updates.";
+  static const legalAndPolicies = 'Legal & Policies';
+  static const legalAndPoliciesDesc = "Meri Sadak 6.2.4 enhances performance, fixes bugs, and improves user experience. Citizens can register and track road complaints for PMGSY & non-PMGSY roads with image support. Check the Google Play Store for updates.";
+  static const resetPasswordHeading = 'Reset Password';
+  static const clearCacheData = 'Clear Cache Data';
+
   //----Upload image screen------
   static const uploadImageHeading = 'Upload Image for Feedback';
   static const uploadImageInstructions = "Kindly upload a well-visible road photo in .jpeg format with a size limit of 1MB.";
@@ -109,6 +133,7 @@ class AppStrings {
   static const imageLimitText = 'Note: Maximum 3 images are allowed for feedback';
   static const confirmLocationHeading = 'Confirm Your Location';
   static const currentLocationLabel = 'Current Location:';
+  static const confirmTheRoadLocation = 'Confirm the road location';
   static const locationPermissionText = 'Location permission is required to fetch your location.';
   static const noProfileImageAvailable ="No profile image available";
 

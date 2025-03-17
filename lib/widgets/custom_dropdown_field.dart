@@ -60,9 +60,10 @@ class _CustomDropdownField extends State<CustomDropdownField> {
         Padding(
           padding: const EdgeInsets.only(bottom: AppDimensions.di_12),
           child: Container(
-            height: 40,
+            padding: const EdgeInsets.only( left: AppDimensions.di_5,right: AppDimensions.di_5),
+            height: 50,
             decoration: BoxDecoration(
-              color: AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
+             color: AppColors.textFieldBorderColor.withAlpha(12), // Use a neutral color or AppColors.greyHundred
               borderRadius: BorderRadius.circular(AppDimensions.di_5),
               border: Border.all(
                 color: AppColors.textFieldBorderColor, // First border color
@@ -88,8 +89,8 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                 });
               },
               decoration: InputDecoration(
-                filled: true,
-                fillColor:  AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
+               // filled: true,
+               // fillColor:  AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
                 border: InputBorder.none,
                 hintText: widget.hintText,
                 hintStyle: TextStyle(color: AppColors.black.withAlpha(95)),

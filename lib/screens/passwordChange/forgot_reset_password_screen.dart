@@ -14,17 +14,16 @@ import '../../widgets/custom_text_widget.dart';
 import '../../widgets/login_signup_bg_active.dart';
 
 class ForgotResetPasswordScreen extends StatefulWidget {
-
   String type;
 
   ForgotResetPasswordScreen({super.key, required this.type});
 
   @override
-  State<ForgotResetPasswordScreen> createState() => _ForgotResetPasswordScreen();
+  State<ForgotResetPasswordScreen> createState() =>
+      _ForgotResetPasswordScreen();
 }
 
 class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
 
@@ -41,8 +40,22 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: Image.asset(
-                    ImageAssetsPath.forgetPasswordBg,
-                    fit: BoxFit.cover, // Make sure the image covers the container
+                    ImageAssetsPath.loginBg,// ImageAssetsPath.forgetPasswordBg,
+                    fit:
+                        BoxFit
+                            .cover, // Make sure the image covers the container
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    top:  DeviceSize.getScreenHeight(context) * 0.1,
+                  ), // Space for the image
+                  child: Center(
+                    child: Image.asset(
+                      ImageAssetsPath.splashScreenLogo,
+                      width: DeviceSize.getScreenWidth(context) * 0.5,
+                      height: DeviceSize.getScreenHeight(context) * 0.2,
+                    ),
                   ),
                 ),
 
@@ -52,26 +65,31 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                   // Set remaining height for the container (full height - image height)
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
+
                     children: [
+                      CustomTextWidget(
+                        text: widget.type,
+                        fontSize: AppDimensions.di_24,
+                        color: AppColors.black,
+                      ),
 
-                      CustomTextWidget(text: widget.type, fontSize: AppDimensions.di_24, color: AppColors.black),
+                      SizedBox(height: AppDimensions.di_20),
 
-                      SizedBox(height: AppDimensions.di_20), // Space between widgets
-
+                      // Space between widgets
                       Container(
                         padding: const EdgeInsets.all(AppDimensions.di_16),
                         child: Column(
+                          spacing: 20,
                           children: [
-
                             customLoginSignupTextFieldWidget(
                               textEditController: _phoneNoController,
                               hintText: AppStrings.phoneNo,
-                              icon: ImageAssetsPath.phone,
+                              icon: ImageAssetsPath.user,
                             ),
 
-                            const SizedBox(height: AppDimensions.di_20),
+                            // const SizedBox(height: AppDimensions.di_20),
 
-                            Row(
+                            /*Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Flexible(child: Divider()),
@@ -83,16 +101,15 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                 ),
                                 Flexible(child: Divider()),
                               ],
-                            ),
+                            ),*/
 
-                            const SizedBox(height: AppDimensions.di_20),
+                            // const SizedBox(height: AppDimensions.di_20),
 
-                            customLoginSignupTextFieldWidget(
+                            /* customLoginSignupTextFieldWidget(
                               textEditController: _emailController,
                               hintText: AppStrings.email,
                               icon: ImageAssetsPath.mail,
-                            ),
-
+                            ),*/
                             const SizedBox(height: AppDimensions.di_20),
 
                             CustomLoginSignupBgActiveWidget(
@@ -106,8 +123,9 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder:
-                                        (context) =>
-                                        OtpValidationScreen(type: widget.type), // Pass the profile data
+                                        (context) => OtpValidationScreen(
+                                          type: widget.type,
+                                        ), // Pass the profile data
                                   ),
                                 );
                               },
@@ -116,21 +134,31 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                             const SizedBox(height: AppDimensions.di_20),
 
                             Visibility(
-                              visible: widget.type != AppStrings.resetPassword,  // Hide the GestureDetector if the type is "Reset"
+                              visible: widget.type != AppStrings.resetPassword,
+                              // Hide the GestureDetector if the type is "Reset"
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LoginScreen(),
+                                    ),
+                                  );
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(Icons.arrow_back),
                                     SizedBox(width: AppDimensions.di_2),
-                                    CustomTextWidget(text: AppStrings.backToLogIn, fontSize: AppDimensions.di_18, color: AppColors.black),
+                                    CustomTextWidget(
+                                      text: AppStrings.backToLogIn,
+                                      fontSize: AppDimensions.di_18,
+                                      color: AppColors.black,
+                                    ),
                                   ],
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),

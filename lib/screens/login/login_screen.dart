@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_colors.dart';
@@ -42,7 +43,21 @@ class _LoginScreen extends State<LoginScreen> {
                   width: double.infinity,
                   child: Image.asset(
                     ImageAssetsPath.loginBg, // Path to the background image
-                    fit: BoxFit.cover, // Make sure the image covers the container
+                    fit:
+                        BoxFit
+                            .cover, // Make sure the image covers the container
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    top:  DeviceSize.getScreenHeight(context) * 0.1,
+                  ), // Space for the image
+                  child: Center(
+                    child: Image.asset(
+                      ImageAssetsPath.splashScreenLogo,
+                      width: DeviceSize.getScreenWidth(context) * 0.5,
+                      height: DeviceSize.getScreenHeight(context) * 0.2,
+                    ),
                   ),
                 ),
 
@@ -70,11 +85,10 @@ class _LoginScreen extends State<LoginScreen> {
                         padding: const EdgeInsets.all(AppDimensions.di_16),
                         child: Column(
                           children: [
-
                             customLoginSignupTextFieldWidget(
                               textEditController: _usernameController,
                               hintText: AppStrings.phoneNo,
-                              icon: ImageAssetsPath.phone,
+                              icon: ImageAssetsPath.user,
                             ),
                             const SizedBox(height: AppDimensions.di_20),
 
@@ -99,7 +113,9 @@ class _LoginScreen extends State<LoginScreen> {
                                     MaterialPageRoute(
                                       builder:
                                           (context) =>
-                                              ForgotResetPasswordScreen(type: AppStrings.forgotPassword), // Pass the profile data
+                                              ForgotResetPasswordScreen(
+                                                type: AppStrings.forgotPassword,
+                                              ), // Pass the profile data
                                     ),
                                   );
                                 },
@@ -135,7 +151,46 @@ class _LoginScreen extends State<LoginScreen> {
 
                             const SizedBox(height: AppDimensions.di_20),
 
-                            CustomLoginSignupBgUnActiveWidget(
+                            RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: AppDimensions.di_14,
+                                ),
+                                // Default text style
+                                children: [
+                                  TextSpan(text: AppStrings.dontHaveAccount,   style: TextStyle(
+                                    color: AppColors.greyTxt,
+                                      fontWeight: AppFontWeight.fontWeight400,
+                                      fontSize: AppDimensions.di_15
+                                  ),),
+                                  TextSpan(text: ' '),
+                                  TextSpan(
+                                    text: AppStrings.signUp,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                        fontSize: 15
+                                    ),
+                                    // Highlight color for the clickable text
+                                    recognizer:
+                                        TapGestureRecognizer()
+                                          ..onTap = () {
+                                            Navigator.pushReplacement(
+                                              // ignore: use_build_context_synchronously
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (context) =>
+                                                        const SignUpScreen(),
+                                              ),
+                                            );
+                                          },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            /* CustomLoginSignupBgUnActiveWidget(
                               text: AppStrings.signUp,
                               fontSize: AppDimensions.di_20,
                               fontWeight: AppFontWeight.fontWeight500,
@@ -151,7 +206,7 @@ class _LoginScreen extends State<LoginScreen> {
                                   ),
                                 );
                               },
-                            ),
+                            ),*/
                           ],
                         ),
                       ),

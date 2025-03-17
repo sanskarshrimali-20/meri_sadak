@@ -47,7 +47,7 @@ class CustomExpansionTile extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    CustomTextWidget(
+                    subheading == ''? Container():  CustomTextWidget(
                       text: subheading,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.blackMagicColor,

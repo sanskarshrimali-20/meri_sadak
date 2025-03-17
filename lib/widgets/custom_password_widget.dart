@@ -28,8 +28,8 @@ Widget customPasswordWidget({
       prefixIcon: Padding(
         padding: const EdgeInsets.all(AppDimensions.di_8),
         child: SvgPicture.asset(
-          ImageAssetsPath.lock,  // Path to the custom icon image
-          width: AppDimensions.di_20, // Adjust the width of the image
+          ImageAssetsPath.lock2,  // Path to the custom icon image
+         width: AppDimensions.di_20, // Adjust the width of the image
           height: AppDimensions.di_20, // Adjust the height of the image
         ),
       ),

@@ -10,7 +10,9 @@ import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../providerData/theme_provider.dart';
+import '../../utils/device_size.dart';
 import '../../widgets/app_bar.dart';
+import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/custom_home_tabs.dart';
@@ -26,7 +28,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _districtController = TextEditingController();
@@ -34,12 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: themeProvider.themeMode == ThemeMode.light ? AppColors.app_bg_color : AppColors.black,
+      backgroundColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? AppColors.app_bg_color
+              : AppColors.black,
       appBar: MyAppBar.buildAppBar(
         AppStrings.appName,
         AppStrings.citizenFeedbackSystem,
@@ -55,63 +58,73 @@ class _HomeScreenState extends State<HomeScreen> {
         // Add space outside the drawer
         child: const CustomDrawer(),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(AppDimensions.di_16),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: CustomButton(
-                  text: "New Register Feedback",
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegisterFeedbackNewScreen()),
-                    );
-                  },
-                  textColor: AppColors.whiteColor,
-                  backgroundColor: AppColors.color_E77728,
-                  fontSize: AppDimensions.di_18,
-                  padding:
-                  EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
-                  borderRadius: BorderRadius.circular(AppDimensions.di_100),
+      body: CustomBodyWithGradient(
+        childHeight: DeviceSize.getScreenHeight(context),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(AppDimensions.di_16),
+            child: Column(
+              children: [
+                SizedBox(height: 30,),
+                Align(
+                  alignment: Alignment.center,
+                  child: CustomButton(
+                    text: "New Register Feedback",
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterFeedbackNewScreen(),
+                        ),
+                      );
+                    },
+                    textColor: AppColors.whiteColor,
+                    backgroundColor: AppColors.color_E77728,
+                    fontSize: AppDimensions.di_18,
+                    padding: EdgeInsets.symmetric(
+                      vertical: AppDimensions.di_6,
+                      horizontal: AppDimensions.di_15,
+                    ),
+                    borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                  ),
                 ),
-              ),
 
-              SizedBox(height: 20,),
+                SizedBox(height: 20),
 
-              Align(
-                alignment: Alignment.center,
-                child: CustomButton(
-                  text: "Old Register Feedback",
-                  onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegisterFeedbackScreen()),
-                    );
-                  },
-                  textColor: AppColors.whiteColor,
-                  backgroundColor: AppColors.color_E77728,
-                  fontSize: AppDimensions.di_18,
-                  padding:
-                  EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
-                  borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                Align(
+                  alignment: Alignment.center,
+                  child: CustomButton(
+                    text: "Old Register Feedback",
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterFeedbackScreen(),
+                        ),
+                      );
+                    },
+                    textColor: AppColors.whiteColor,
+                    backgroundColor: AppColors.color_E77728,
+                    fontSize: AppDimensions.di_18,
+                    padding: EdgeInsets.symmetric(
+                      vertical: AppDimensions.di_6,
+                      horizontal: AppDimensions.di_15,
+                    ),
+                    borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                  ),
                 ),
-              ),
 
-              SizedBox(height: 20,),
+                SizedBox(height: 20),
 
-              Switch(
-                value: themeProvider.themeMode == ThemeMode.dark,
-                onChanged: (value) {
-                  themeProvider.toggleTheme(); // Toggle the theme on switch change
-                },
-              ),
+                Switch(
+                  value: themeProvider.themeMode == ThemeMode.dark,
+                  onChanged: (value) {
+                    themeProvider
+                        .toggleTheme(); // Toggle the theme on switch change
+                  },
+                ),
 
-              /* GestureDetector(
+                /* GestureDetector(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutPMGSY()));
                 },
@@ -227,17 +240,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               )*/
-            ],
+              ],
+            ),
           ),
-        )
+        ),
       ),
     );
   }
 
-  void openRoadListScreen(String label, String value){
+  void openRoadListScreen(String label, String value) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RoadListScreen(label: label, value: value)),
+      MaterialPageRoute(
+        builder: (context) => RoadListScreen(label: label, value: value),
+      ),
     );
   }
 }

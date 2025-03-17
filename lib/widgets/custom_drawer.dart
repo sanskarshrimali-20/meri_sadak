@@ -12,6 +12,9 @@ import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:meri_sadak/widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import '../screens/AboutMeriSadak/about_meri_sadak.dart';
+import '../screens/AppVersion/app_version.dart';
+import '../screens/PrivacyAndSecurity/privacy_and_security.dart';
 import '../screens/login/login_screen.dart';
 import '../utils/localization_provider.dart';
 import 'custom_base_dialog.dart';
@@ -41,28 +44,27 @@ class _CustomDrawerState extends State<CustomDrawer> {
         padding: const EdgeInsets.all(AppDimensions.di_25),
         child: Column(
           children: [
-
             Container(
               padding: EdgeInsets.all(AppDimensions.di_16),
               height: AppDimensions.di_150,
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: <Color>[
-                      AppColors.blueGradientColor1, // Gradient Start Color
-                      AppColors.blueGradientColor2  // Gradient End Color
-                    ],
-                  ),
-                  borderRadius: BorderRadius.all( Radius.circular(AppDimensions.di_20),)
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: <Color>[
+                    AppColors.blueGradientColor1, // Gradient Start Color
+                    AppColors.blueGradientColor2, // Gradient End Color
+                  ],
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(AppDimensions.di_20),
+                ),
               ),
 
               child: Row(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      AppDimensions.di_8,
-                    ),
+                    borderRadius: BorderRadius.circular(AppDimensions.di_8),
                     // Optional rounded corners
                     child: Image.asset(
                       ImageAssetsPath.placeHolder,
@@ -71,17 +73,34 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  SizedBox(width:  AppDimensions.di_10,),
+                  SizedBox(width: AppDimensions.di_10),
                   SizedBox(
                     width: DeviceSize.getScreenWidth(context) * 0.45,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height:  AppDimensions.di_20,),
-                        CustomTextWidget(maxlines:1,text: localizationProvider.localizedStrings['name'] ?? 'Sanskar Shrimali', fontSize: AppDimensions.di_20, color: AppColors.whiteColor),
-                        SizedBox(height: AppDimensions.di_5,),
-                        CustomTextWidget(text: 'Phone No: 9087654321', fontSize: AppDimensions.di_14, color: AppColors.whiteColor, maxlines: 1,),
-                        CustomTextWidget(text: 'Email ID: sanskars@cdac.in', fontSize: AppDimensions.di_14, color: AppColors.whiteColor, maxlines: 1,),
+                        SizedBox(height: AppDimensions.di_20),
+                        CustomTextWidget(
+                          maxlines: 1,
+                          text:
+                              localizationProvider.localizedStrings['name'] ??
+                              'Sanskar Shrimali',
+                          fontSize: AppDimensions.di_20,
+                          color: AppColors.whiteColor,
+                        ),
+                        SizedBox(height: AppDimensions.di_5),
+                        CustomTextWidget(
+                          text: 'Phone No: 9087654321',
+                          fontSize: AppDimensions.di_14,
+                          color: AppColors.whiteColor,
+                          maxlines: 1,
+                        ),
+                        CustomTextWidget(
+                          text: 'Email ID: sanskars@cdac.in',
+                          fontSize: AppDimensions.di_14,
+                          color: AppColors.whiteColor,
+                          maxlines: 1,
+                        ),
                       ],
                     ),
                   ),
@@ -108,38 +127,31 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
                   ),
-
                   customDrawerWidget(
-                    title: AppStrings.settings,
-                    icon: ImageAssetsPath.setting,
+                    title: AppStrings.appearance,
+                    icon: ImageAssetsPath.appearance,
                     onClick: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SettingScreen()),
-                      );
+                      Navigator.of(context).pop(); // Close the drawer
                     },
                   ),
-
                   Divider(
                     color: Colors.grey, // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
                   ),
-
                   customDrawerWidget(
-                    title: AppStrings.contactUs,
-                    icon: ImageAssetsPath.mail,
+                    title: AppStrings.privacyAndSecurity,
+                    icon: ImageAssetsPath.beneficiaries,
                     onClick: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ContactUsScreen()),
+                          builder: (context) => PrivacyAndSecurity(),
+                        ),
                       );
                     },
                   ),
-
                   Divider(
                     color: Colors.grey, // Line color
                     thickness: AppDimensions.di_1, // Line thickness
@@ -154,7 +166,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Share.share('Check out this awesome Flutter app!');
                     },
                   ),
+                  Divider(
+                    color: Colors.grey, // Line color
+                    thickness: AppDimensions.di_1, // Line thickness
+                    indent: AppDimensions.di_10, // Space from the left
+                    endIndent: AppDimensions.di_10, // Space from the right
+                  ),
 
+                  customDrawerWidget(
+                    title: AppStrings.contactUs,
+                    icon: ImageAssetsPath.contacts,
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ContactUsScreen(),
+                        ),
+                      );
+                    },
+                  ),
                   Divider(
                     color: Colors.grey, // Line color
                     thickness: AppDimensions.di_1, // Line thickness
@@ -168,8 +198,65 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     onClick: () {
                       Navigator.push(
                         context,
+                        MaterialPageRoute(builder: (context) => AboutPMGSY()),
+                      );
+                    },
+                  ),
+                  Divider(
+                    color: Colors.grey, // Line color
+                    thickness: AppDimensions.di_1, // Line thickness
+                    indent: AppDimensions.di_10, // Space from the left
+                    endIndent: AppDimensions.di_10, // Space from the right
+                  ),
+
+                  customDrawerWidget(
+                    title: AppStrings.aboutMeriSadak,
+                    icon: ImageAssetsPath.info,
+                    onClick: () {
+                      Navigator.push(
+                        context,
                         MaterialPageRoute(
-                            builder: (context) => AboutPMGSY()),
+                          builder: (context) => AboutMeriSadak(),
+                        ),
+                      );
+                    },
+                  ),
+                  Divider(
+                    color: Colors.grey, // Line color
+                    thickness: AppDimensions.di_1, // Line thickness
+                    indent: AppDimensions.di_10, // Space from the left
+                    endIndent: AppDimensions.di_10, // Space from the right
+                  ),
+
+                  customDrawerWidget(
+                    title: AppStrings.appVersion,
+                    icon: ImageAssetsPath.appVersion,
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppVersion(),
+                        ),
+                      );
+                    },
+                  ),
+
+                  Divider(
+                    color: Colors.grey, // Line color
+                    thickness: AppDimensions.di_1, // Line thickness
+                    indent: AppDimensions.di_10, // Space from the left
+                    endIndent: AppDimensions.di_10, // Space from the right
+                  ),
+
+                  customDrawerWidget(
+                    title: AppStrings.settings,
+                    icon: ImageAssetsPath.setting,
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SettingScreen(),
+                        ),
                       );
                     },
                   ),
@@ -179,21 +266,27 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
             Spacer(), // Push Logout to the bottom of the drawer
             // Logout Button
-
             ListTile(
-                leading: SvgPicture.asset(
-                  ImageAssetsPath.logout,
-                  color: Colors.red,
-                ),
-                title: Text(AppStrings.logout, style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600, fontSize: AppDimensions.di_18)),
-
-                onTap: () async {
-                   Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  );
-                },
+              leading: SvgPicture.asset(
+                ImageAssetsPath.logout,
+                color: Colors.red,
               ),
+              title: Text(
+                AppStrings.logout,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w700,
+                  fontSize: AppDimensions.di_18,
+                ),
+              ),
+
+              onTap: () async {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+            ),
 
             /* ListTile(
               leading: Icon(Icons.refresh_outlined, color: Colors.blue),

@@ -50,12 +50,14 @@ class MyAppBar {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              AppColors.appColor
-                  .withAlpha((0.9 * 255).toInt()),
-              const Color(0xFF211D5E),
+              // AppColors.appColor
+              //     .withAlpha((0.9 * 255).toInt()),
+              // const Color(0xFF211D5E),
+              AppColors.blueGradientColor1, // Gradient Start Color
+              AppColors.blueGradientColor1  // Gradient End Color
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
       ),

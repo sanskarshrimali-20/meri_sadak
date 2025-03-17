@@ -34,7 +34,7 @@ class CustomGestureContainer extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: AppColors.textFieldBorderColor.withAlpha(12),
           borderRadius: BorderRadius.circular(5),
           border: Border.all(
             color: borderColor,
@@ -51,7 +51,7 @@ class CustomGestureContainer extends StatelessWidget {
               child: CustomTextWidget(
                 text: text,
                 fontSize: AppDimensions.di_14,
-                color: AppColors.selectImageColor,
+                color: AppColors.txtColor,
                 fontWeight: AppFontWeight.fontWeight500,
                 // textAlign: AppFontSizeWeight.textAlignCenter,
                 // letterSpacing: AppFontSizeWeight.letterSpacing_0_0,

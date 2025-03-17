@@ -42,11 +42,23 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: Image.asset(
-                    ImageAssetsPath.forgetPasswordBg,
+                    ImageAssetsPath.loginBg, //  ImageAssetsPath.forgetPasswordBg,
                     // Path to the background image
                     fit:
                     BoxFit
                         .cover, // Make sure the image covers the container
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    top:  DeviceSize.getScreenHeight(context) * 0.1,
+                  ), // Space for the image
+                  child: Center(
+                    child: Image.asset(
+                      ImageAssetsPath.splashScreenLogo,
+                      width: DeviceSize.getScreenWidth(context) * 0.5,
+                      height: DeviceSize.getScreenHeight(context) * 0.2,
+                    ),
                   ),
                 ),
 

@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/login/login_screen.dart';
+import 'package:meri_sadak/utils/device_size.dart';
+import 'package:meri_sadak/utils/device_utils.dart';
 
-class SplashScreen extends StatefulWidget{
+import '../../constants/app_colors.dart';
+
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState()  => _SplashScreen();
+  State<SplashScreen> createState() => _SplashScreen();
 }
 
-class _SplashScreen extends State<SplashScreen> with SingleTickerProviderStateMixin{
+class _SplashScreen extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -24,16 +29,39 @@ class _SplashScreen extends State<SplashScreen> with SingleTickerProviderStateMi
     // Start the animation
     _controller.forward().then((_) async {
       // Check login status
-      Navigator.pushReplacement(context,  MaterialPageRoute(
-        builder: (context) =>
-            LoginScreen(), // Pass the profile data
-      ),);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(), // Pass the profile data
+        ),
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.blueGradientColor1, // Gradient Start Color
+              AppColors.blueGradientColor2, // Gradient End Color
+            ], // Gradient colors
+          ),
+        ),
+        child: Center(
+          child: Image.asset(
+            ImageAssetsPath.splashScreenLogo,
+            width: DeviceSize.getScreenWidth(context) * 0.5,
+            height: DeviceSize.getScreenHeight(context) * 0.2,
+          ),
+        ),
+      ),
+    );
+    /* return Scaffold(
       body: Stack(
         children: [
           // Background Image
@@ -45,6 +73,6 @@ class _SplashScreen extends State<SplashScreen> with SingleTickerProviderStateMi
           ),
         ],
       ),
-    );
+    );*/
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:meri_sadak/screens/registerFeedback/submitted_feedback_scree.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
@@ -162,7 +163,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                                     )
                                     : CustomLocationWidget(
                                       labelText:
-                                          AppStrings.currentLocationLabel,
+                                          AppStrings.confirmTheRoadLocation,
                                       isRequired: false,
                                       latitude: permissionProvider.latitude,
                                       longitude: permissionProvider.longitude,
@@ -252,11 +253,14 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         permissionProvider.isLoading
             ? Align(
               alignment: Alignment.center,
-              child: CircularProgressIndicator(),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
+              ),
             )
             : CustomLocationWidget(
-              labelText: AppStrings.currentLocationLabel,
-              isRequired: true,
+              labelText: AppStrings.confirmTheRoadLocation,
+              isRequired: false,
               latitude: permissionProvider.latitude,
               longitude: permissionProvider.longitude,
               initialAddress: permissionProvider.address.toString(),
@@ -527,7 +531,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               });
             },
             textColor: AppColors.whiteColor,
-            backgroundColor: AppColors.color_E77728,
+            backgroundColor: AppColors.blueGradientColor1,
             fontSize: AppDimensions.di_18,
             padding: EdgeInsets.symmetric(
               vertical: AppDimensions.di_6,
@@ -644,132 +648,136 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
         SizedBox(height: 5),
 
-        Table(
-          border: TableBorder.all(color: AppColors.textFieldBorderColor),
-          columnWidths: {
-            0: FixedColumnWidth(110.0),
-            // Set fixed width for the first column
-            1: FlexColumnWidth(1),
-            // Set flexible width for the second column
-          },
-          children: [
-            TableRow(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomTextWidget(
-                    text: AppStrings.state,
-                    fontSize: AppDimensions.di_14,
-                    color: AppColors.black,
-                    fontWeight: AppFontWeight.fontWeight500,
+        Container( color: AppColors.textFieldBorderColor.withAlpha(12),
+          child: Table(
+            border: TableBorder.all(color: AppColors.textFieldBorderColor),
+            columnWidths: {
+              0: FixedColumnWidth(110.0),
+              // Set fixed width for the first column
+              1: FlexColumnWidth(1),
+              // Set flexible width for the second column
+            },
+            children: [
+              TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomTextWidget(
+                      text: AppStrings.state,
+                      fontSize: AppDimensions.di_14,
+                      color: AppColors.black,
+                      fontWeight: AppFontWeight.fontWeight500,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Cell 2'),
-                ),
-              ],
-            ),
-            TableRow(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomTextWidget(
-                    text: AppStrings.district,
-                    fontSize: AppDimensions.di_14,
-                    color: AppColors.black,
-                    fontWeight: AppFontWeight.fontWeight500,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Cell 2'),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Cell 2'),
-                ),
-              ],
-            ),
-            TableRow(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomTextWidget(
-                    text: AppStrings.block,
-                    fontSize: AppDimensions.di_14,
-                    color: AppColors.black,
-                    fontWeight: AppFontWeight.fontWeight500,
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomTextWidget(
+                      text: AppStrings.district,
+                      fontSize: AppDimensions.di_14,
+                      color: AppColors.black,
+                      fontWeight: AppFontWeight.fontWeight500,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Cell 2'),
-                ),
-              ],
-            ),
-            TableRow(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomTextWidget(
-                    text: AppStrings.roadName,
-                    fontSize: AppDimensions.di_14,
-                    color: AppColors.black,
-                    fontWeight: AppFontWeight.fontWeight500,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Cell 2'),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Cell 2'),
-                ),
-              ],
-            ),
-            TableRow(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomTextWidget(
-                    text: AppStrings.categoryOfComplaint,
-                    fontSize: AppDimensions.di_14,
-                    color: AppColors.black,
-                    fontWeight: AppFontWeight.fontWeight500,
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomTextWidget(
+                      text: AppStrings.block,
+                      fontSize: AppDimensions.di_14,
+                      color: AppColors.black,
+                      fontWeight: AppFontWeight.fontWeight500,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Cell 2'),
-                ),
-              ],
-            ),
-          ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Cell 2'),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomTextWidget(
+                      text: AppStrings.roadName,
+                      fontSize: AppDimensions.di_14,
+                      color: AppColors.black,
+                      fontWeight: AppFontWeight.fontWeight500,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Cell 2'),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomTextWidget(
+                      text: AppStrings.categoryOfComplaint,
+                      fontSize: AppDimensions.di_14,
+                      color: AppColors.black,
+                      fontWeight: AppFontWeight.fontWeight500,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Cell 2'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        Table(
-          border: TableBorder.all(color: AppColors.textFieldBorderColor),
-          children: [
-            TableRow(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomTextWidget(
-                        text: AppStrings.feedback,
-                        fontSize: AppDimensions.di_14,
-                        color: AppColors.black,
-                        fontWeight: AppFontWeight.fontWeight500,
-                      ),
+        Container(color: AppColors.textFieldBorderColor.withAlpha(12),
+          child: Table(
+            border: TableBorder.all(color: AppColors.textFieldBorderColor),
+            children: [
+              TableRow(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextWidget(
+                          text: AppStrings.feedback,
+                          fontSize: AppDimensions.di_14,
+                          color: AppColors.black,
+                          fontWeight: AppFontWeight.fontWeight500,
+                        ),
 
-                      CustomTextWidget(
-                        text: AppStrings.feedbackDummy,
-                        fontSize: AppDimensions.di_14,
-                        color: AppColors.black,
-                        maxlines: 5,
-                        fontWeight: AppFontWeight.fontWeight400,
-                      ),
-                    ],
+                        CustomTextWidget(
+                          text: AppStrings.feedbackDummy,
+                          fontSize: AppDimensions.di_14,
+                          color: AppColors.black,
+                          maxlines: 5,
+                          fontWeight: AppFontWeight.fontWeight400,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
 
         SizedBox(height: 20),
@@ -786,7 +794,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                   });
                 },
                 textColor: AppColors.whiteColor,
-                backgroundColor: AppColors.color_E77728,
+                backgroundColor: AppColors.blueGradientColor1,
                 fontSize: AppDimensions.di_18,
                 padding: EdgeInsets.symmetric(
                   vertical: AppDimensions.di_6,
@@ -802,9 +810,19 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               alignment: Alignment.centerRight,
               child: CustomButton(
                 text: AppStrings.submit,
-                onPressed: () async {},
+                onPressed: () async {
+                  Navigator.push(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) =>
+                      const SubmittedFeedbackScree(),
+                    ),
+                  );
+                },
                 textColor: AppColors.whiteColor,
-                backgroundColor: AppColors.color_E77728,
+                backgroundColor: AppColors.blueGradientColor1,
                 fontSize: AppDimensions.di_18,
                 padding: EdgeInsets.symmetric(
                   vertical: AppDimensions.di_6,
