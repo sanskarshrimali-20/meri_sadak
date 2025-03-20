@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
+import 'package:meri_sadak/screens/otpVerify/otp_screen.dart';
 import 'package:meri_sadak/screens/termAndPrivacy/terms_condition_privacy_policy.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
@@ -14,6 +16,7 @@ import '../../widgets/custom_text_widget.dart';
 import '../../widgets/login_signup_bg_active.dart';
 import '../home/home_screen.dart';
 import '../login/login_screen.dart';
+import '../passwordChange/password_create_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -43,6 +46,7 @@ class _SignUpScreen extends State<SignUpScreen> {
             // Image covering the top 30% of the screen
             Stack(
               children: [
+
                 SizedBox(
                   width: double.infinity,
                   child: Image.asset(
@@ -53,9 +57,27 @@ class _SignUpScreen extends State<SignUpScreen> {
                             .cover, // Make sure the image covers the container
                   ),
                 ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0, left: 20),
+                  child: SizedBox(
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: SvgPicture.asset(
+                      ImageAssetsPath.backArrow,
+                      //  ImageAssetsPath.signupBg, // Path to the background image
+                      fit:
+                      BoxFit
+                          .cover, // Make sure the image covers the container
+                    ),
+                  ),
+                ),),
+
                 Container(
                   margin: EdgeInsets.only(
-                    top: DeviceSize.getScreenHeight(context) * 0.04,
+                    top: DeviceSize.getScreenHeight(context) * 0.06,
                   ), // Space for the image
                   child: Center(
                     child: Image.asset(
@@ -68,7 +90,7 @@ class _SignUpScreen extends State<SignUpScreen> {
 
                 // Adjusting the container's height so it fills the remaining space
                 CustomLoginSignupContainer(
-                  marginHeight: 0.25,
+                  marginHeight: 0.3,
                   height: DeviceSize.getScreenHeight(context),
                   // Set remaining height for the container (full height - image height)
                   child: Column(
@@ -76,38 +98,38 @@ class _SignUpScreen extends State<SignUpScreen> {
                     children: [
                       CustomTextWidget(
                         text: AppStrings.signUp,
-                        fontSize: AppDimensions.di_24,
-                        color: AppColors.black,
+                        fontSize: AppDimensions.di_22,
+                        color: AppColors.black, fontWeight: AppFontWeight.fontWeight600,
                       ),
 
                       SizedBox(height: AppDimensions.di_15),
 
                       // Space between widgets
                       Container(
-                        padding: const EdgeInsets.all(AppDimensions.di_16),
+                        padding: const EdgeInsets.all(AppDimensions.di_14),
                         child: Column(
                           children: [
-                            customLoginSignupTextFieldWidget(
+                            CustomLoginSignupTextFieldWidget(
                               textEditController: _fullNameController,
                               hintText: AppStrings.fullName,
                               icon: ImageAssetsPath.user,
                             ),
-                            const SizedBox(height: AppDimensions.di_20),
+                            const SizedBox(height: AppDimensions.di_15),
 
-                            customLoginSignupTextFieldWidget(
+                            CustomLoginSignupTextFieldWidget(
                               textEditController: _emailController,
                               hintText: AppStrings.email,
                               icon: ImageAssetsPath.mail,
                             ),
-                            const SizedBox(height: AppDimensions.di_20),
+                            const SizedBox(height: AppDimensions.di_15),
 
-                            customLoginSignupTextFieldWidget(
+                            CustomLoginSignupTextFieldWidget(
                               textEditController: _phoneNoController,
                               hintText: AppStrings.phoneNoOnly,
                               icon: ImageAssetsPath.phone,
                             ),
 
-                            const SizedBox(height: AppDimensions.di_20),
+                            const SizedBox(height: AppDimensions.di_15),
 
                             Row(
                               children: [
@@ -126,7 +148,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                                   text: TextSpan(
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: AppDimensions.di_14,
+                                      fontSize: AppDimensions.di_15,
                                     ),
                                     // Default text style
                                     children: [
@@ -136,6 +158,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
+                                          fontSize: AppDimensions.di_15,
                                         ),
                                         // Highlight color for the clickable text
                                         recognizer:
@@ -158,6 +181,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
+                                          fontSize: AppDimensions.di_15,
                                         ),
                                         // Highlight color for the clickable text
                                         recognizer:
@@ -184,17 +208,32 @@ class _SignUpScreen extends State<SignUpScreen> {
 
                             CustomLoginSignupBgActiveWidget(
                               text: AppStrings.signUp,
-                              fontSize: AppDimensions.di_20,
+                              fontSize: AppDimensions.di_18,
                               fontWeight: AppFontWeight.fontWeight500,
                               color: AppColors.whiteColor,
                               textAlign: TextAlign.center,
                               onClick: () {
+
+                               /* Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) =>
+                                        OtpValidationScreen(type: AppStrings.createPassword,), // Pass the profile data
+                                  ),
+                                );*/
+
+                                final userProfile = {
+                                  'fullname': _fullNameController.text,
+                                  'phoneNo': _phoneNoController.text,
+                                  'email': _emailController.text,};
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder:
                                         (context) =>
-                                            HomeScreen(), // Pass the profile data
+                                            PasswordCreateScreen(type: AppStrings.createPassword, userProfile: userProfile), // Pass the profile data
                                   ),
                                 );
                               },
@@ -206,7 +245,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                               text: TextSpan(
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: AppDimensions.di_14,
+                                  fontSize: AppDimensions.di_15,
                                 ),
                                 // Default text style
                                 children: [
@@ -223,6 +262,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
+                                      fontSize: AppDimensions.di_16,
                                     ),
                                     // Highlight color for the clickable text
                                     recognizer:

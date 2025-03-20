@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/home/home_screen.dart';
 import 'package:meri_sadak/screens/login/login_screen.dart';
@@ -8,6 +9,7 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_font_weight.dart';
 import '../../constants/app_strings.dart';
+import '../../services/DatabaseHelper/database_helper.dart';
 import '../../utils/device_size.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
@@ -17,7 +19,8 @@ import '../../widgets/login_signup_bg_active.dart';
 class PasswordCreateScreen extends StatefulWidget {
 
   String type;
-  PasswordCreateScreen({super.key, required this.type});
+  Map<String, dynamic> userProfile;
+  PasswordCreateScreen({super.key, required this.type, required this.userProfile});
 
   @override
   State<PasswordCreateScreen> createState() => _PasswordCreateScreen();
@@ -26,6 +29,7 @@ class PasswordCreateScreen extends StatefulWidget {
 class _PasswordCreateScreen extends State<PasswordCreateScreen> {
 
   bool _isPasswordVisible = false;
+  final dbHelper = DatabaseHelper();
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController = TextEditingController();
@@ -47,6 +51,24 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
                     fit: BoxFit.cover, // Make sure the image covers the container
                   ),
                 ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0, left: 20),
+                  child: SizedBox(
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: SvgPicture.asset(
+                        ImageAssetsPath.backArrow,
+                        //  ImageAssetsPath.signupBg, // Path to the background image
+                        fit:
+                        BoxFit
+                            .cover, // Make sure the image covers the container
+                      ),
+                    ),
+                  ),),
+
                 Container(
                   margin: EdgeInsets.only(
                     top:  DeviceSize.getScreenHeight(context) * 0.1,
@@ -68,7 +90,12 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
 
-                      CustomTextWidget(text: AppStrings.createPassword, fontSize: AppDimensions.di_24, color: AppColors.black),
+                      CustomTextWidget(
+                        text: AppStrings.createPassword,
+                        fontSize: AppDimensions.di_22,
+                        color: AppColors.black,
+                        fontWeight: AppFontWeight.fontWeight600,
+                      ),
 
                       SizedBox(height: AppDimensions.di_20), // Space between widgets
 
@@ -101,12 +128,17 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
 
                             CustomLoginSignupBgActiveWidget(
                               text: AppStrings.submit,
-                              fontSize: AppDimensions.di_20,
+                              fontSize: AppDimensions.di_18,
                               fontWeight: AppFontWeight.fontWeight500,
                               color: AppColors.whiteColor,
                               textAlign: TextAlign.center,
                               onClick: () {
                                 if(widget.type == AppStrings.resetPassword){
+
+                                  widget.userProfile['password'] = _passwordController.text;
+
+                                  dbHelper.insertUserDetails(widget.userProfile);
+
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -116,13 +148,23 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
                                     ),
                                   );
                                 }
-                               else{
+                                if(widget.type == AppStrings.forgotPassword){
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                       builder:
                                           (context) =>
                                           LoginScreen(), // Pass the profile data
+                                    ),
+                                  );
+                                }
+                               else{
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) =>
+                                          HomeScreen(), // Pass the profile data
                                     ),
                                   );
                                 }

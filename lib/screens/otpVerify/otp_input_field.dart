@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../../constants/app_dimensions.dart';
 
 class OTPInputField extends StatefulWidget {
@@ -51,7 +50,8 @@ class _OTPInputFieldState extends State<OTPInputField> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(widget.length, (index) {
         return SizedBox(
-          width: AppDimensions.di_50,
+          width: AppDimensions.di_45,
+          height: AppDimensions.di_45,
           child: TextField(
             inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
             controller: controllers[index],

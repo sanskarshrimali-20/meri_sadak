@@ -8,7 +8,9 @@ class AppStrings {
   static const login = "Log In";
   static const loginWithSpace = " Log In";
   static const phoneNo = "Phone Number / Email ID";
+  static const phoneEmail = "Phone / Email ID";
   static const phoneNoOnly = "Phone Number";
+  static const phoneNoO = "Phone No";
   static const password = "Password";
   static const forgotPasswordQue = "Forgot Password?";
   static const signUp = "Sign Up";
@@ -18,6 +20,7 @@ class AppStrings {
   static const enterNewPassword = "Enter New Password";
   static const confirmNewPassword = "Confirm New Password";
   static const fullName = "Full Name";
+  static const name = "Name";
   static const email = "E-mail";
   static const confirmPassword = "Confirm Password";
   static const alreadyHaveAccount = "Already have an account?";
@@ -74,18 +77,18 @@ class AppStrings {
   static const noIPrefer = "No,\nI prefer not to be contacted";
   static const welcome = "Welcome";
   static const meriSadakApplication = "Meri Sadak application allows citizens to register a complaint regarding PMGSY and non PMGSY Roads.";
-  static const continues = "continue";
+  static const continues = "Continue";
   static const previous = "Previous";
   static const back = "Back";
   static const addressNRDDA = "National Rural Roads Development Agency, 5th Floor, NBCC Tower, Bhikaji Cama Place, New Delhi 110066.";
   static const contactNumberOne = "+91-11-26714001";
   static const contactNumberTwo = "+91-11-26714002";
-  static const emailId = "Email-Id:";
-  static const timings = "Timings:";
+  static const emailId = "Email-Id";
+  static const timings = "Timings";
   static const didntReceiveOtp = "Didn’t receive an OTP?";
   static const resendOtp = " Resend OTP";
-  static const weHaveSend = "We have sent OTP on your number";
-  static const otpValidation = "OTP Validation";
+  static const weHaveSend = "OTP sent to your phone 000 000 5943 and email demo@gmail.com";
+  static const otpVerification = "OTP Verification";
   static const selectLanguage = "Select Language";
   static const resetPassword = "Reset Password";
   static const createPassword = "Create Password";
@@ -150,9 +153,34 @@ class AppStrings {
 
   static const edit = "Edit";
 
-  static const roadName = "Road Name";
+  static const enterRoadName = " Enter Road Name";
 
   static const location = "Location";
+
+  static const myProfile = "My Profile";
+  static const checkVersionUpdate = "Check version update";
+  static const themeMode = "Dark and Light Mode";
+  static const fontSize = "Font Size";
+  static const language  = "Language ";
+
+  static const verify = "Verify";
+  static const pleaseSelectImage = "Please Select At Least One Image";
+  static const pleaseSelectState = "Please Select State";
+  static const pleaseSelectDistrict = "Please Select District";
+  static const pleaseSelectComplaint = "Please Select Complaint Type";
+  static const pleaseWriteFeedback = "Please Write Your Feedback";
+
+  static const roadName = "Road Name";
+
+  static const regular = 'Regular';
+
+  static const small = "Small";
+  static const large = "Large";
+
+  static const selectLanguagePre = 'Select your preferred language.';
+
+
+
 
 
 

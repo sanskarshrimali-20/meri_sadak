@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/login/login_screen.dart';
 import 'package:meri_sadak/screens/otpVerify/otp_screen.dart';
+import 'package:meri_sadak/screens/passwordChange/password_create_screen.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_font_weight.dart';
 import '../../constants/app_strings.dart';
 import '../../utils/device_size.dart';
+import '../../widgets/custom_button.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
 import '../../widgets/custom_password_widget.dart';
@@ -27,6 +30,10 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
 
+  bool changesuffixiocn = false;
+  bool suffixiconvisible = false;
+  bool continueEnable = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,15 +47,34 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: Image.asset(
-                    ImageAssetsPath.loginBg,// ImageAssetsPath.forgetPasswordBg,
+                    ImageAssetsPath.loginBg,
+                    // ImageAssetsPath.forgetPasswordBg,
                     fit:
                         BoxFit
                             .cover, // Make sure the image covers the container
                   ),
                 ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 40.0, left: 20),
+                  child: SizedBox(
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: SvgPicture.asset(
+                        ImageAssetsPath.backArrow,
+                        //  ImageAssetsPath.signupBg, // Path to the background image
+                        fit:
+                        BoxFit
+                            .cover, // Make sure the image covers the container
+                      ),
+                    ),
+                  ),),
+
                 Container(
                   margin: EdgeInsets.only(
-                    top:  DeviceSize.getScreenHeight(context) * 0.1,
+                    top: DeviceSize.getScreenHeight(context) * 0.1,
                   ), // Space for the image
                   child: Center(
                     child: Image.asset(
@@ -69,69 +95,117 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                     children: [
                       CustomTextWidget(
                         text: widget.type,
-                        fontSize: AppDimensions.di_24,
+                        fontSize: AppDimensions.di_22,
                         color: AppColors.black,
+                        fontWeight: AppFontWeight.fontWeight600,
                       ),
 
                       SizedBox(height: AppDimensions.di_20),
 
                       // Space between widgets
                       Container(
-                        padding: const EdgeInsets.all(AppDimensions.di_16),
+                        padding: const EdgeInsets.all(AppDimensions.di_12),
                         child: Column(
                           spacing: 20,
                           children: [
-                            customLoginSignupTextFieldWidget(
+                            CustomLoginSignupTextFieldWidget(
                               textEditController: _phoneNoController,
-                              hintText: AppStrings.phoneNo,
+                              hintText: AppStrings.phoneEmail,
                               icon: ImageAssetsPath.user,
+                              showSuffixIcon: suffixiconvisible,
+                              changeSuffixIcon: changesuffixiocn,
+                              maxlength: 25,
+                              onChanged:
+                                  (text) => {
+                                setState(() {
+                                  if (_phoneNoController.text.isEmpty)
+                                  {
+                                    suffixiconvisible = false;
+                                  changesuffixiocn = false;
+                                  continueEnable = false;
+                                  }
+                                  else{
+                                    continueEnable = false;
+                                  }
+                                })
+                                  },
                             ),
 
-                            // const SizedBox(height: AppDimensions.di_20),
 
-                            /*Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Flexible(child: Divider()),
-                                CustomTextWidget(
-                                  text: ' or ',
-                                  fontSize: AppDimensions.di_16,
-                                  color: AppColors.black,
-                                  fontWeight: AppFontWeight.fontWeight500,
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: CustomButton(
+                                text: AppStrings.verify,
+                                onPressed: () async {
+                                  setState(() {
+                                    if(_phoneNoController.text.isEmpty){
+                                      suffixiconvisible = false;
+                                      changesuffixiocn = false;
+                                      continueEnable = false;
+                                    }
+                                    else if(_phoneNoController.text.length > 6){
+                                      suffixiconvisible = true;
+                                      changesuffixiocn = true;
+                                      continueEnable = true;
+                                    }
+                                    else{
+                                      suffixiconvisible = true;
+                                      changesuffixiocn = false;
+                                      continueEnable = false;
+                                    }
+                                  });
+                                },
+                                textColor: AppColors.whiteColor,
+                                fontSize: AppDimensions.di_18,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: AppDimensions.di_6,
+                                  horizontal: AppDimensions.di_15,
                                 ),
-                                Flexible(child: Divider()),
-                              ],
-                            ),*/
+                                borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                                buttonHeight: AppDimensions.di_35,
+                                buttonWidth: AppDimensions.di_80,
+                                backgroundColor: AppColors.toastBgColorGreen,
+                                backgroundColorOne: AppColors.toastBgColorGreen,
+                              ),
+                            ),
 
-                            // const SizedBox(height: AppDimensions.di_20),
-
-                            /* customLoginSignupTextFieldWidget(
-                              textEditController: _emailController,
-                              hintText: AppStrings.email,
-                              icon: ImageAssetsPath.mail,
-                            ),*/
-                            const SizedBox(height: AppDimensions.di_20),
+                            const SizedBox(height: AppDimensions.di_30),
 
                             CustomLoginSignupBgActiveWidget(
-                              text: AppStrings.submit,
-                              fontSize: AppDimensions.di_20,
+                              text: AppStrings.continues,
+                              fontSize: AppDimensions.di_18,
                               fontWeight: AppFontWeight.fontWeight500,
                               color: AppColors.whiteColor,
                               textAlign: TextAlign.center,
                               onClick: () {
-                                Navigator.push(
+
+                               /* Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder:
                                         (context) => OtpValidationScreen(
                                           type: widget.type,
                                         ), // Pass the profile data
+
+                                  ),
+                                );*/
+                                final userProfile = {
+                                  'fullname': "",
+                                  'phoneNo':"",
+                                  'email': "",};
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => PasswordCreateScreen(
+                                      type: widget.type, userProfile: userProfile,
+                                    ), // Pass the profile data
+
                                   ),
                                 );
                               },
+                              isEnabled: continueEnable,
                             ),
-
-                            const SizedBox(height: AppDimensions.di_20),
 
                             Visibility(
                               visible: widget.type != AppStrings.resetPassword,
@@ -154,6 +228,7 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                       text: AppStrings.backToLogIn,
                                       fontSize: AppDimensions.di_18,
                                       color: AppColors.black,
+                                      fontWeight: AppFontWeight.fontWeight500,
                                     ),
                                   ],
                                 ),

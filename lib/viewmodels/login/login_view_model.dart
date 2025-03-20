@@ -12,6 +12,8 @@ class LoginViewModel extends ChangeNotifier {
   final ApiService _apiService = ApiService();
   final LocalSecureStorage _localStorage = LocalSecureStorage();
 
+  final dbHelper = DatabaseHelper();
+
   bool _isLoading = false;
   String? _errorMessage;
   String? _userName;
@@ -29,7 +31,7 @@ class LoginViewModel extends ChangeNotifier {
     try {
       _setLoading(true);
 
-      final requestBody = {
+     /* final requestBody = {
         "username": username,
         "password": password,
       };
@@ -52,8 +54,19 @@ class LoginViewModel extends ChangeNotifier {
       // Set local storage logging state
       // await _localStorage.setLoggingState('true');/
       log("Local storage set to 'true'");
+*/
 
-      return "success";
+      final profile = await dbHelper.getUserDetailsById(username);
+      String phoneNo = profile?['phoneNo'] ?? 'No Name';  // Replace 'name' with actual field name
+      String password = profile?['password'] ?? 'No Name';  // Replace 'name' with actual field name
+
+      if(phoneNo == username && password == password){
+        return "Success";
+      }
+      else{
+        return "Error";
+      }
+      // return "success";
     } catch (e, stackTrace) {
       log("Error during login: $e");
       debugPrintStack(stackTrace: stackTrace);

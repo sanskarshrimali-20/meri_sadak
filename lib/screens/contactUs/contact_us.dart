@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/contact_us_widget.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_image_path.dart';
-import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 
 class ContactUsScreen extends StatefulWidget {
@@ -20,12 +20,9 @@ class _ContactUsScreen extends State<ContactUsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColorGainsBoro,
-      appBar: CustomAppBar(
-        title: AppStrings.contactUs,
-        leadingIcon: ImageAssetsPath.backArrow,
-      ),
       body: CustomBodyWithGradient(
-        childHeight: DeviceSize.getScreenHeight(context) * 0.6,
+        title: AppStrings.contactUs,
+        childHeight: DeviceSize.getScreenHeight(context) * 0.7,
         child: Padding(
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
@@ -48,9 +45,10 @@ class _ContactUsScreen extends State<ContactUsScreen> {
                     textOne: "10:00 AM to 5:00 PM",
                     textTwo: "",
                     icon: ImageAssetsPath.clock,
+                    fontWeight: AppFontWeight.fontWeight600,
                   ),
                   Divider(
-                    color: Colors.grey, // Line color
+                    color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
@@ -59,14 +57,15 @@ class _ContactUsScreen extends State<ContactUsScreen> {
                   SizedBox(height: AppDimensions.di_15,),
 
                   ContactUsWidget(
-                    text: AppStrings.phoneNo,
+                    text: AppStrings.phoneNoOnly,
                     textOne: "+91 11-26714001",
                     textTwo: "+91 11-26714002",
                     icon: ImageAssetsPath.phone,
                     space: AppDimensions.di_15,
+                    fontWeight: AppFontWeight.fontWeight600,
                   ),
                   Divider(
-                    color: Colors.grey, // Line color
+                    color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
@@ -77,9 +76,10 @@ class _ContactUsScreen extends State<ContactUsScreen> {
                     text: AppStrings.emailId,
                     textOne: "merisadakhelp@gmail.com",
                     icon: ImageAssetsPath.mail,
+                    fontWeight: AppFontWeight.fontWeight600,
                   ),
                   Divider(
-                    color: Colors.grey, // Line color
+                    color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
@@ -90,6 +90,7 @@ class _ContactUsScreen extends State<ContactUsScreen> {
                     text: AppStrings.address,
                     textOne: AppStrings.addressNRDDA,
                     icon: ImageAssetsPath.locationPin,
+                    fontWeight: AppFontWeight.fontWeight600,
                     maxlines: 4,
                   ),
                 ],

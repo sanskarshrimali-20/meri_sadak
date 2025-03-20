@@ -27,11 +27,8 @@ class _AppVersionState extends State<AppVersion> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColorGainsBoro,
-      appBar: CustomAppBar(
-        title: AppStrings.appVersion,
-        leadingIcon: ImageAssetsPath.backArrow,
-      ),
       body: CustomBodyWithGradient(
+        title: AppStrings.appVersion,
         childHeight: DeviceSize.getScreenHeight(context),
         child: ListView(
           children: [

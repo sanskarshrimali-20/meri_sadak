@@ -37,9 +37,8 @@ class _AboutPMGSYState extends State<AboutPMGSY> {
 
     return Scaffold(
       backgroundColor: AppColors.bgColorGainsBoro,
-      appBar: CustomAppBar(
-        title: AppStrings.aboutTitle, leadingIcon: ImageAssetsPath.backArrow,),
       body: CustomBodyWithGradient(
+        title: AppStrings.aboutTitle,
         childHeight: DeviceSize.getScreenHeight(context),
         child: ListView(
           children: [
@@ -93,7 +92,7 @@ class _AboutPMGSYState extends State<AboutPMGSY> {
                 onMapTap: (point) async {
                   await provider.setLocation(
                       point.latitude, point.longitude);
-                },
+                }, onMapReady: () {  },
               ),
             ),
           ],

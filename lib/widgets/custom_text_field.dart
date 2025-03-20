@@ -20,6 +20,7 @@ class CustomTextField extends StatefulWidget {
   final bool isRequired;
   final bool editable;
   final bool isNumberWithPrefix;
+  final double fontSize;
 
   const CustomTextField({
     super.key,
@@ -36,6 +37,7 @@ class CustomTextField extends StatefulWidget {
     this.editable = true,
     required this.labelText,
     required this.isRequired,
+    this.fontSize = AppDimensions.di_17,
     this.isNumberWithPrefix = false,
   });
 
@@ -70,13 +72,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
     }
     else if(widget.keyboardType == TextInputType.text){
       inputFormatters = [
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s\-]')),];
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9\a-zA-Z\s\-]')),];
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
             widget.isRequired
                 ? Text("*", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red))
                 : SizedBox.shrink(),
@@ -108,15 +109,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
               inputFormatters: inputFormatters,
               textCapitalization: TextCapitalization.words,
               decoration: InputDecoration(
-                //filled: true,
-               // fillColor:  AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
                 border: InputBorder.none,
                 hintText: widget.label,
-                hintStyle: TextStyle(color: AppColors.black.withAlpha(90), fontSize: AppDimensions.di_17, fontWeight: AppFontWeight.fontWeight400),
+                hintStyle: TextStyle(color: AppColors.black.withAlpha(90), fontSize: widget.fontSize),
                 counterText: "",
-                // errorText: errorText, // Display error message here
               ),
-            ),
+              style: TextStyle(
+                fontSize: widget.fontSize,  // Adjust the font size here for the text input
+                color: AppColors.black,  // Adjust text color if needed
+              ),
+            )
           ),
         ),
       ],
