@@ -74,6 +74,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
               controller: widget.textController,
               onChanged: (val) {
                 setState(() {
+                  widget.onChanged?.call(widget.textController!.text);
                   _filteredList = _subFilteredList
                       .where((element) => element
                       .toLowerCase()
@@ -82,7 +83,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                 });
               },
               validator: (val) => val!.isEmpty ? 'Field can\'t be empty' : null,
-              style: widget.style ?? TextStyle(color: Colors.grey.shade800, fontSize: AppDimensions.di_16),
+              style: widget.style ?? TextStyle(color: AppColors.black, fontSize: AppDimensions.di_16),
               onTap: () {
                 setState(() {
                   _isTapped = true; // Show dropdown when tapped
@@ -112,9 +113,9 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                   onTap: () {
                     widget.textController!.clear();
                     setState(() {
+                      widget.onChanged?.call('');
                       _filteredList = widget.items!;
                     });
-
                   },
                   child: const Icon(Icons.clear, color: Colors.grey),
                 )
@@ -128,7 +129,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
             ? Container(
           height: widget.dropdownHeight ??  AppDimensions.di_150,
           color: widget.dropdownBgColor ?? Colors.grey.shade200,
-          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.di_8),
+          padding: const EdgeInsets.only(left: AppDimensions.di_12, right: AppDimensions.di_8),
           child: ListView.builder(
             itemCount: _filteredList.length,
             itemBuilder: (context, index) {
@@ -141,7 +142,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                   });
                 },
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: AppDimensions.di_8),
+                  padding: const EdgeInsets.only(bottom: AppDimensions.di_8),
                   child: Text(
                     _filteredList[index],
                     style: widget.dropdownTextStyle ??

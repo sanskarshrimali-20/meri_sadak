@@ -1,115 +1,118 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:meri_sadak/constants/app_strings.dart';
+import 'package:meri_sadak/screens/legalPolicy/legal_policy_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
-import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
-import '../../constants/app_font_weight.dart';
 import '../../constants/app_image_path.dart';
-import '../../constants/app_strings.dart';
-import '../../providerData/permission_provider.dart';
-import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
-import '../../widgets/custom_carousel_slider.dart';
-import '../../widgets/custom_expansion_tile.dart';
-import '../../widgets/custom_text_widget.dart';
-import '../location/location_widget.dart';
+import '../../widgets/drawer_widget.dart';
+import '../passwordChange/forgot_reset_password_screen.dart';
 
-class PrivacyAndSecurity extends StatefulWidget {
-  const PrivacyAndSecurity({super.key});
+class PrivacyAndSecurityScreen extends StatefulWidget {
+  const PrivacyAndSecurityScreen({super.key});
 
   @override
-  State<PrivacyAndSecurity> createState() => _PrivacyAndSecurityState();
+  State<PrivacyAndSecurityScreen> createState() => _PrivacyAndSecurityScreen();
 }
 
-class _PrivacyAndSecurityState extends State<PrivacyAndSecurity> {
+class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColorGainsBoro,
-      appBar: CustomAppBar(
-        title: AppStrings.privacyAndSecurityHeading,
-        leadingIcon: ImageAssetsPath.backArrow,
-      ),
       body: CustomBodyWithGradient(
-        childHeight: DeviceSize.getScreenHeight(context),
-        child: ListView(
-          children: [
-            SizedBox(height: 20,),
-            Card(
-              elevation: 2.0,
-              child: Container(
-                height: 70,
-                padding: EdgeInsets.only(left: AppDimensions.di_10, right: AppDimensions.di_10, top: AppDimensions.di_5, bottom: AppDimensions.di_5),
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomTextWidget(
-                      text:   AppStrings.resetPasswordHeading,
-                      fontSize: AppDimensions.di_16,
-                      color: AppColors.blackMagicColor,
-                      fontWeight: AppFontWeight.fontWeight600,
-                      // textAlign: AppFontSizeWeight.textAlignJustify,
-                      // letterSpacing: AppFontSizeWeight.letterSpacing_0_5,
-                    ),
-                    //SvgPicture.asset(ImageAssetsPath.replace,)
-                  ],
-                ),
+        title: AppStrings.privacyAndSecurity,
+        childHeight: DeviceSize.getScreenHeight(context) * 0.7,
+        child: Padding(
+          padding: EdgeInsets.all(AppDimensions.di_5),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.whiteColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(AppDimensions.di_20), // Rounded corners
               ),
             ),
-            Card(
-              elevation: 2.0,
-              child: Container(
-                height: 70,
-                padding: EdgeInsets.only(left: AppDimensions.di_10, right: AppDimensions.di_10, top: AppDimensions.di_5, bottom: AppDimensions.di_5),
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomTextWidget(
-                      text:   AppStrings.clearCacheData,
-                      fontSize: AppDimensions.di_16,
-                      color: AppColors.blackMagicColor,
-                      fontWeight: AppFontWeight.fontWeight600,
-                      // textAlign: AppFontSizeWeight.textAlignJustify,
-                      // letterSpacing: AppFontSizeWeight.letterSpacing_0_5,
-                    ),
-                   // SvgPicture.asset(ImageAssetsPath.replace,)
-                  ],
-                ),
+
+            padding: EdgeInsets.all(AppDimensions.di_15),
+
+            child: SizedBox(
+              child: Column(
+                children: [
+                  SizedBox(height: AppDimensions.di_15),
+
+                  customDrawerWidget(
+                    title: AppStrings.resetPassword,
+                    icon: ImageAssetsPath.lock2,
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                              ForgotResetPasswordScreen(type: AppStrings.resetPassword), // Pass the profile data
+                        ),
+                      );
+                    },
+                  ),
+
+                  Divider(
+                    color: Colors.grey.withAlpha(60), // Line color
+                    thickness: AppDimensions.di_1, // Line thickness
+                    indent: AppDimensions.di_10, // Space from the left
+                    endIndent: AppDimensions.di_10, // Space from the right
+                  ),
+
+                  customDrawerWidget(
+                    title: AppStrings.clearCacheData,
+                    icon: ImageAssetsPath.clear,
+                    onClick: () {
+
+                    },
+                  ),
+                 /* Divider(
+                    color: Colors.grey.withAlpha(60), // Line color
+                    thickness: AppDimensions.di_1, // Line thickness
+                    indent: AppDimensions.di_10, // Space from the left
+                    endIndent: AppDimensions.di_10, // Space from the right
+                  ),
+
+                  customDrawerWidget(
+                    title: AppStrings.managePermissions,
+                    icon: ImageAssetsPath.contacts,
+                    onClick: () {
+                    },
+                  ),*/
+
+                  Divider(
+                    color: Colors.grey.withAlpha(60), // Line color
+                    thickness: AppDimensions.di_1, // Line thickness
+                    indent: AppDimensions.di_10, // Space from the left
+                    endIndent: AppDimensions.di_10, // Space from the right
+                  ),
+
+                  customDrawerWidget(
+                    title: AppStrings.legalAndPolicies,
+                    icon: ImageAssetsPath.privacy,
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                              LegalPolicyScreen(), // Pass the profile data
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
-            // Use CustomExpansionTile for "About PMGSY"
-            CustomExpansionTile(
-              title: AppStrings.managePermissions,
-              subheading: AppStrings.managePermissionsDesc,
-              content:  Container(), // Content can be empty or add custom widgets here
-              initiallyExpanded: true,
-            ),
-            CustomExpansionTile(
-              title: AppStrings.legalAndPolicies,
-              subheading: AppStrings.legalAndPoliciesDesc,
-              content:  Container(), // Content can be empty or add custom widgets here
-              initiallyExpanded: false,
-            ),
-
-            /*   CustomExpansionTile(
-              title: AppStrings.appVersionUpdate,
-              subheading: '',
-              //AppStrings.aboutMeriSadakSubHeading,
-              content: Container(),
-              // Content can be empty or add custom widgets here
-              initiallyExpanded: false,
-            ),*/
-
-          ],
+          ),
         ),
       ),
     );
   }
+
 }

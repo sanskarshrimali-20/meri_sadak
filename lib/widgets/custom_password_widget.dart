@@ -41,8 +41,9 @@ Widget customPasswordWidget({
         color: Colors.black54,
         fontSize: AppDimensions.di_17,
       ),
+      hintStyle: const TextStyle(color: Colors.black54, fontSize: AppDimensions.di_16),
       prefixIcon: Padding(
-        padding: const EdgeInsets.all(AppDimensions.di_8),
+        padding: const EdgeInsets.all(AppDimensions.di_9),
         child: SvgPicture.asset(
           ImageAssetsPath.lock2, // Path to the custom icon image
           width: AppDimensions.di_20, // Adjust the width of the image
