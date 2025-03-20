@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 
+import '../constants/app_colors.dart';
 import '../constants/app_dimensions.dart';
 
 Widget customPasswordWidget({
@@ -38,8 +39,9 @@ Widget customPasswordWidget({
       errorMaxLines: 3,
       // Allow up to 3 lines for error text
       hintStyle: const TextStyle(
-        color: Colors.black54,
-        fontSize: AppDimensions.di_17,
+          color: AppColors.blackMagicColor,
+          fontSize: AppDimensions.di_18,
+          fontWeight: FontWeight.w400
       ),
       prefixIcon: Padding(
         padding: const EdgeInsets.all(AppDimensions.di_8),

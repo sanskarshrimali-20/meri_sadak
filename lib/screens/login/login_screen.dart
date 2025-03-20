@@ -12,6 +12,7 @@ import 'package:meri_sadak/screens/signUp/sign_up_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_container.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_textfield.dart';
+import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:meri_sadak/widgets/login_signup_bg_unactive.dart';
 import '../../widgets/custom_password_widget.dart';
 import '../../widgets/custom_snackbar.dart';
@@ -29,8 +30,12 @@ class _LoginScreen extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _usernameFocusNode =
+      FocusNode(); // FocusNode for the text field
   String? emailPhoneError;
   String? passwordError;
+  bool isPhoneNumberField =
+      true; // Track if we're showing phone number or email
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +54,8 @@ class _LoginScreen extends State<LoginScreen> {
                     child: Image.asset(
                       ImageAssetsPath.loginBg, // Path to the background image
                       fit:
-                      BoxFit
-                          .cover, // Make sure the image covers the container
+                          BoxFit
+                              .cover, // Make sure the image covers the container
                     ),
                   ),
                   Container(
@@ -92,31 +97,67 @@ class _LoginScreen extends State<LoginScreen> {
                             children: [
                               CustomLoginSignupTextFieldWidget(
                                 controller: _usernameController,
-                                hintText: AppStrings.phoneNo,
-                                icon: ImageAssetsPath.user,
-                                keyboardType: TextInputType.emailAddress,
+                                focusNode: _usernameFocusNode,
+                                hintText:
+                                    isPhoneNumberField
+                                        ? AppStrings.phoneNoTxt
+                                        : AppStrings.emailIdTxt,
+                                icon:
+                                    isPhoneNumberField
+                                        ? ImageAssetsPath.phone
+                                        : ImageAssetsPath.mail,
+                                // ImageAssetsPath.user,//
+                                keyboardType:
+                                    isPhoneNumberField
+                                        ? TextInputType.phone
+                                        : TextInputType.emailAddress,
                                 label: '',
-                                fieldTypeCheck: 'phoneEmail',
+                                // fieldTypeCheck: 'phoneEmail',
+                                maxLength: isPhoneNumberField ? 10 : 50,
                                 labelText: '',
                                 errorText: emailPhoneError,
                                 isRequired: true,
                                 onChanged: validateEmailPhone,
-                                /* validator: (value) {
-                                  // Validator logic for phone number/email
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Phone Number / Email ID is required';
-                                  }
-                                  if (!_validateUsername(value)) {
-                                    return "Please enter a valid phone number or email";
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {
-                                  // Trigger validation on text change
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  // Close the keyboard when tapping outside the input field
+                                  FocusScope.of(context).unfocus();
+                                  // Toggle the field type
                                   setState(() {
-                                    _formKey.currentState?.validate();
+                                    isPhoneNumberField =
+                                        !isPhoneNumberField; // Toggle field type
+                                    emailPhoneError =
+                                        null; // Reset error text when switching fields
+                                    _usernameController.clear();
                                   });
-                                },*/
+                                  // Open the keyboard again for the next focused field
+                                  Future.delayed(
+                                    Duration(milliseconds: 300),
+                                    () {
+                                      FocusScope.of(
+                                        context,
+                                      ).requestFocus(_usernameFocusNode);
+                                    },
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: AppDimensions.di_8,
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: CustomTextWidget(
+                                      text:
+                                          isPhoneNumberField
+                                              ? AppStrings.useEmailInstead
+                                              : AppStrings.usePhoneNumbInstead,
+                                      fontSize: AppDimensions.di_15,
+                                      color: AppColors.blackMagicColor,
+                                      fontWeight: AppFontWeight.fontWeight600,
+                                    ),
+                                  ),
+                                ),
                               ),
                               const SizedBox(height: AppDimensions.di_20),
 
@@ -127,24 +168,8 @@ class _LoginScreen extends State<LoginScreen> {
                                 isPassword: true,
                                 isPasswordVisible: _isPasswordVisible,
                                 togglePasswordVisibility:
-                                _togglePasswordVisibility,
+                                    _togglePasswordVisibility,
                                 onChanged: validatePassword,
-                                /*    validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return "Password is required";
-                                  }
-                                  if (!_validatePassword(value)) {
-                                    // Show error if password is weak
-                                    return "Password should be at least 8 characters long, contain an uppercase letter, a number, and a special character";
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {
-                                  // Trigger validation on text change
-                                  setState(() {
-                                    _formKey.currentState?.validate();
-                                  });
-                                },*/
                               ),
 
                               const SizedBox(height: AppDimensions.di_15),
@@ -159,19 +184,18 @@ class _LoginScreen extends State<LoginScreen> {
                                       MaterialPageRoute(
                                         builder:
                                             (context) =>
-                                            ForgotResetPasswordScreen(
-                                              type:
-                                              AppStrings.forgotPassword,
-                                            ), // Pass the profile data
+                                                ForgotResetPasswordScreen(
+                                                  type:
+                                                      AppStrings.forgotPassword,
+                                                ), // Pass the profile data
                                       ),
                                     );
                                   },
-                                  child: Text(
-                                    AppStrings.forgotPasswordQue,
-                                    style: TextStyle(
-                                      color: AppColors.textColor,
-                                      fontSize: AppDimensions.di_16,
-                                    ),
+                                  child: CustomTextWidget(
+                                    text: AppStrings.forgotPasswordQue,
+                                    fontSize: AppDimensions.di_15,
+                                    color: AppColors.blackMagicColor,
+                                    fontWeight: AppFontWeight.fontWeight600,
                                   ),
                                 ),
                               ),
@@ -215,18 +239,18 @@ class _LoginScreen extends State<LoginScreen> {
                                       ),
                                       // Highlight color for the clickable text
                                       recognizer:
-                                      TapGestureRecognizer()
-                                        ..onTap = () {
-                                          Navigator.pushReplacement(
-                                            // ignore: use_build_context_synchronously
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) =>
-                                              const SignUpScreen(),
-                                            ),
-                                          );
-                                        },
+                                          TapGestureRecognizer()
+                                            ..onTap = () {
+                                              Navigator.pushReplacement(
+                                                // ignore: use_build_context_synchronously
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder:
+                                                      (context) =>
+                                                          const SignUpScreen(),
+                                                ),
+                                              );
+                                            },
                                     ),
                                   ],
                                 ),
@@ -349,9 +373,15 @@ class _LoginScreen extends State<LoginScreen> {
     // Validator logic for phone number/email
     setState(() {
       if (value == null || value.trim().isEmpty) {
-        emailPhoneError = 'Phone Number / Email ID is required';
+        emailPhoneError =
+            isPhoneNumberField
+                ? 'Phone Number is required'
+                : 'Email ID is required';
       } else if (!_validateUsername(value)) {
-        emailPhoneError = "Please enter a valid phone number or email";
+        emailPhoneError =
+            isPhoneNumberField
+                ? "Please enter a valid phone number"
+                : "Please enter a valid email id";
       } else {
         emailPhoneError = null;
       }
@@ -365,7 +395,7 @@ class _LoginScreen extends State<LoginScreen> {
       } else if (!_validatePassword(value)) {
         // Show error if password is weak
         passwordError =
-        "Password should be at least 8 characters long, contain an uppercase letter, a number, and a special character";
+            "Password should be at least 8 characters long, contain an uppercase letter, a number, and a special character";
       } else {
         passwordError = null;
       }

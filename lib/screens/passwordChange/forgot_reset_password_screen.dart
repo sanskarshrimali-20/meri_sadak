@@ -25,9 +25,14 @@ class ForgotResetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
+  final FocusNode _usernameFocusNode =
+      FocusNode(); // FocusNode for the text field
   final _formKey = GlobalKey<FormState>();
+  bool isPhoneNumberField =
+      true; // Track if we're showing phone number or email
+  String? emailPhoneError;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +52,8 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                       ImageAssetsPath.loginBg,
                       // ImageAssetsPath.forgetPasswordBg,
                       fit:
-                      BoxFit
-                          .cover, // Make sure the image covers the container
+                          BoxFit
+                              .cover, // Make sure the image covers the container
                     ),
                   ),
                   Container(
@@ -84,21 +89,34 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                         Container(
                           padding: const EdgeInsets.all(AppDimensions.di_16),
                           child: Column(
-                            spacing: 20,
                             children: [
                               CustomLoginSignupTextFieldWidget(
-                                controller: _phoneNoController,
-                                hintText: AppStrings.phoneNo,
-                                icon: ImageAssetsPath.user,
+                                controller: _usernameController,
+                                focusNode: _usernameFocusNode,
+                                hintText:
+                                    isPhoneNumberField
+                                        ? AppStrings.phoneNoTxt
+                                        : AppStrings.emailIdTxt,
+                                icon:
+                                    isPhoneNumberField
+                                        ? ImageAssetsPath.phone
+                                        : ImageAssetsPath.mail,
+                                // ImageAssetsPath.user,//
+                                keyboardType:
+                                    isPhoneNumberField
+                                        ? TextInputType.phone
+                                        : TextInputType.emailAddress,
                                 label: '',
+                                // fieldTypeCheck: 'phoneEmail',
+                                maxLength: isPhoneNumberField ? 10 : 50,
                                 labelText: '',
-                                fieldTypeCheck: 'phoneEmail',
+                                errorText: emailPhoneError,
                                 isRequired: true,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: (value) {
+                                onChanged: validateEmailPhone,
+                                /* validator: (value) {
                                   // Validator logic for phone number/email
                                   if (value == null || value.trim().isEmpty) {
-                                    return 'Phone Number/Email ID is required';
+                                    return 'Phone Number / Email ID is required';
                                   }
                                   if (!_validateUsername(value)) {
                                     return "Please enter a valid phone number or email";
@@ -110,7 +128,47 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                   setState(() {
                                     _formKey.currentState?.validate();
                                   });
+                                },*/
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  // Close the keyboard when tapping outside the input field
+                                  FocusScope.of(context).unfocus();
+                                  // Toggle the field type
+                                  setState(() {
+                                    isPhoneNumberField =
+                                        !isPhoneNumberField; // Toggle field type
+                                    emailPhoneError =
+                                        null; // Reset error text when switching fields
+                                    _usernameController.clear();
+                                  });
+                                  // Open the keyboard again for the next focused field
+                                  Future.delayed(
+                                    Duration(milliseconds: 300),
+                                    () {
+                                      FocusScope.of(
+                                        context,
+                                      ).requestFocus(_usernameFocusNode);
+                                    },
+                                  );
                                 },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: AppDimensions.di_8,
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: CustomTextWidget(
+                                      text:
+                                          isPhoneNumberField
+                                              ? AppStrings.useEmailInstead
+                                              : AppStrings.usePhoneNumbInstead,
+                                      fontSize: AppDimensions.di_15,
+                                      color: AppColors.blackMagicColor,
+                                      fontWeight: AppFontWeight.fontWeight600,
+                                    ),
+                                  ),
+                                ),
                               ),
 
                               // const SizedBox(height: AppDimensions.di_20),
@@ -136,7 +194,7 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                 hintText: AppStrings.email,
                                 icon: ImageAssetsPath.mail,
                               ),*/
-                              const SizedBox(height: AppDimensions.di_20),
+                              const SizedBox(height: AppDimensions.di_40),
 
                               CustomLoginSignupBgActiveWidget(
                                 text: AppStrings.submit,
@@ -147,11 +205,11 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                 onClick: _onForgotPasswordClick,
                               ),
 
-                              const SizedBox(height: AppDimensions.di_20),
+                              const SizedBox(height: AppDimensions.di_40),
 
                               Visibility(
                                 visible:
-                                widget.type != AppStrings.resetPassword,
+                                    widget.type != AppStrings.resetPassword,
                                 // Hide the GestureDetector if the type is "Reset"
                                 child: GestureDetector(
                                   onTap: () {
@@ -169,8 +227,9 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                       SizedBox(width: AppDimensions.di_2),
                                       CustomTextWidget(
                                         text: AppStrings.backToLogIn,
-                                        fontSize: AppDimensions.di_18,
-                                        color: AppColors.black,
+                                        fontSize: AppDimensions.di_15,
+                                        fontWeight: AppFontWeight.fontWeight600,
+                                        color: AppColors.blackMagicColor,
                                       ),
                                     ],
                                   ),
@@ -210,7 +269,8 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
   }
 
   void _onForgotPasswordClick() {
-    if (_formKey.currentState?.validate() ?? false) {
+    validateEmailPhone(_usernameController.text);
+    if (emailPhoneError == null) {
       // If the form is valid, proceed with the logic
       // If both username and password are valid, proceed to the next screen
       showErrorDialog(
@@ -223,10 +283,29 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
         MaterialPageRoute(
           builder:
               (context) => OtpValidationScreen(
-            type: widget.type,
-          ), // Pass the profile data
+                type: widget.type,
+              ), // Pass the profile data
         ),
       );
     }
+  }
+
+  void validateEmailPhone(String value) {
+    // Validator logic for phone number/email
+    setState(() {
+      if (value == null || value.trim().isEmpty) {
+        emailPhoneError =
+            isPhoneNumberField
+                ? 'Phone Number is required'
+                : 'Email ID is required';
+      } else if (!_validateUsername(value)) {
+        emailPhoneError =
+            isPhoneNumberField
+                ? "Please enter a valid phone number"
+                : "Please enter a valid email id";
+      } else {
+        emailPhoneError = null;
+      }
+    });
   }
 }
