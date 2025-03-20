@@ -59,6 +59,10 @@ dependencies:
     sdk: flutter
   intl: ^0.19.0
   google_fonts: ^6.2.1
+  flutter_map_dragmarker: ^8.0.2
+  flutter_map_cache: ^1.5.2
+  path_provider: ^2.1.5
+  dio_cache_interceptor_hive_store: ^4.0.0
 
   # flutter_gen: ^5.8.0
 
