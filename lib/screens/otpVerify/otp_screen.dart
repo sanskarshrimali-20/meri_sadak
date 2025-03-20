@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/otpVerify/otp_input_field.dart';
 import 'package:meri_sadak/screens/passwordChange/password_create_screen.dart';
@@ -43,28 +42,10 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                     //  ImageAssetsPath.forgetPasswordBg,
                     // Path to the background image
                     fit:
-                        BoxFit
-                            .cover, // Make sure the image covers the container
+                    BoxFit
+                        .cover, // Make sure the image covers the container
                   ),
                 ),
-
-                Padding(
-                  padding: const EdgeInsets.only(top: 40.0, left: 20),
-                  child: SizedBox(
-                    child: GestureDetector(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      child: SvgPicture.asset(
-                        ImageAssetsPath.backArrow,
-                        //  ImageAssetsPath.signupBg, // Path to the background image
-                        fit:
-                        BoxFit
-                            .cover, // Make sure the image covers the container
-                      ),
-                    ),
-                  ),),
-
                 Container(
                   margin: EdgeInsets.only(
                     top: DeviceSize.getScreenHeight(context) * 0.1,
@@ -86,11 +67,13 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       // Example: Add a TextField inside the white container
-                      CustomTextWidget(
-                        text: AppStrings.otpVerification,
-                        fontSize: AppDimensions.di_22,
-                        color: AppColors.black,
-                        fontWeight: AppFontWeight.fontWeight600,
+                      Text(
+                        AppStrings.otpVerification,
+                        style: TextStyle(
+                          color: AppColors.textColor,
+                          fontSize: AppDimensions.di_24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(height: AppDimensions.di_20),
 
@@ -104,32 +87,19 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                               color: AppColors.black,
                             ),
 
-                            const SizedBox(height: AppDimensions.di_30),
+                            const SizedBox(height: AppDimensions.di_20),
 
                             OTPInputField(onCompleted: onOtpCompleted),
 
-                            const SizedBox(height: AppDimensions.di_30),
+                            const SizedBox(height: AppDimensions.di_20),
 
                             CustomLoginSignupBgActiveWidget(
-                              text: AppStrings.submit,
-                              fontSize: AppDimensions.di_18,
+                              text: AppStrings.continues,
+                              fontSize: AppDimensions.di_20,
                               fontWeight: AppFontWeight.fontWeight500,
                               color: AppColors.whiteColor,
                               textAlign: TextAlign.center,
                               onClick: onContinuePressed,
-                                final userProfile = {
-                                  'fullname': "",
-                                  'phoneNo':"",
-                                  'email': "",};
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) =>
-                                        PasswordCreateScreen(type: widget.type, userProfile: userProfile,), // Pass the profile data
-                                  ),
-                                );
-                              },
                             ),
 
                             const SizedBox(height: AppDimensions.di_20),
@@ -138,18 +108,11 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                               text: TextSpan(
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: AppDimensions.di_15,
+                                  fontSize: AppDimensions.di_14,
                                 ),
                                 // Default text style
                                 children: [
-                                  TextSpan(
-                                    text: AppStrings.didntReceiveOtp,
-                                    style: TextStyle(
-                                      color: AppColors.greyTxt,
-                                      fontWeight: AppFontWeight.fontWeight400,
-                                      fontSize: AppDimensions.di_16,
-                                    ),
-                                  ),
+                                  TextSpan(text: AppStrings.didntReceiveOtp),
                                   TextSpan(
                                     text: AppStrings.resendOtp,
                                     style: TextStyle(
@@ -158,21 +121,11 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                                     ),
                                     // Highlight color for the clickable text
                                     recognizer:
-                                        TapGestureRecognizer()..onTap = () {},
+                                    TapGestureRecognizer()..onTap = () {},
                                   ),
                                 ],
                               ),
                             ),
-                                    TapGestureRecognizer()
-                                      ..onTap = () {
-
-                                      },
-                                  ),
-                                ],
-                              ),
-                            ),
-
-
                           ],
                         ),
                       ),
@@ -211,8 +164,8 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
         MaterialPageRoute(
           builder:
               (context) => PasswordCreateScreen(
-                type: widget.type,
-              ), // Pass the profile data
+            type: widget.type,
+          ), // Pass the profile data
         ),
       );
     }

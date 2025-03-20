@@ -94,7 +94,6 @@ class LocalSecureStorage {
     await _storage.write(key: key, value: value);
   }
 
-}
 
   Future<void> setClickedBy(String t) async {
     await _storage.write(key: 'clickedBy', value: t);

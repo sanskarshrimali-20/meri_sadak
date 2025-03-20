@@ -12,7 +12,7 @@ Widget customPasswordWidget({
   required bool isPasswordVisible,
   VoidCallback? togglePasswordVisibility,
   bool showPrefixIcon =
-      true, // Add this parameter to control prefix icon visibility
+  true, // Add this parameter to control prefix icon visibility
   String? Function(String?)? validator,
   Function(String)? onChanged,
   String? errorText,
@@ -41,9 +41,8 @@ Widget customPasswordWidget({
         color: Colors.black54,
         fontSize: AppDimensions.di_17,
       ),
-      hintStyle: const TextStyle(color: Colors.black54, fontSize: AppDimensions.di_16),
       prefixIcon: Padding(
-        padding: const EdgeInsets.all(AppDimensions.di_9),
+        padding: const EdgeInsets.all(AppDimensions.di_8),
         child: SvgPicture.asset(
           ImageAssetsPath.lock2, // Path to the custom icon image
           width: AppDimensions.di_20, // Adjust the width of the image
@@ -51,15 +50,15 @@ Widget customPasswordWidget({
         ),
       ),
       suffixIcon:
-          isPassword
-              ? IconButton(
-                icon: Icon(
-                  isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.black,
-                ),
-                onPressed: togglePasswordVisibility,
-              )
-              : null,
+      isPassword
+          ? IconButton(
+        icon: Icon(
+          isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+          color: Colors.black,
+        ),
+        onPressed: togglePasswordVisibility,
+      )
+          : null,
       focusedBorder: UnderlineInputBorder(
         borderSide: BorderSide(
           color: Colors.black,

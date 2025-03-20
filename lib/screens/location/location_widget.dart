@@ -405,22 +405,7 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                             ],
 
                       ),
-                      CircleLayer(
-                        circles: [
-                          CircleMarker(
-                            point: initialPosition,
-                            // Original center
-                            radius: allowedRadius,
-                            useRadiusInMeter: true,
-                            color: AppColors.blueGradientColor1
-                                .withAlpha(40),
-                            borderColor: AppColors.blueGradientColor2,
-                            borderStrokeWidth: 0.7,
-
-                          ),
-                        ),
-                      )
-                      : Text("Map Could not be loaded"),
+                        )):Text("Map Could not be loaded"),
 
                   Padding(
                     padding: EdgeInsets.all(AppDimensions.di_15),
