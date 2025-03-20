@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // ignore: unnecessary_import
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:meri_sadak/constants/app_colors.dart';
 
 import '../constants/app_dimensions.dart';
 
@@ -17,6 +18,7 @@ class CustomLoginSignupTextFieldWidget extends StatefulWidget {
   final int maxLines;
   final int? maxLength;
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final bool readOnly;
   final VoidCallback? onTap;
   final String labelText;
@@ -36,6 +38,7 @@ class CustomLoginSignupTextFieldWidget extends StatefulWidget {
     this.maxLines = 1,
     this.maxLength,
     this.controller,
+    this.focusNode,
     this.readOnly = false,
     this.onTap,
     required this.labelText,
@@ -92,7 +95,8 @@ class _CustomLoginSignupTextFieldWidgetState
         FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s\-]')),
         // Allow text with spaces and hyphens
       ];
-    } else if (widget.fieldTypeCheck == 'phoneEmail') {
+    }
+    /*else if (widget.fieldTypeCheck == 'phoneEmail') {
       setState(() {
         inputFormatters = [
           // Allow characters valid for both email and phone number
@@ -102,22 +106,35 @@ class _CustomLoginSignupTextFieldWidgetState
           // Also allow numbers that are specific for phone number format
           // FilteringTextInputFormatter.allow(RegExp(r'^[6789][0-9]{9}$')), // Phone number starts with 6, 7, 8, or 9 and 10 digits total
 
-          /* FilteringTextInputFormatter.allow(
+          */ /* FilteringTextInputFormatter.allow(
             RegExp(r'^[a-zA-Z0-9@._+\-]+$|^[6789][0-9]{9}$'),
-          ),*/
+          ),*/ /*
           FilteringTextInputFormatter.allow(
             RegExp(r'^[a-zA-Z0-9@._+\-]*$|^[6789][0-9]{9}$'),
           ),
         ];
       });
+    }*/ else if (widget.keyboardType == TextInputType.phone) {
+      inputFormatters = [
+       // FilteringTextInputFormatter.allow(RegExp(r'^[6789][0-9]{0,9}$')),
+        FilteringTextInputFormatter.allow(RegExp(r'^[9876][0-9]*$')),
+        LengthLimitingTextInputFormatter(widget.maxLength),
+      ];
+    } else if (widget.keyboardType == TextInputType.emailAddress) {
+      inputFormatters = [
+        FilteringTextInputFormatter.allow(
+            RegExp(r'[a-zA-Z0-9@._+-]')),
+        // Allow letters, numbers, @, ., _, +, -
+      ];
     }
-    print("inputFormatters: ${inputFormatters}");
+    print("widget.keyboardType: ${widget.keyboardType}");
 
     return TextFormField(
       controller: widget.controller,
+      focusNode: widget.focusNode,
       onChanged: widget.onChanged,
       maxLines: widget.maxLines,
-      maxLength: maxLength == 10 ? 10 : widget.maxLength,
+      maxLength: widget.maxLength,
       keyboardType: widget.keyboardType,
       validator: widget.validator,
       readOnly: widget.readOnly,
@@ -134,8 +151,9 @@ class _CustomLoginSignupTextFieldWidgetState
         errorMaxLines: 3,
         // Allow up to 3 lines for error text
         hintStyle: const TextStyle(
-          color: Colors.black54,
-          fontSize: AppDimensions.di_17,
+          color: AppColors.blackMagicColor,
+          fontSize: AppDimensions.di_18,
+          fontWeight: FontWeight.w400
         ),
         prefixIcon: Padding(
           padding: const EdgeInsets.all(AppDimensions.di_8),
