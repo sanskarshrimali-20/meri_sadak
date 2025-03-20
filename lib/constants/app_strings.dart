@@ -178,6 +178,7 @@ class AppStrings {
   static const large = "Large";
 
   static const selectLanguagePre = 'Select your preferred language.';
+  static const termsAndPrivacy = 'Terms, Conditions & Privacy Policy';
 
 
 

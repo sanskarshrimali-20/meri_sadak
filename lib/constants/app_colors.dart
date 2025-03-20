@@ -36,6 +36,8 @@ class AppColors {
   static const Color appBgThree = Color(0xFFFF3535);
   static const Color greyTxt = Color(0xFF909090);
   static const Color txtColor = Color(0xFF91908F);
+
+  static const Color darkModeColor = Color(0xFF292826);
   // #FE6B0A #E9E330
 
 
