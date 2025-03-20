@@ -104,5 +104,14 @@ class LocalSecureStorage {
     return clickedBy;
   }
 
+  Future<void> checkedTermsPolicy(String t) async {
+    await _storage.write(key: 'checked', value: t);
+  }
+
+  Future<String?> getTermsPolicy() async {
+    String? checked =  await _storage.read(key: 'checked');
+    return checked;
+  }
+
 
 }

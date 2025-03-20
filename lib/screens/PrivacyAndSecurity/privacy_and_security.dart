@@ -24,7 +24,7 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
       backgroundColor: AppColors.bgColorGainsBoro,
       body: CustomBodyWithGradient(
         title: AppStrings.privacyAndSecurity,
-        childHeight: DeviceSize.getScreenHeight(context) * 0.7,
+        childHeight: DeviceSize.getScreenHeight(context) * 0.3,
         child: Padding(
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
@@ -44,7 +44,7 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
 
                   customDrawerWidget(
                     title: AppStrings.resetPassword,
-                    icon: ImageAssetsPath.lock2,
+                    icon: ImageAssetsPath.passLock,
                     onClick: () {
                       Navigator.push(
                         context,

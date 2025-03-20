@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor:
             themeProvider.themeMode == ThemeMode.light
                 ? AppColors.app_bg_color
-                : AppColors.black,
+                : AppColors.darkModeColor,
         appBar: MyAppBar.buildAppBar(
           AppStrings.appName,
           AppStrings.citizenFeedbackSystem,

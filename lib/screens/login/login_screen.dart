@@ -28,8 +28,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreen extends State<LoginScreen> {
   bool _isPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController(text: "98765432019");
+  final TextEditingController _passwordController = TextEditingController(text: "Sanssdjj12@dkl");
+
   final FocusNode _usernameFocusNode =
       FocusNode(); // FocusNode for the text field
   String? emailPhoneError;

@@ -6,6 +6,7 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_font_weight.dart';
 import '../../constants/app_strings.dart';
+import '../../services/LocalStorageService/local_storage.dart';
 import '../../utils/device_size.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
@@ -25,17 +26,39 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreen extends State<SignUpScreen> {
   bool _isPasswordVisible = false;
-  bool _isChecked = true;
+  bool _isChecked = false;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController =
-  TextEditingController();
+      TextEditingController();
   String? emailError;
   String? phoneError;
   String? fullNameError;
+  String? storage;
+
+  final _storage = LocalSecureStorage(); // Secure storage instance
+
+  @override
+  void initState() {
+    _loadClickedType();
+
+    super.initState();
+  }
+
+  Future<void> _loadClickedType() async {
+    storage = await _storage.getTermsPolicy();
+
+    setState(() {
+      if (storage == "checked") {
+        _isChecked = true;
+      } else {
+        _isChecked = false;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +78,8 @@ class _SignUpScreen extends State<SignUpScreen> {
                       ImageAssetsPath.loginBg,
                       //  ImageAssetsPath.signupBg, // Path to the background image
                       fit:
-                      BoxFit
-                          .cover, // Make sure the image covers the container
+                          BoxFit
+                              .cover, // Make sure the image covers the container
                     ),
                   ),
                   Container(
@@ -195,6 +218,13 @@ class _SignUpScreen extends State<SignUpScreen> {
                                     activeColor: AppColors.blueGradientColor1,
                                     value: _isChecked,
                                     onChanged: (bool? value) {
+                                      if (_isChecked) {
+                                        _storage.checkedTermsPolicy(
+                                          "unChecked",
+                                        );
+                                      } else {
+                                        _storage.checkedTermsPolicy("checked");
+                                      }
                                       setState(() {
                                         _isChecked = value ?? false;
                                       });
@@ -218,18 +248,24 @@ class _SignUpScreen extends State<SignUpScreen> {
                                           ),
                                           // Highlight color for the clickable text
                                           recognizer:
-                                          TapGestureRecognizer()
-                                            ..onTap = () {
-                                              Navigator.push(
-                                                // ignore: use_build_context_synchronously
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder:
-                                                      (context) =>
-                                                  const TermsConditionPrivacyPolicyScreen(),
-                                                ),
-                                              );
-                                            },
+                                              TapGestureRecognizer()
+                                                ..onTap = () async {
+                                                  final result = await Navigator.push(
+                                                    // ignore: use_build_context_synchronously
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder:
+                                                          (context) =>
+                                                              const TermsConditionPrivacyPolicyScreen(),
+                                                    ),
+                                                  );
+
+                                                  if (result != null) {
+                                                   setState(() {
+                                                     _isChecked = true;
+                                                   });
+                                                  }
+                                                },
                                         ),
                                         TextSpan(text: AppStrings.and),
                                         TextSpan(
@@ -240,18 +276,18 @@ class _SignUpScreen extends State<SignUpScreen> {
                                           ),
                                           // Highlight color for the clickable text
                                           recognizer:
-                                          TapGestureRecognizer()
-                                            ..onTap = () {
-                                              Navigator.push(
-                                                // ignore: use_build_context_synchronously
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder:
-                                                      (context) =>
-                                                  const TermsConditionPrivacyPolicyScreen(),
-                                                ),
-                                              );
-                                            },
+                                              TapGestureRecognizer()
+                                                ..onTap = () {
+                                                  Navigator.push(
+                                                    // ignore: use_build_context_synchronously
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder:
+                                                          (context) =>
+                                                              const TermsConditionPrivacyPolicyScreen(),
+                                                    ),
+                                                  );
+                                                },
                                         ),
                                       ],
                                     ),
@@ -296,18 +332,18 @@ class _SignUpScreen extends State<SignUpScreen> {
                                       ),
                                       // Highlight color for the clickable text
                                       recognizer:
-                                      TapGestureRecognizer()
-                                        ..onTap = () {
-                                          Navigator.pushReplacement(
-                                            // ignore: use_build_context_synchronously
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) =>
-                                              const LoginScreen(),
-                                            ),
-                                          );
-                                        },
+                                          TapGestureRecognizer()
+                                            ..onTap = () {
+                                              Navigator.pushReplacement(
+                                                // ignore: use_build_context_synchronously
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder:
+                                                      (context) =>
+                                                          const LoginScreen(),
+                                                ),
+                                              );
+                                            },
                                     ),
                                   ],
                                 ),
@@ -394,7 +430,7 @@ class _SignUpScreen extends State<SignUpScreen> {
         phoneError = 'Phone number is required';
       } else if (!phoneRegExp.hasMatch(value)) {
         phoneError =
-        'Enter a valid phone number (10 digits starting with 6, 7, 8, or 9)';
+            'Enter a valid phone number (10 digits starting with 6, 7, 8, or 9)';
       } else {
         phoneError = null;
       }

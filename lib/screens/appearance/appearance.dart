@@ -4,7 +4,6 @@ import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_dialog_button.dart';
-import 'package:meri_sadak/widgets/custom_select_dialog.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
@@ -14,7 +13,6 @@ import '../../providerData/theme_provider.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
 import '../../utils/localization_provider.dart';
 import '../../widgets/custom_body_with_gradient.dart';
-import '../../widgets/custom_text_icon_button.dart';
 import '../../widgets/drawer_widget.dart';
 
 class AppearanceScreen extends StatefulWidget {
@@ -53,7 +51,7 @@ class _AppearanceScreen extends State<AppearanceScreen> {
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light
           ? AppColors.app_bg_color
-          : AppColors.black,
+          : AppColors.darkModeColor,
       body: CustomBodyWithGradient(
         title: localizationProvider.localizedStrings['appearance'] ?? "Appearance",
         childHeight: DeviceSize.getScreenHeight(context) * 0.3,

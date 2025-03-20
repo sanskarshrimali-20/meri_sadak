@@ -57,6 +57,8 @@ class ImageAssetsPath {
   static const language = "$folderPath/language.svg";
   static const clear = "$folderPath/clear.svg";
   static const userIcon = "$folderPath/user_icon.svg";
+  static const passLock = "$folderPath/pass_lock.svg";
+
 
 
 

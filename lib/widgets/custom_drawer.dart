@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meri_sadak/constants/app_colors.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
+import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/screens/aboutPmgsy/about_pmgsy.dart';
@@ -65,29 +66,30 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
               child: Row(
                 children: [
-                CircleAvatar(
-                radius: 40, // Size of the circle
-                backgroundColor: Colors.lightGreenAccent, // Background color for the circle
-                child: Text(
-                  "S", // First character of the name
-                  style: TextStyle(
-                    color: Colors.white, // Color of the text
-                    fontSize: 50, // Text size
-                    fontWeight: FontWeight.bold, // Text weight
-                  ),
-                ),
-              ),
-                  /*ClipRRect(
-                    borderRadius: BorderRadius.circular(AppDimensions.di_60),
-                    // Optional rounded corners
-                    child: FadeInImage.assetNetwork(
-                      placeholder: ImageAssetsPath.placeHolder, // Placeholder asset image
-                      image: 'https://picsum.photos/200/300', // Network image URL
-                      width: AppDimensions.di_80,
-                      height: AppDimensions.di_80,
-                      fit: BoxFit.cover,
+                  Container(
+                    width: 80, // Width of the circle (2 * radius)
+                    height: 80, // Height of the circle (2 * radius)
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle, // Make the container a circle
+                      border: Border.all(
+                        color: AppColors.toastBgColorGreen, // Color of the border
+                        width: 2, // Stroke width
+                      ),
                     ),
-                  ),*/
+                    child: CircleAvatar(
+                      radius: 40, // Radius of the avatar (half of the container size)
+                      backgroundColor: AppColors.whiteColor, // Background color for the circle
+                      child: Text(
+                        "S", // First character of the name
+                        style: TextStyle(
+                          color: AppColors.blueGradientColor1, // Color of the text
+                          fontSize: AppDimensions.di_50, // Text size
+                          fontWeight: AppFontWeight.fontWeight600, // Text weight
+                        ),
+                      ),
+                    ),
+                  ),
+
                   SizedBox(width: AppDimensions.di_10),
                   SizedBox(
                     width: DeviceSize.getScreenWidth(context) * 0.40,
