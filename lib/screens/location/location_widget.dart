@@ -22,6 +22,7 @@ class CustomLocationWidget extends StatefulWidget {
   final double mapHeight;
   final double mapWidth;
   final Function() onRefresh;
+  final VoidCallback? onMapReady;
   final Function(LatLng) onMapTap;
 
   // ignore: use_super_parameters
@@ -39,6 +40,7 @@ class CustomLocationWidget extends StatefulWidget {
     this.mapHeight = 200.0,
     this.mapWidth = 300.0,
     required this.onRefresh,
+    this.onMapReady,
     required this.onMapTap,
   }) : super(key: key);
 
@@ -123,6 +125,12 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                   borderRadius: BorderRadius.circular(12.0),
                   child: FlutterMap(
                     options: MapOptions(
+                      onMapReady: () {
+                        // Call the onMapReady callback when the map is ready
+                        if (widget.onMapReady != null) {
+                          widget.onMapReady!();
+                        }
+                      },
                       initialCenter: LatLng(
                           widget.latitude!, widget.longitude!),
                       initialZoom: 15.0,
@@ -245,7 +253,7 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                             height: 50.0,
                             child: Icon(
                               Icons.location_pin,
-                              color: Colors.red,
+                              color: AppColors.blueGradientColor1,
                               size: 40,
                             ),
                           ),
@@ -258,10 +266,10 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                             // Original center
                             radius: allowedRadius,
                             useRadiusInMeter: true,
-                            color: Colors.blue
-                                .withAlpha((0.09 * 255).toInt()),
-                            borderColor: Colors.black,
-                            borderStrokeWidth: 0.5,
+                            color: AppColors.blueGradientColor1
+                                .withAlpha(40),
+                            borderColor: AppColors.blueGradientColor2,
+                            borderStrokeWidth: 0.7,
                           ),
                         ],
                       ),

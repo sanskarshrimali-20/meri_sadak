@@ -133,11 +133,8 @@ class _RegisterFeedbackScreen extends State<RegisterFeedbackScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColorGainsBoro,
-      appBar: CustomAppBar(
-        title: AppStrings.registerFeedback,
-        leadingIcon: ImageAssetsPath.backArrow,
-      ),
       body: CustomBodyWithGradient(
+        title: AppStrings.registerFeedback,
         childHeight: DeviceSize.getScreenHeight(context),
         child: SizedBox(
           height: DeviceSize.getScreenHeight(context),

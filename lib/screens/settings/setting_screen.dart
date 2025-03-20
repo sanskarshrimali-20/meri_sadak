@@ -1,59 +1,128 @@
 import 'package:flutter/material.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
-import 'package:provider/provider.dart';
+import 'package:meri_sadak/screens/AppVersion/app_version.dart';
+import 'package:meri_sadak/screens/PrivacyAndSecurity/privacy_and_security.dart';
+import 'package:meri_sadak/screens/appearance/appearance.dart';
+import 'package:meri_sadak/screens/profile/profile.dart';
+import 'package:meri_sadak/utils/device_size.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_image_path.dart';
-import '../../services/DatabaseHelper/database_helper.dart';
-import '../../utils/localization_provider.dart';
 import '../../widgets/custom_app_bar.dart';
-import '../../widgets/custom_button.dart';
-import '../../widgets/custom_text_icon_button.dart';
-import '../passwordChange/forgot_reset_password_screen.dart';
+import '../../widgets/custom_body_with_gradient.dart';
+import '../../widgets/drawer_widget.dart';
 
 class SettingScreen extends StatefulWidget {
-  final Map<String, dynamic>? userProfile;
-
-  const SettingScreen({super.key, this.userProfile});
+  const SettingScreen({super.key});
 
   @override
-  State<SettingScreen> createState() => _SettingScreenState();
+  State<SettingScreen> createState() => _SettingScreen();
 }
 
-class _SettingScreenState extends State<SettingScreen> {
-
-  @override
-  void initState() {
-    saveLocalizationData();
-    super.initState();
-  }
-
+class _SettingScreen extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.greyHundred,
-        appBar: CustomAppBar(
-          title: AppStrings.settings,
-          leadingIcon: ImageAssetsPath.backArrow,
-        ),
-        body: SingleChildScrollView(
-        child: Column(
-        children: [
-
-          CustomButton(
-            text: AppStrings.selectLanguage,
-            onPressed: () async {
-              _showLanguageSelectionDialog();
-            },
-            textColor: AppColors.whiteColor,
-            backgroundColor: AppColors.color_E77728,
-            fontSize: AppDimensions.di_18,
-            padding:
-            EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
-            borderRadius: BorderRadius.circular(AppDimensions.di_100),
+      backgroundColor: AppColors.bgColorGainsBoro,
+     /* appBar: CustomAppBar(
+        title: AppStrings.contactUs,
+        leadingIcon: ImageAssetsPath.backArrow,
+      ),*/
+      body: CustomBodyWithGradient(
+        title: AppStrings.settings,
+        childHeight: DeviceSize.getScreenHeight(context) * 0.4,
+        child: Padding(
+          padding: EdgeInsets.all(AppDimensions.di_5),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.whiteColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(AppDimensions.di_20), // Rounded corners
+              ),
+            ),
+            padding: EdgeInsets.all(AppDimensions.di_15),
+            child: SizedBox(
+              child: Column(
+                children: [
+                  SizedBox(height: AppDimensions.di_15),
+                  customDrawerWidget(
+                    title: AppStrings.myProfile,
+                    icon: ImageAssetsPath.userIcon,
+                    iconColor: AppColors.black,
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  Divider(
+                    color: Colors.grey.withAlpha(60), // Line color
+                    thickness: AppDimensions.di_1, // Line thickness
+                    indent: AppDimensions.di_10, // Space from the left
+                    endIndent: AppDimensions.di_10, // Space from the right
+                  ),
+                  customDrawerWidget(
+                    title: AppStrings.appearance,
+                    icon: ImageAssetsPath.appearanceIcon,
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppearanceScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  Divider(
+                    color: Colors.grey.withAlpha(60), // Line color
+                    thickness: AppDimensions.di_1, // Line thickness
+                    indent: AppDimensions.di_10, // Space from the left
+                    endIndent: AppDimensions.di_10, // Space from the right
+                  ),
+                  customDrawerWidget(
+                    title: AppStrings.privacyAndSecurity,
+                    icon: ImageAssetsPath.privacy,
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PrivacyAndSecurityScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  Divider(
+                    color: Colors.grey.withAlpha(60), // Line color
+                    thickness: AppDimensions.di_1, // Line thickness
+                    indent: AppDimensions.di_10, // Space from the left
+                    endIndent: AppDimensions.di_10, // Space from the right
+                  ),
+                  customDrawerWidget(
+                    title: AppStrings.checkVersionUpdate,
+                    icon: ImageAssetsPath.replace,
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AppVersion(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
+        ),
+      ),
+    );
+  }}
 
-          SizedBox(height: 30,),
+
+/*
 
           CustomButton(
             text: AppStrings.resetPassword,
@@ -80,68 +149,5 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  Future<void> _showLanguageSelectionDialog() async {
-    await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(title: const Text('Choose Language'), actions: [
-            Consumer<LocalizationProvider>(
-                builder: (context, provider, child) {
-                  return Container(
-                      child: Row(
-                        children: [
-                          CustomTextIconButton(
-                            icon: Icons.language,
-                            label: 'English',
-                            onPressed: () {
-                              provider.setLocale(Locale('en', 'US'));
-                              Navigator.pop(context); // Close the dialog
-                            },
-                            backgroundColor: Colors.blue[50],
-                            textColor: Colors.blue,
-                            iconColor: Colors.blue,
-                          ),
-                          Spacer(),
-                          CustomTextIconButton(
-                            icon: Icons.temple_hindu,
-                            label: 'Hindi',
-                            onPressed: () {
-                              provider.setLocale(Locale('hi', 'IN'));
-                              Navigator.pop(context); // Close the dialog
-                            },
-                            backgroundColor: Colors.blue[50],
-                            textColor: Colors.blue,
-                            iconColor: Colors.blue,
-                          )
-                        ],
-                      ));
-                })
-          ]);
-        });
-  }
 
-  void saveLocalizationData() async {
-    final dbHelper = DatabaseHelper();
-
-    // English localization data
-    Map<String, String> enLocalization = {
-      "settings": "Settings",
-      "name": "Sanskar Shrimali",
-      "general_settings": "General Settings",
-      // other English translations
-    };
-
-    // Hindi localization data
-    Map<String, String> hiLocalization = {
-      "settings": "सेटिंग्स",
-      "name": "संस्कार",
-      "general_settings": "सामान्य सेटिंग्स",
-      // other Hindi translations
-    };
-
-    // Save English and Hindi data
-    await dbHelper.insertLocalization('en', enLocalization);
-    await dbHelper.insertLocalization('hi', hiLocalization);
-  }
-
-}
+}*/

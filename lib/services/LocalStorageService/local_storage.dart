@@ -41,7 +41,7 @@ class LocalSecureStorage {
   Future<String?> getAccessToken() async {
     try {
       Map<String, dynamic>? userDetails =
-          await DatabaseHelper().getUserLoginDetails();
+          await DatabaseHelper().getUserDetails();
 
       if (!userDetails!.containsKey("accessToken")) {
         if (kDebugMode) {
@@ -92,5 +92,16 @@ class LocalSecureStorage {
   Future<void> setTheme({required String key,  required String value}) async {
     await _storage.write(key: key, value: value);
   }
+
+
+  Future<void> setClickedBy(String t) async {
+    await _storage.write(key: 'clickedBy', value: t);
+  }
+
+  Future<String?> getClickedBy() async {
+    String? clickedBy =  await _storage.read(key: 'clickedBy');
+    return clickedBy;
+  }
+
 
 }

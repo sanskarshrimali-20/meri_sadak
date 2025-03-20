@@ -11,7 +11,10 @@ class PermissionProvider extends ChangeNotifier {
   double? longitude;
   String address = '',location='Unknown';
   bool isLoading = false;
-
+  String state = '';
+  String district = '';
+  String block = '';
+  bool isLocationFetched =false;
   File? _profilePic;
 
   // Getter for profilePic
@@ -35,6 +38,9 @@ class PermissionProvider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
+  /*  if(isLocationFetched){
+      return;
+    }*/
     try {
       // Check if location services are enabled
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -71,13 +77,18 @@ class PermissionProvider extends ChangeNotifier {
       );
       location = '${position.latitude}, ${position.longitude}';
       debugPrint("location---$location");
+      state = placemarks.first.administrativeArea ?? '';
+      district = placemarks.first.locality ?? '';
+      block = placemarks.first.subLocality ?? ''; // This ma
       address =
       '${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea} - ${placemarks.first.postalCode}, ${placemarks.first.country}.';
       debugPrint("address---$address");
+
+      // isLocationFetched = true;
       notifyListeners();
 
     } catch (e) {
-      address = 'Failed to fetch location: ${e.toString()}';
+       address = 'Failed to fetch location: ${e.toString()}';
     } finally {
       isLoading = false;
       notifyListeners();

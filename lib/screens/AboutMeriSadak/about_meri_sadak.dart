@@ -26,11 +26,8 @@ class _AboutMeriSadakState extends State<AboutMeriSadak> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgColorGainsBoro,
-      appBar: CustomAppBar(
-        title: AppStrings.aboutMeriSadakHeading,
-        leadingIcon: ImageAssetsPath.backArrow,
-      ),
       body: CustomBodyWithGradient(
+        title: AppStrings.aboutMeriSadakHeading,
         childHeight: DeviceSize.getScreenHeight(context),
         child: ListView(
           children: [
@@ -44,7 +41,7 @@ class _AboutMeriSadakState extends State<AboutMeriSadak> {
 
             // Use CustomExpansionTile for "About PMGSY"
             CustomExpansionTile(
-              title: AppStrings.aboutPMGSYHeading,
+              title: AppStrings.aboutMeriSadakHeading,
               subheading: '', //AppStrings.aboutMeriSadakSubHeading,
               content: Text(
                 AppStrings.aboutMeriSadakSubHeading,

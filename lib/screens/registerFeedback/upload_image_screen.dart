@@ -184,7 +184,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                                     onTap:
                                         () => _showProfileImageDialog(
                                           context,
-                                          imageItem.image.path,
+                                          imageItem.imagePath,
                                           DeviceSize.getScreenHeight(context),
                                           DeviceSize.getScreenWidth(context),
                                           permissionProvider,
@@ -199,7 +199,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                                           ),
                                           // Optional rounded corners
                                           child: Image.file(
-                                            File(imageItem.image.path),
+                                            File(imageItem.imagePath),
                                             width: AppDimensions.di_100,
                                             height: AppDimensions.di_100,
                                             fit: BoxFit.cover,
@@ -356,7 +356,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                               point.latitude,
                               point.longitude,
                             );
-                          },
+                          }, onMapReady: () {  },
                         ),
               ),
               Container(
@@ -530,7 +530,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
                                           point.latitude,
                                           point.longitude,
                                         );
-                                      },
+                                      }, onMapReady: () {  },
                                     ),
                           ),
                         if (imgSource == 'Camera')

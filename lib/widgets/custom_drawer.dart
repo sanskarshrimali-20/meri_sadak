@@ -12,6 +12,7 @@ import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:meri_sadak/widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import '../providerData/theme_provider.dart';
 import '../screens/AboutMeriSadak/about_meri_sadak.dart';
 import '../screens/AppVersion/app_version.dart';
 import '../screens/PrivacyAndSecurity/privacy_and_security.dart';
@@ -35,6 +36,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     final localizationProvider = Provider.of<LocalizationProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Drawer(
       width:
@@ -63,19 +65,32 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
               child: Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(AppDimensions.di_8),
+                CircleAvatar(
+                radius: 40, // Size of the circle
+                backgroundColor: Colors.lightGreenAccent, // Background color for the circle
+                child: Text(
+                  "S", // First character of the name
+                  style: TextStyle(
+                    color: Colors.white, // Color of the text
+                    fontSize: 50, // Text size
+                    fontWeight: FontWeight.bold, // Text weight
+                  ),
+                ),
+              ),
+                  /*ClipRRect(
+                    borderRadius: BorderRadius.circular(AppDimensions.di_60),
                     // Optional rounded corners
-                    child: Image.asset(
-                      ImageAssetsPath.placeHolder,
+                    child: FadeInImage.assetNetwork(
+                      placeholder: ImageAssetsPath.placeHolder, // Placeholder asset image
+                      image: 'https://picsum.photos/200/300', // Network image URL
                       width: AppDimensions.di_80,
                       height: AppDimensions.di_80,
                       fit: BoxFit.cover,
                     ),
-                  ),
+                  ),*/
                   SizedBox(width: AppDimensions.di_10),
                   SizedBox(
-                    width: DeviceSize.getScreenWidth(context) * 0.45,
+                    width: DeviceSize.getScreenWidth(context) * 0.40,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -116,44 +131,50 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   customDrawerWidget(
                     title: AppStrings.home,
                     icon: ImageAssetsPath.home,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Navigator.of(context).pop(); // Close the drawer
                     },
                   ),
 
                   Divider(
-                    color: Colors.grey, // Line color
+                    color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
                   ),
+
                   customDrawerWidget(
-                    title: AppStrings.appearance,
+                    title: AppStrings.settings,
                     icon: ImageAssetsPath.appearance,
-                    onClick: () {
-                      Navigator.of(context).pop(); // Close the drawer
-                    },
-                  ),
-                  Divider(
-                    color: Colors.grey, // Line color
-                    thickness: AppDimensions.di_1, // Line thickness
-                    indent: AppDimensions.di_10, // Space from the left
-                    endIndent: AppDimensions.di_10, // Space from the right
-                  ),
-                  customDrawerWidget(
-                    title: AppStrings.privacyAndSecurity,
-                    icon: ImageAssetsPath.beneficiaries,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PrivacyAndSecurity(),
+                          builder: (context) => SettingScreen(),
                         ),
                       );
                     },
                   ),
                   Divider(
-                    color: Colors.grey, // Line color
+                    color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
@@ -162,12 +183,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   customDrawerWidget(
                     title: AppStrings.share,
                     icon: ImageAssetsPath.share,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Share.share('Check out this awesome Flutter app!');
                     },
                   ),
                   Divider(
-                    color: Colors.grey, // Line color
+                    color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
@@ -176,6 +206,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   customDrawerWidget(
                     title: AppStrings.contactUs,
                     icon: ImageAssetsPath.contacts,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Navigator.push(
                         context,
@@ -186,7 +225,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     },
                   ),
                   Divider(
-                    color: Colors.grey, // Line color
+                    color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
@@ -195,6 +234,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   customDrawerWidget(
                     title: AppStrings.about,
                     icon: ImageAssetsPath.info,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Navigator.push(
                         context,
@@ -203,7 +251,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     },
                   ),
                   Divider(
-                    color: Colors.grey, // Line color
+                    color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
@@ -212,6 +260,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   customDrawerWidget(
                     title: AppStrings.aboutMeriSadak,
                     icon: ImageAssetsPath.info,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Navigator.push(
                         context,
@@ -221,116 +278,32 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       );
                     },
                   ),
-                  Divider(
-                    color: Colors.grey, // Line color
-                    thickness: AppDimensions.di_1, // Line thickness
-                    indent: AppDimensions.di_10, // Space from the left
-                    endIndent: AppDimensions.di_10, // Space from the right
-                  ),
-
-                  customDrawerWidget(
-                    title: AppStrings.appVersion,
-                    icon: ImageAssetsPath.appVersion,
-                    onClick: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AppVersion(),
-                        ),
-                      );
-                    },
-                  ),
-
-                  Divider(
-                    color: Colors.grey, // Line color
-                    thickness: AppDimensions.di_1, // Line thickness
-                    indent: AppDimensions.di_10, // Space from the left
-                    endIndent: AppDimensions.di_10, // Space from the right
-                  ),
-
-                  customDrawerWidget(
-                    title: AppStrings.settings,
-                    icon: ImageAssetsPath.setting,
-                    onClick: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SettingScreen(),
-                        ),
-                      );
-                    },
-                  ),
                 ],
               ),
             ),
 
             Spacer(), // Push Logout to the bottom of the drawer
-            // Logout Button
-            ListTile(
-              leading: SvgPicture.asset(
-                ImageAssetsPath.logout,
-                color: Colors.red,
-              ),
-              title: Text(
-                AppStrings.logout,
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AppDimensions.di_18,
-                ),
-              ),
 
-              onTap: () async {
+            Divider(
+              color: Colors.grey.withAlpha(60), // Line color
+              thickness: AppDimensions.di_1, // Line thickness
+              indent: AppDimensions.di_10, // Space from the left
+              endIndent: AppDimensions.di_10, // Space from the right
+            ),
+
+
+            customDrawerWidget(
+              title: AppStrings.logout,
+              icon: ImageAssetsPath.logout,
+              onClick: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => LoginScreen(),
+                  ),
                 );
-              },
+              }, iconColor: Colors.red, textColor: Colors.red, visible: false, logoutVisible: false
             ),
-
-            /* ListTile(
-              leading: Icon(Icons.refresh_outlined, color: Colors.blue),
-              title: Text('Master Data'), */
-            /*CustomTextWidget(
-                text: 'Master Data',
-                fontWeight: FontWeight.bold,
-                color: Colors
-                    .blue, // This will now correctly set the text color to red,
-              ),*/
-            /*
-              onTap: () {
-                */
-            /*final masterDataViewModel = context.read<MasterDataViewModel>();
-                masterDataViewModel
-                    .fetchMasterData(refreshDB: true)
-                    .then((value) {
-                  if (kDebugMode) {
-                    log("Fetch master data status $value");
-                  }
-                }).catchError((error) {
-                  if (kDebugMode) {
-                    log("error while fetching master data");
-                    debugPrint(error);
-                  }
-                });*/
-            /*
-              },
-            ),
-
-            ListTile(
-              leading: Icon(Icons.upload_file_outlined, color: Colors.blue,),
-              title:Text('Upload Log File'), */
-            /*CustomTextWidget(
-                text: 'Upload Log File',
-                fontWeight: FontWeight.bold,
-                color: Colors
-                    .blue, // This will now correctly set the text color to red,
-              ),*/
-            /*
-              onTap: () {
-
-              },
-            )*/
           ],
         ),
       ),

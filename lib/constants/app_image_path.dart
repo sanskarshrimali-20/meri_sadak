@@ -48,4 +48,16 @@ class ImageAssetsPath {
   static const share = "$folderPath/share.svg";
   static const aboutMeriSadakFrame1 = "$folderPath/merisadakframe1.png";
   static const aboutMeriSadakFrame2 = "$folderPath/merisadakframe2.png";
+  static const deleteImage = "$folderPath/delete_image.svg";
+  static const headerBg = "$folderPath/header_bg.png";
+  static const checkCircle = "$folderPath/check_circle.svg";
+  static const appearanceIcon = "$folderPath/appearance_icon.svg";
+  static const privacy = "$folderPath/privacy.svg";
+  static const fontSize = "$folderPath/font_size.svg";
+  static const language = "$folderPath/language.svg";
+  static const clear = "$folderPath/clear.svg";
+  static const userIcon = "$folderPath/user_icon.svg";
+
+
+
 }
