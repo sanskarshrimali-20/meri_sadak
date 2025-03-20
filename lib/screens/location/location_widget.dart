@@ -1,13 +1,19 @@
 import 'dart:developer';
+import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_cache/flutter_map_cache.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:flutter_map_dragmarker/flutter_map_dragmarker.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../constants/app_colors.dart';
+import '../../services/LocalStorageService/local_storage.dart';
 
 class CustomLocationWidget extends StatefulWidget {
   final String labelText;
@@ -51,12 +57,16 @@ class CustomLocationWidget extends StatefulWidget {
 
 class _CustomLocationWidgetState extends State<CustomLocationWidget> {
   String currentAddress = '';
+
   // ignore: unused_field, prefer_final_fields
   bool _isSatellite = false;
   late LatLng markerPosition; // Tracks marker and circle position
   final double allowedRadius = 350; // Radius in meters
   late LatLng initialPosition;
   final Distance distanceCalculator = const Distance();
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
+  String path = '';
 
   @override
   void initState() {
@@ -69,36 +79,80 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
   Widget build(BuildContext context) {
     return widget.latitude != null && widget.longitude != null
         ? Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              widget.labelText,
-              style: TextStyle(fontSize: AppDimensions.di_16,fontWeight: FontWeight.bold),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  widget.labelText,
+                  style: TextStyle(
+                    fontSize: AppDimensions.di_16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 5), // Space between text and image
+                widget.isRequired == true
+                    ? Text(
+                      "*",
+                      style: TextStyle(
+                        fontSize: AppDimensions.di_16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    )
+                    : SizedBox.shrink(),
+                Spacer(), // This will push the next widget to the end
+                widget.isLoading
+                    ? SizedBox(
+                      height: 25,
+                      width: 25,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                        color: widget.progressIndicatorColor,
+                      ),
+                    )
+                    : IconButton(
+                      icon: Icon(
+                        Icons.refresh,
+                        color: widget.refreshIconColor,
+                        size: 25,
+                      ),
+                      onPressed: widget.onRefresh,
+                    ),
+              ],
             ),
-            SizedBox(width: 5), // Space between text and image
-            widget.isRequired == true
-                ? Text("*",
-                style: TextStyle(fontSize: AppDimensions.di_16,
-                    fontWeight: FontWeight.bold, color: Colors.red))
-                : SizedBox.shrink(),
-            Spacer(), // This will push the next widget to the end
-            widget.isLoading
-                ? SizedBox(
-              height: 25,
-              width: 25,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.0,
-                color: widget.progressIndicatorColor,
+            Container(
+              padding: const EdgeInsets.all(AppDimensions.di_4),
+              decoration: BoxDecoration(
+                color: AppColors.textFieldBorderColor.withAlpha(12),
+                // Use a neutral color or AppColors.greyHundred
+                borderRadius: BorderRadius.circular(AppDimensions.di_5),
+                border: Border.all(
+                  color: AppColors.textFieldBorderColor, // First border color
+                  width: AppDimensions.di_1,
+                ),
               ),
-            )
-                : IconButton(
-              icon: Icon(
-                Icons.refresh,
-                color: widget.refreshIconColor,
-                size: 25,
-              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ignore: unnecessary_null_comparison
+                  initialPosition != null
+                      ? SizedBox(
+                        width: widget.mapWidth,
+                        height: widget.mapHeight,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: FlutterMap(
+                            options: MapOptions(
+                              initialCenter: LatLng(
+                                widget.latitude!,
+                                widget.longitude!,
+                              ),
+                              initialZoom: 15.0,
+                              maxZoom: 18.0,
+                              /* onTap: (tapPosition, point) async {
+
               onPressed: widget.onRefresh,
             ),
           ],
@@ -236,16 +290,15 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                         enableMultiFingerGestureRace: true,
                         pinchMoveWinGestures: 0,
                         rotationWinGestures: 0,
-                      ),
-                    ),
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                        userAgentPackageName:
-                        "com.example.myprofile",
-                      ),
-                      MarkerLayer(
+                      ),*/
+                            ),
+                            children: [
+                              TileLayer(
+                                urlTemplate:
+                                    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                userAgentPackageName: "com.example.myprofile",
+                              ),
+                              /* MarkerLayer(
                         markers: [
                           Marker(
                             point: markerPosition,
@@ -258,6 +311,99 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                             ),
                           ),
                         ],
+
+                      ),*/
+                              CircleLayer(
+                                circles: [
+                                  CircleMarker(
+                                    point: initialPosition,
+                                    // Original center
+                                    radius: allowedRadius,
+                                    useRadiusInMeter: true,
+                                    color: Colors.blue.withAlpha(
+                                      (0.09 * 255).toInt(),
+                                    ),
+                                    borderColor: Colors.black,
+                                    borderStrokeWidth: 0.5,
+                                  ),
+                                ],
+                              ),
+                              DragMarkers(
+                                alignment: Alignment.topCenter,
+                                markers: [
+                                  DragMarker(
+                                    point: markerPosition,
+                                    size: Size(40, 40),
+                                    // Required size parameter
+                                    builder:
+                                        (ctx, pos, isDragging) => Icon(
+                                          isDragging
+                                              ? Icons.edit_location
+                                              : Icons.location_on,
+                                          size: 50,
+                                          color: Colors.red,
+                                        ),
+                                    onDragUpdate: (details, newPosition) {
+                                      setState(() {
+                                        markerPosition = newPosition;
+                                      });
+                                    },
+                                    onDragEnd: (details, newPosition) async {
+                                      final distance = Distance().as(
+                                        LengthUnit.Meter,
+                                        newPosition,
+                                        initialPosition,
+                                      );
+                                      final placemarks =
+                                          await placemarkFromCoordinates(
+                                            newPosition.latitude,
+                                            newPosition.longitude,
+                                          );
+
+                                      if (distance <= allowedRadius) {
+                                        print("newPosition--$newPosition");
+                                        // Update marker position and fetch address
+                                        setState(() {
+                                          markerPosition = newPosition;
+                                          currentAddress =
+                                              '${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea} - ${placemarks.first.postalCode}, ${placemarks.first.country}.';
+                                        });
+                                        print(
+                                          "markerPosition--$markerPosition",
+                                        );
+
+                                        widget.onMapTap(newPosition);
+                                      } else {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              "The dragged location is outside the allowed radius of $allowedRadius meters.",
+                                            ),
+                                            backgroundColor: Colors.red,
+                                            behavior: SnackBarBehavior.floating,
+                                            duration: Duration(seconds: 2),
+                                          ),
+                                        );
+                                        final currentPlacemarks =
+                                            await placemarkFromCoordinates(
+                                              initialPosition.latitude,
+                                              initialPosition.longitude,
+                                            );
+
+                                        setState(() {
+                                          markerPosition = initialPosition;
+                                          currentAddress =
+                                              '${currentPlacemarks.first.street}, ${currentPlacemarks.first.locality}, ${currentPlacemarks.first.administrativeArea} - ${currentPlacemarks.first.postalCode}, ${currentPlacemarks.first.country}.';
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+
                       ),
                       CircleLayer(
                         circles: [
@@ -270,42 +416,46 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                                 .withAlpha(40),
                             borderColor: AppColors.blueGradientColor2,
                             borderStrokeWidth: 0.7,
+
                           ),
-                        ],
+                        ),
+                      )
+                      : Text("Map Could not be loaded"),
+
+                  Padding(
+                    padding: EdgeInsets.all(AppDimensions.di_15),
+                    child: Container(
+                      padding: EdgeInsets.all(AppDimensions.di_5),
+                      decoration: BoxDecoration(
+                        color: AppColors.whiteColor,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(AppDimensions.di_5),
+                        ),
                       ),
-                    ],
+                      child: CustomTextWidget(
+                        text: currentAddress,
+                        fontSize: AppDimensions.di_15,
+                        color: AppColors.black,
+                      ),
+                    ),
                   ),
-                ),
-              )
-                  : Text("Map Could not be loaded"),
-
-              Padding(padding: EdgeInsets.all(AppDimensions.di_15), child: Container(
-                padding: EdgeInsets.all(AppDimensions.di_5),
-                decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
-                  borderRadius: BorderRadius.all(Radius.circular(AppDimensions.di_5))
-                ),
-                child: CustomTextWidget(text: currentAddress, fontSize: AppDimensions.di_15,
-                    color: AppColors.black),
-              ),)
-
-            ],
-          ),
-        ),
-      ],
-    )
-        : const Center(
-      child: CircularProgressIndicator(
-        strokeWidth: 2.0,
-      ),
-    );
+                ],
+              ),
+            ),
+          ],
+        )
+        : const Center(child: CircularProgressIndicator(strokeWidth: 2.0));
   }
 
   void loadLatLongDataOnInit() {
     try {
       // Safely parse latitude and longitude
-      final double lat = double.parse(widget.latitude?.toString() ?? '0.0');
-      final double lng = double.parse(widget.longitude?.toString() ?? '0.0');
+      final double lat = double.parse(
+        widget.latitude?.toString() ?? '36.090092',
+      );
+      final double lng = double.parse(
+        widget.longitude?.toString() ?? '-79.294617',
+      );
       setState(() {
         // Set the marker position if values are valid
         markerPosition = LatLng(lat, lng);
