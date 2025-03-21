@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
+import '../../providerData/theme_provider.dart';
 
 class OTPInputField extends StatefulWidget {
   final int length;
@@ -46,6 +49,8 @@ class _OTPInputFieldState extends State<OTPInputField> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(widget.length, (index) {
@@ -53,6 +58,9 @@ class _OTPInputFieldState extends State<OTPInputField> {
           width: AppDimensions.di_45,
           height: AppDimensions.di_45,
           child: TextField(
+            style: TextStyle(color: themeProvider.themeMode == ThemeMode.light
+                ? AppColors.textColor
+                : AppColors.authDarkModeTextColor,),
             inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
             controller: controllers[index],
             focusNode: focusNodes[index],

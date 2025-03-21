@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import '../../constants/api_end_point.dart';
 import '../../services/ApiService/api_service.dart';
+import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 
 class SignUpViewModel extends ChangeNotifier {
@@ -21,12 +22,14 @@ class SignUpViewModel extends ChangeNotifier {
   String? get userName => _userName;
 
   bool get isLoggedIn => _isLoggedIn;
+  final dbHelper = DatabaseHelper();
 
-  Future<String?> signUpUser(Map<String, dynamic> signUp) async {
+
+  Future<String?> performSignUp(Map<String, dynamic> signUp) async {
     try {
       _setLoading(true);
 
-      if (kDebugMode) {
+     /* if (kDebugMode) {
         log("Request body: $signUp");
       }
 
@@ -45,7 +48,16 @@ class SignUpViewModel extends ChangeNotifier {
       // await _localStorage.setLoggingState('true');/
       log("Local storage set to 'true'");
 
-      return "success";
+      return "Success";*/
+
+        final signUpOperation = await dbHelper.setSignupDetails(signUp);
+
+        if(signUpOperation == "Success"){
+          return "Success";
+        }else{
+          return "Error";
+        }
+
     } catch (e, stackTrace) {
       log("Error during login: $e");
       debugPrintStack(stackTrace: stackTrace);

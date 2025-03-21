@@ -1,16 +1,21 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
+import 'package:meri_sadak/screens/otpVerify/otp_screen.dart';
 import 'package:meri_sadak/screens/termAndPrivacy/terms_condition_privacy_policy.dart';
+import 'package:meri_sadak/viewmodels/forgotChangePassword/forgot_change_password_viewmodel.dart';
+import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_font_weight.dart';
 import '../../constants/app_strings.dart';
+import '../../providerData/theme_provider.dart';
+import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 import '../../utils/device_size.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
-import '../../widgets/custom_password_widget.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_widget.dart';
 import '../../widgets/login_signup_bg_active.dart';
@@ -39,6 +44,8 @@ class _SignUpScreen extends State<SignUpScreen> {
   String? fullNameError;
   String? storage;
 
+  final dbHelper = DatabaseHelper();
+
   final _storage = LocalSecureStorage(); // Secure storage instance
 
   @override
@@ -62,6 +69,9 @@ class _SignUpScreen extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
         // Wrap everything in SingleChildScrollView
@@ -82,6 +92,17 @@ class _SignUpScreen extends State<SignUpScreen> {
                               .cover, // Make sure the image covers the container
                     ),
                   ),
+
+                  Padding(padding: EdgeInsets.only(top: AppDimensions.di_40, left: AppDimensions.di_20),
+                    child: SizedBox(
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: SvgPicture.asset(ImageAssetsPath.backArrow, fit: BoxFit.cover),
+                      ),
+                    ),),
+
                   Container(
                     margin: EdgeInsets.only(
                       top: DeviceSize.getScreenHeight(context) * 0.04,
@@ -97,16 +118,20 @@ class _SignUpScreen extends State<SignUpScreen> {
 
                   // Adjusting the container's height so it fills the remaining space
                   CustomLoginSignupContainer(
+                    backgroundColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.authDarkModeColor,
                     marginHeight: 0.25,
                     height: DeviceSize.getScreenHeight(context),
                     // Set remaining height for the container (full height - image height)
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+
                         CustomTextWidget(
-                          text: AppStrings.signUp,
-                          fontSize: AppDimensions.di_24,
-                          color: AppColors.black,
+                          text: AppStrings.signUp, fontSize: AppDimensions.di_24, color: themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.textColor
+                            : AppColors.authDarkModeTextColor, fontWeight: AppFontWeight.fontWeight600,
                         ),
 
                         SizedBox(height: AppDimensions.di_15),
@@ -117,6 +142,12 @@ class _SignUpScreen extends State<SignUpScreen> {
                           child: Column(
                             children: [
                               CustomLoginSignupTextFieldWidget(
+                                textColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.textColor
+                                    : AppColors.authDarkModeTextColor,
+                                backgroundColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.whiteColor
+                                    : AppColors.authDarkModeColor,
                                 controller: _fullNameController,
                                 hintText: AppStrings.fullName,
                                 errorText: fullNameError,
@@ -146,6 +177,12 @@ class _SignUpScreen extends State<SignUpScreen> {
                               const SizedBox(height: AppDimensions.di_20),
 
                               CustomLoginSignupTextFieldWidget(
+                                textColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.textColor
+                                    : AppColors.authDarkModeTextColor,
+                                backgroundColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.whiteColor
+                                    : AppColors.authDarkModeColor,
                                 controller: _emailController,
                                 hintText: AppStrings.email,
                                 icon: ImageAssetsPath.mail,
@@ -178,6 +215,12 @@ class _SignUpScreen extends State<SignUpScreen> {
                               const SizedBox(height: AppDimensions.di_20),
 
                               CustomLoginSignupTextFieldWidget(
+                                textColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.textColor
+                                    : AppColors.authDarkModeTextColor,
+                                backgroundColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.whiteColor
+                                    : AppColors.authDarkModeColor,
                                 controller: _phoneNoController,
                                 hintText: AppStrings.phoneNoOnly,
                                 icon: ImageAssetsPath.phone,
@@ -239,11 +282,17 @@ class _SignUpScreen extends State<SignUpScreen> {
                                       ),
                                       // Default text style
                                       children: [
-                                        TextSpan(text: AppStrings.iAccept),
+                                        TextSpan(text: AppStrings.iAccept,  style: TextStyle(
+                                          color: themeProvider.themeMode == ThemeMode.light
+                                              ? AppColors.textColor
+                                              : AppColors.authDarkModeTextColor,
+                                        ),),
                                         TextSpan(
                                           text: AppStrings.termsCondition,
                                           style: TextStyle(
-                                            color: Colors.black,
+                                            color: themeProvider.themeMode == ThemeMode.light
+                                                ? AppColors.textColor
+                                                : AppColors.authDarkModeTextColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                           // Highlight color for the clickable text
@@ -267,11 +316,17 @@ class _SignUpScreen extends State<SignUpScreen> {
                                                   }
                                                 },
                                         ),
-                                        TextSpan(text: AppStrings.and),
+                                        TextSpan(text: AppStrings.and, style: TextStyle(
+                                          color: themeProvider.themeMode == ThemeMode.light
+                                              ? AppColors.textColor
+                                              : AppColors.authDarkModeTextColor,
+                                        ),),
                                         TextSpan(
                                           text: AppStrings.privacyPolicy,
                                           style: TextStyle(
-                                            color: Colors.black,
+                                            color: themeProvider.themeMode == ThemeMode.light
+                                                ? AppColors.textColor
+                                                : AppColors.authDarkModeTextColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                           // Highlight color for the clickable text
@@ -324,11 +379,15 @@ class _SignUpScreen extends State<SignUpScreen> {
                                         fontSize: AppDimensions.di_15,
                                       ),
                                     ),
+                                    TextSpan(text: ' '),
                                     TextSpan(
                                       text: AppStrings.loginWithSpace,
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: themeProvider.themeMode == ThemeMode.light
+                                            ? AppColors.textColor
+                                            : AppColors.authDarkModeTextColor,
                                         fontWeight: FontWeight.bold,
+                                        fontSize: AppDimensions.di_15,
                                       ),
                                       // Highlight color for the clickable text
                                       recognizer:
@@ -369,7 +428,7 @@ class _SignUpScreen extends State<SignUpScreen> {
     });
   }
 
-  void _onSignInClick() {
+  Future<void> _onSignInClick() async {
     String fullName = _fullNameController.text.trim();
     String email = _emailController.text.trim();
     String phoneNo = _phoneNoController.text.trim();
@@ -381,23 +440,41 @@ class _SignUpScreen extends State<SignUpScreen> {
     if (fullNameError == null && emailError == null && phoneError == null) {
       // If the form is valid, proceed with the logic
       // If both username and password are valid, proceed to the next screen
-      showErrorDialog(
-        context,
-        "You're register successfully",
-        backgroundColor: Colors.green,
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(), // Navigate to home screen
-        ),
-      );
+
+      if(_isChecked == false){
+        showErrorDialog(
+          context,
+          "Please select Terms & Conditions and Privacy Policy",
+          backgroundColor: Colors.red,
+        );
+        return;
+      }
+
+      final profile = await dbHelper.getSignupDetails(_phoneNoController.text);
+      String phoneNoExist = profile?['phoneNo'] ?? 'No Name';
+
+      if(phoneNoExist == _phoneNoController.text){
+        showErrorDialog(
+          context,
+          "This account already existed!!",
+          backgroundColor: Colors.red,
+        );
+      }
+      else{
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpValidationScreen(type: AppStrings.signUp,
+              userSignUpDetails: {'fullName': fullName, 'phoneNo': phoneNo, 'email': email},), // Navigate to home screen
+          ),
+        );
+      }
     }
   }
 
   validateFullName(String value) {
     setState(() {
-      if (value == null || value.trim().isEmpty) {
+      if (value.trim().isEmpty) {
         fullNameError = 'Full Name is required';
       } else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
         fullNameError = 'Enter a valid full name (letters and spaces only)';
@@ -411,7 +488,7 @@ class _SignUpScreen extends State<SignUpScreen> {
     String emailPattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
     RegExp emailRegExp = RegExp(emailPattern);
     setState(() {
-      if (value == null || value.trim().isEmpty) {
+      if (value.trim().isEmpty) {
         emailError = 'Email is required';
       } else if (!emailRegExp.hasMatch(value)) {
         emailError = 'Enter a valid email address';
@@ -426,7 +503,7 @@ class _SignUpScreen extends State<SignUpScreen> {
     String phonePattern = r"^[6789][0-9]{9}$";
     RegExp phoneRegExp = RegExp(phonePattern);
     setState(() {
-      if (value == null || value.trim().isEmpty) {
+      if (value.trim().isEmpty) {
         phoneError = 'Phone number is required';
       } else if (!phoneRegExp.hasMatch(value)) {
         phoneError =

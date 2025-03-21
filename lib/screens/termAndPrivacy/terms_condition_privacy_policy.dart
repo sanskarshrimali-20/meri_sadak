@@ -4,10 +4,12 @@ import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:meri_sadak/widgets/login_signup_bg_active.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_image_path.dart';
+import '../../providerData/theme_provider.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 
 class TermsConditionPrivacyPolicyScreen extends StatefulWidget {
@@ -35,9 +37,11 @@ class _TermsConditionPrivacyPolicyScreen
 
   final _storage = LocalSecureStorage(); // Secure storage instance
 
-
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       body: SizedBox.expand(
         child: GestureDetector(
@@ -49,6 +53,9 @@ class _TermsConditionPrivacyPolicyScreen
                 fit:
                     BoxFit
                         .cover, // This will ensure the image covers the whole screen
+                width: DeviceSize.getScreenWidth(context),
+                height: DeviceSize.getScreenHeight(context),
+
               ),
 
               Container(
@@ -71,7 +78,9 @@ class _TermsConditionPrivacyPolicyScreen
                   alignment: Alignment.center,
                   // Align the child container to the center
                   decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.boxDarkModeColor,
                     borderRadius: BorderRadius.all(
                       Radius.circular(AppDimensions.di_20), // Rounded corners
                     ),
@@ -86,7 +95,9 @@ class _TermsConditionPrivacyPolicyScreen
                       CustomTextWidget(
                         text: AppStrings.termsAndPrivacy,
                         fontSize: AppDimensions.di_24,
-                        color: AppColors.black,
+                        color: themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.textColor
+                            : AppColors.authDarkModeTextColor,
                         fontWeight: AppFontWeight.fontWeight600,
                         textAlign: TextAlign.center,
                       ),
@@ -103,7 +114,9 @@ class _TermsConditionPrivacyPolicyScreen
                                   "• ",
                                   style: TextStyle(
                                     fontSize: 18,
-                                    color: AppColors.black,
+                                    color: themeProvider.themeMode == ThemeMode.light
+                                        ? AppColors.textColor
+                                        : AppColors.authDarkModeTextColor,
                                   ),
                                 ),
                                 // Bullet point
@@ -112,7 +125,9 @@ class _TermsConditionPrivacyPolicyScreen
                                     items[index],
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: AppColors.black,
+                                      color: themeProvider.themeMode == ThemeMode.light
+                                          ? AppColors.textColor
+                                          : AppColors.authDarkModeTextColor,
                                     ),
                                   ),
                                 ),

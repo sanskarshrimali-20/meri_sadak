@@ -5,7 +5,9 @@ import 'package:meri_sadak/providerData/permission_provider.dart';
 import 'package:meri_sadak/providerData/theme_provider.dart';
 import 'package:meri_sadak/screens/splash/splash_screen.dart';
 import 'package:meri_sadak/utils/localization_provider.dart';
+import 'package:meri_sadak/viewmodels/forgotChangePassword/forgot_change_password_viewmodel.dart';
 import 'package:meri_sadak/viewmodels/login/login_view_model.dart';
+import 'package:meri_sadak/viewmodels/signup/sign_up_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -44,6 +46,8 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => SignUpViewModel()),
+        ChangeNotifierProvider(create: (_) => ForgotChangePasswordViewModel()),
         ChangeNotifierProvider(create: (_) => widget.localizationProvider),
         ChangeNotifierProvider(create: (_) => PermissionProvider()),
         ChangeNotifierProvider(create: (_) => ImagePickerProvider()),

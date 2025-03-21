@@ -113,5 +113,13 @@ class LocalSecureStorage {
     return checked;
   }
 
+  Future<void> setLoginUser(String t) async {
+    await _storage.write(key: 'loginUser', value: t);
+  }
+
+  Future<String?> getLoginUser() async {
+    String? clickedBy =  await _storage.read(key: 'loginUser');
+    return clickedBy;
+  }
 
 }

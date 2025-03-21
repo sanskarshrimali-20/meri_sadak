@@ -19,7 +19,7 @@ class _SubmittedFeedbackScreeState extends State<SubmittedFeedbackScree> {
           onTap: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              MaterialPageRoute(builder: (context) => HomeScreen()),
             );
           },
           child: Image.asset(

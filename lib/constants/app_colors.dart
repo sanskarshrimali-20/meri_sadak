@@ -35,10 +35,20 @@ class AppColors {
   static const Color appBgTwo = Color(0xFFFF3535);
   static const Color appBgThree = Color(0xFFFF3535);
   static const Color greyTxt = Color(0xFF909090);
+  static const Color greyRichTxt = Color(0xFF91908F);
   static const Color txtColor = Color(0xFF91908F);
 
   static const Color darkModeColor = Color(0xFF292826);
-  // #FE6B0A #E9E330
+
+  static const Color authDarkModeColor = Color(0xFF000C22);
+  static const Color authDarkModeTextColor = Color(0xFFE7E3E0);
+
+  static const Color bgDarkModeColor  = Color(0xFF202020);
+  static const Color boxDarkModeColor  = Color(0xFF0B0B0B);
+  static const Color textDarkModeColor  = Color(0xFF2B2B2B);
+
+
+// #FE6B0A #E9E330
 
 
 

@@ -2,9 +2,10 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import '../../constants/api_end_point.dart';
 import '../../services/ApiService/api_service.dart';
+import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 
-class SignUpViewModel extends ChangeNotifier {
+class ForgotChangePasswordViewModel extends ChangeNotifier {
 
   final ApiService _apiService = ApiService();
   final LocalSecureStorage _localStorage = LocalSecureStorage();
@@ -18,37 +19,21 @@ class SignUpViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   String? get userName => _userName;
+  final dbHelper = DatabaseHelper();
 
 
-  Future<String?> forgotChangePassword() async {
+  Future<String?> forgotChangePassword(String userCred, String password) async {
     try {
       _setLoading(true);
 
-      final requestBody = {
-        "mobileNo": "username",
-        "password": "password",
-      };
+      final signUpOperation = await dbHelper.updatePassword(userCred, password);
 
-      if (kDebugMode) {
-        log("Request body: $requestBody");
+      if(signUpOperation == "Success"){
+        return "Success";
+      }else{
+        return "Error";
       }
 
-      // Make API call
-      final response = await _apiService.post(ApiEndPoints.forgotChangePass, requestBody);
-
-      if (kDebugMode) {
-        log("Response status code: ${response.statusCode}");
-        log("Response body: ${response.body}");
-      }
-
-      // Handle the database insertion based on platform
-
-
-      // Set local storage logging state
-      // await _localStorage.setLoggingState('true');/
-      log("Local storage set to 'true'");
-
-      return "success";
     } catch (e, stackTrace) {
       log("Error during login: $e");
       debugPrintStack(stackTrace: stackTrace);

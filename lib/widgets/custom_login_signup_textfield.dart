@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meri_sadak/constants/app_colors.dart';
 
 import '../constants/app_dimensions.dart';
+import '../constants/app_image_path.dart';
 
 class CustomLoginSignupTextFieldWidget extends StatefulWidget {
   final String hintText;
@@ -26,6 +27,10 @@ class CustomLoginSignupTextFieldWidget extends StatefulWidget {
   final bool isNumberWithPrefix;
   final String? errorText;
   final String? fieldTypeCheck;
+  final Color backgroundColor;
+  final Color textColor;
+  final bool showSuffixIcon; // Boolean to control suffix icon visibility
+  final bool changeSuffixIcon;
 
   CustomLoginSignupTextFieldWidget({
     required this.hintText,
@@ -46,6 +51,10 @@ class CustomLoginSignupTextFieldWidget extends StatefulWidget {
     this.isNumberWithPrefix = false,
     this.errorText,
     this.fieldTypeCheck,
+    this.backgroundColor = AppColors.whiteColor,
+    this.textColor = AppColors.textColor,
+    this.showSuffixIcon = false, // Default value is true
+    this.changeSuffixIcon = false,
   });
 
   @override
@@ -130,6 +139,9 @@ class _CustomLoginSignupTextFieldWidgetState
     print("widget.keyboardType: ${widget.keyboardType}");
 
     return TextFormField(
+      style: TextStyle(
+        color: widget.textColor,  // Set the text color here
+      ),
       controller: widget.controller,
       focusNode: widget.focusNode,
       onChanged: widget.onChanged,
@@ -142,7 +154,7 @@ class _CustomLoginSignupTextFieldWidgetState
       inputFormatters: inputFormatters,
       //textCapitalization: TextCapitalization.words,
       decoration: InputDecoration(
-        fillColor: Colors.white.withAlpha(200),
+        fillColor: widget.backgroundColor,
         // Darken the fill color
         filled: true,
         counterText: "",
@@ -150,22 +162,33 @@ class _CustomLoginSignupTextFieldWidgetState
         errorText: widget.errorText,
         errorMaxLines: 3,
         // Allow up to 3 lines for error text
-        hintStyle: const TextStyle(
-          color: AppColors.blackMagicColor,
+        hintStyle: TextStyle(
+          color: widget.textColor,
           fontSize: AppDimensions.di_18,
           fontWeight: FontWeight.w400
         ),
         prefixIcon: Padding(
-          padding: const EdgeInsets.all(AppDimensions.di_8),
+          padding: const EdgeInsets.all(AppDimensions.di_11),
           child: SvgPicture.asset(
             widget.icon, // Path to the custom icon image
-            width: AppDimensions.di_24, // Adjust the width of the image
-            height: AppDimensions.di_24, // Adjust the height of the image
+            width: AppDimensions.di_18, // Adjust the width of the image
+            height: AppDimensions.di_18, // Adjust the height of the image
+            color: widget.textColor,
           ),
         ),
+        suffixIcon: widget.showSuffixIcon
+            ? Padding(
+          padding: const EdgeInsets.all(AppDimensions.di_10),
+          child: SvgPicture.asset(
+            widget.changeSuffixIcon
+                ? ImageAssetsPath.checkCircle // The new icon if the boolean is true
+                : ImageAssetsPath.deleteImage, // Default icon
+          ),
+        )
+            : null,
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.black,
+            color: widget.textColor,
           ), // Change focused border color
         ),
         enabledBorder: UnderlineInputBorder(

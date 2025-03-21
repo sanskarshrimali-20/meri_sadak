@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/login/login_screen.dart';
 import 'package:meri_sadak/screens/otpVerify/otp_screen.dart';
+import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_font_weight.dart';
 import '../../constants/app_strings.dart';
+import '../../providerData/theme_provider.dart';
+import '../../services/DatabaseHelper/database_helper.dart';
 import '../../utils/device_size.dart';
+import '../../widgets/custom_button.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
 import '../../widgets/custom_password_widget.dart';
@@ -34,8 +39,16 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
       true; // Track if we're showing phone number or email
   String? emailPhoneError;
 
+  bool changesuffixiocn = false;
+  bool suffixiconvisible = false;
+  bool continueEnable = false;
+  final dbHelper = DatabaseHelper();
+
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
         // Wrap everything in SingleChildScrollView
@@ -56,6 +69,17 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                               .cover, // Make sure the image covers the container
                     ),
                   ),
+
+                  Padding(padding: EdgeInsets.only(top: AppDimensions.di_40, left: AppDimensions.di_20),
+                    child: SizedBox(
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: SvgPicture.asset(ImageAssetsPath.backArrow, fit: BoxFit.cover),
+                      ),
+                    ),),
+
                   Container(
                     margin: EdgeInsets.only(
                       top: DeviceSize.getScreenHeight(context) * 0.1,
@@ -70,6 +94,9 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                   ),
 
                   CustomLoginSignupContainer(
+                    backgroundColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.authDarkModeColor,
                     marginHeight: 0.40,
                     height: DeviceSize.getScreenHeight(context),
                     // Set remaining height for the container (full height - image height)
@@ -78,9 +105,9 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
 
                       children: [
                         CustomTextWidget(
-                          text: widget.type,
-                          fontSize: AppDimensions.di_24,
-                          color: AppColors.black,
+                          text: widget.type, fontSize: AppDimensions.di_24, color: themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.textColor
+                            : AppColors.authDarkModeTextColor, fontWeight: AppFontWeight.fontWeight600,
                         ),
 
                         SizedBox(height: AppDimensions.di_20),
@@ -91,6 +118,12 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                           child: Column(
                             children: [
                               CustomLoginSignupTextFieldWidget(
+                                textColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.textColor
+                                    : AppColors.authDarkModeTextColor,
+                                backgroundColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.whiteColor
+                                    : AppColors.authDarkModeColor,
                                 controller: _usernameController,
                                 focusNode: _usernameFocusNode,
                                 hintText:
@@ -112,6 +145,8 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                 labelText: '',
                                 errorText: emailPhoneError,
                                 isRequired: true,
+                                showSuffixIcon: suffixiconvisible,
+                                changeSuffixIcon: changesuffixiocn,
                                 onChanged: validateEmailPhone,
                                 /* validator: (value) {
                                   // Validator logic for phone number/email
@@ -130,46 +165,97 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                   });
                                 },*/
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  // Close the keyboard when tapping outside the input field
-                                  FocusScope.of(context).unfocus();
-                                  // Toggle the field type
-                                  setState(() {
-                                    isPhoneNumberField =
-                                        !isPhoneNumberField; // Toggle field type
-                                    emailPhoneError =
-                                        null; // Reset error text when switching fields
-                                    _usernameController.clear();
-                                  });
-                                  // Open the keyboard again for the next focused field
-                                  Future.delayed(
-                                    Duration(milliseconds: 300),
-                                    () {
-                                      FocusScope.of(
-                                        context,
-                                      ).requestFocus(_usernameFocusNode);
-                                    },
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: AppDimensions.di_8,
-                                  ),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: CustomTextWidget(
-                                      text:
-                                          isPhoneNumberField
-                                              ? AppStrings.useEmailInstead
-                                              : AppStrings.usePhoneNumbInstead,
-                                      fontSize: AppDimensions.di_15,
-                                      color: AppColors.blackMagicColor,
-                                      fontWeight: AppFontWeight.fontWeight600,
+
+                              Row(children: [
+
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+
+                                    child: CustomButton(
+                                      text: AppStrings.verify,
+                                      onPressed: () async {
+                                        setState(() {
+                                          if(_usernameController.text.isEmpty){
+                                            suffixiconvisible = false;
+                                            changesuffixiocn = false;
+                                            continueEnable = false;
+                                          }
+                                          else if(_usernameController.text.length >= 10){
+                                            suffixiconvisible = true;
+                                            changesuffixiocn = true;
+                                            continueEnable = true;
+                                          }
+                                          else{
+                                            suffixiconvisible = true;
+                                            changesuffixiocn = false;
+                                            continueEnable = false;
+                                          }
+                                        });
+                                      },
+                                      textColor: AppColors.whiteColor,
+                                      fontSize: AppDimensions.di_18,
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: AppDimensions.di_6,
+                                        horizontal: AppDimensions.di_15,
+                                      ),
+                                      borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                                      buttonHeight: AppDimensions.di_35,
+                                      buttonWidth: AppDimensions.di_80,
+                                      backgroundColor: AppColors.toastBgColorGreen,
+                                      backgroundColorOne: AppColors.toastBgColorGreen,
+                                    ),
+                                ),
+
+                                Spacer(),
+
+                                GestureDetector(
+                                  onTap: () {
+                                    // Close the keyboard when tapping outside the input field
+                                    FocusScope.of(context).unfocus();
+                                    // Toggle the field type
+                                    setState(() {
+                                      suffixiconvisible = false;
+                                      changesuffixiocn = false;
+                                      continueEnable = false;
+
+                                      isPhoneNumberField =
+                                      !isPhoneNumberField; // Toggle field type
+                                      emailPhoneError =
+                                      null; // Reset error text when switching fields
+                                      _usernameController.clear();
+                                    });
+                                    // Open the keyboard again for the next focused field
+                                    Future.delayed(
+                                      Duration(milliseconds: 300),
+                                          () {
+                                        FocusScope.of(
+                                          context,
+                                        ).requestFocus(_usernameFocusNode);
+                                      },
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: AppDimensions.di_8,
+                                    ),
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: CustomTextWidget(
+                                        text:
+                                        isPhoneNumberField
+                                            ? AppStrings.useEmailInstead
+                                            : AppStrings.usePhoneNumbInstead,
+                                        fontSize: AppDimensions.di_15,
+                                        color: themeProvider.themeMode == ThemeMode.light
+                                            ? AppColors.textColor
+                                            : AppColors.authDarkModeTextColor,
+                                        fontWeight: AppFontWeight.fontWeight600,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+
+                              ],),
 
                               // const SizedBox(height: AppDimensions.di_20),
 
@@ -203,6 +289,7 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                 color: AppColors.whiteColor,
                                 textAlign: TextAlign.center,
                                 onClick: _onForgotPasswordClick,
+                                isEnabled: continueEnable,
                               ),
 
                               const SizedBox(height: AppDimensions.di_40),
@@ -229,7 +316,9 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                         text: AppStrings.backToLogIn,
                                         fontSize: AppDimensions.di_15,
                                         fontWeight: AppFontWeight.fontWeight600,
-                                        color: AppColors.blackMagicColor,
+                                        color: themeProvider.themeMode == ThemeMode.light
+                                            ? AppColors.textColor
+                                            : AppColors.authDarkModeTextColor,
                                       ),
                                     ],
                                   ),
@@ -268,32 +357,49 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
     return false; // Invalid input
   }
 
-  void _onForgotPasswordClick() {
+  Future<void> _onForgotPasswordClick() async {
     validateEmailPhone(_usernameController.text);
     if (emailPhoneError == null) {
       // If the form is valid, proceed with the logic
       // If both username and password are valid, proceed to the next screen
-      showErrorDialog(
-        context,
-        "OTP sent successfully!",
-        backgroundColor: Colors.green,
-      );
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) => OtpValidationScreen(
-                type: widget.type,
-              ), // Pass the profile data
-        ),
-      );
+
+      final profile = await dbHelper.getSignupDetails(_usernameController.text);
+      String phoneNoExist = profile?['phoneNo'] ?? 'No Name';
+      String emailExist = profile?['email'] ?? 'No Name';
+      bool isPhone  = true;
+      if(_usernameController.text.contains("@")){
+        isPhone = false;
+      }
+      else{
+        isPhone = true;
+      }
+      if(isPhone ? phoneNoExist == _usernameController.text : emailExist == _usernameController.text){
+        showErrorDialog(
+          context,
+          "OTP sent successfully!",
+          backgroundColor: Colors.green,
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpValidationScreen(type: widget.type, userCred: _usernameController.text,), // Navigate to home screen
+          ),
+        );
+      }
+      else{
+        showErrorDialog(
+          context,
+          "This account doesn't exist!!",
+          backgroundColor: Colors.red,
+        );
+      }
     }
   }
 
   void validateEmailPhone(String value) {
     // Validator logic for phone number/email
     setState(() {
-      if (value == null || value.trim().isEmpty) {
+      if (value.trim().isEmpty) {
         emailPhoneError =
             isPhoneNumberField
                 ? 'Phone Number is required'
@@ -306,6 +412,17 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
       } else {
         emailPhoneError = null;
       }
+
+      if (_phoneNoController.text.isEmpty)
+      {
+        suffixiconvisible = false;
+        changesuffixiocn = false;
+        continueEnable = false;
+      }
+      else{
+        continueEnable = false;
+      }
+
     });
   }
 }
