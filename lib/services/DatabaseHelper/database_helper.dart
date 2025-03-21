@@ -40,9 +40,9 @@ class DatabaseHelper {
         await db.execute('PRAGMA foreign_keys = ON;');
 
         await db.execute('''
-          CREATE TABLE user_details (
+          CREATE TABLE sign_up (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            fullname TEXT,
+            fullName TEXT,
             phoneNo TEXT,
             email TEXT,
             password TEXT
@@ -50,7 +50,7 @@ class DatabaseHelper {
         ''');
 
         await db.execute('''
-          CREATE TABLE user_login (
+          CREATE TABLE login (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             accessToken TEXT UNIQUE NOT NULL,
@@ -119,6 +119,81 @@ class DatabaseHelper {
 
       },
     );
+  }
+
+  Future<String> setSignupDetails(Map<String, dynamic> signUp) async {
+    try {
+      final db = await database;
+      // Use INSERT OR REPLACE to overwrite any existing record
+      await db.insert(
+        'sign_up',
+        signUp,
+        conflictAlgorithm: ConflictAlgorithm.replace, // Ensures only one record exists
+      );
+      return "Success";
+      debugPrint("User profile inserted successfully");
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to insert user profile");
+        print(stackTrace);
+        return "Error";
+      }
+    }
+    return "Error";
+  }
+
+  Future<Map<String, dynamic>?> getSignupDetails(String userId) async {
+    try {
+      final db = await database;
+
+      final List<Map<String, dynamic>> result = await db.query(
+        'sign_up',
+        where: 'phoneNo = ? OR email = ?',
+        whereArgs: [userId], // Use the identifier as the where argument
+        limit: 1, // Fetch only one record
+      );
+
+      if (result.isNotEmpty) {
+        return result.first; // Return the user profile with the matching ID
+      } else {
+        debugPrint("No user profile found for id: $userId");
+        return null; // Return null if no record exists
+      }
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to get user profile by id");
+        print(stackTrace);
+      }
+      return null; // Return null on error
+    }
+  }
+
+  Future<String> updatePassword(String userIdentifier, String newPassword) async {
+    try {
+      final db = await database;
+
+      // Update the password for the user with the given userIdentifier (could be userId, email, or phoneNo)
+      int updatedRows = await db.update(
+        'sign_up',
+        {'password': newPassword}, // Set the new password
+        where: 'email = ? OR phoneNo = ?', // Identify the user by email or phoneNo
+        whereArgs: [userIdentifier, userIdentifier], // Pass the userIdentifier for email or phoneNo
+      );
+
+      if (updatedRows > 0) {
+        debugPrint("Password updated successfully");
+        return "Success";
+      } else {
+        debugPrint("No user found with this identifier");
+        return "No user found with this identifier";
+      }
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to update password");
+        print(stackTrace);
+      }
+      return "Error";
+    }
   }
 
   Future<void> insertUserDetails(Map<String, dynamic> userProfile) async {

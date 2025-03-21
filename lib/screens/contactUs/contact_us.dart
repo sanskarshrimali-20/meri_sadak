@@ -47,6 +47,7 @@ class _ContactUsScreen extends State<ContactUsScreen> {
                     icon: ImageAssetsPath.clock,
                     fontWeight: AppFontWeight.fontWeight600,
                   ),
+
                   Divider(
                     color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness

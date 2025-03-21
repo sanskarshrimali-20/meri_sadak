@@ -1,11 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
-import '../../constants/api_end_point.dart';
-import '../../constants/app_strings.dart';
 import '../../services/ApiService/api_service.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
-import '../../services/EncryptionService/encryption_service.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 
 class LoginViewModel extends ChangeNotifier {
@@ -17,7 +14,6 @@ class LoginViewModel extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   String? _userName;
-  bool _isLoggedIn = false;
 
   bool get isLoading => _isLoading;
 
@@ -25,9 +21,8 @@ class LoginViewModel extends ChangeNotifier {
 
   String? get userName => _userName;
 
-  bool get isLoggedIn => _isLoggedIn;
 
-  Future<String?> performLogin(String username, String password) async {
+  Future<String?> performLogin(String username, String passwordValue) async {
     try {
       _setLoading(true);
 
@@ -56,15 +51,21 @@ class LoginViewModel extends ChangeNotifier {
       log("Local storage set to 'true'");
 */
 
-      final profile = await dbHelper.getUserDetailsById(username);
-      String phoneNo = profile?['phoneNo'] ?? 'No Name';  // Replace 'name' with actual field name
+      final profile = await dbHelper.getSignupDetails(username);
+      String phoneNo = profile?['phoneNo'] ?? 'No Name';  // Replace 'phone' with actual field name
       String password = profile?['password'] ?? 'No Name';  // Replace 'name' with actual field name
+      String email = profile?['email'] ?? 'No Name';  // Replace 'email' with actual field name
 
-      if(phoneNo == username && password == password){
+      debugPrint("profileValue$profile");
+      debugPrint("password$password");
+      debugPrint("passwordValue$passwordValue");
+
+      if((phoneNo == username || email == username) && password == passwordValue){
+        _localStorage.setLoggingState("true");
         return "Success";
       }
       else{
-        return "Error";
+        return "No user available from this credentials";
       }
       // return "success";
     } catch (e, stackTrace) {
@@ -77,7 +78,6 @@ class LoginViewModel extends ChangeNotifier {
     }
   }
 
-
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
@@ -85,10 +85,6 @@ class LoginViewModel extends ChangeNotifier {
 
   void _setError(String message) {
     _errorMessage = message;
-    notifyListeners();
-  }
-
-  Future<void> checkLoginStatus() async {
     notifyListeners();
   }
 
@@ -103,5 +99,4 @@ class LoginViewModel extends ChangeNotifier {
 
     return jsonResponse["message"].toString();
   }
-
 }

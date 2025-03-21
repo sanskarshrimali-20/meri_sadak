@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:meri_sadak/constants/app_colors.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
 
 class CustomLoginSignupContainer extends StatelessWidget {
   final double height;
   final double marginHeight;
   final Widget child;
+  final Color backgroundColor;
 
   // Constructor that accepts height and child widget
-  const CustomLoginSignupContainer({super.key, required this.height, required this.child, required this.marginHeight});
+  const CustomLoginSignupContainer({super.key, required this.height, required this.child, required this.marginHeight, this.backgroundColor = AppColors.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class CustomLoginSignupContainer extends StatelessWidget {
       height: height - (height * marginHeight),
       margin: EdgeInsets.only(top: height * marginHeight), // Apply 32% margin from the top
       decoration: BoxDecoration(
-        color: Colors.white, // White background
+        color: backgroundColor, // White background
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(AppDimensions.di_25), // Rounded top-left corner
           topRight: Radius.circular(AppDimensions.di_25), // Rounded top-right corner

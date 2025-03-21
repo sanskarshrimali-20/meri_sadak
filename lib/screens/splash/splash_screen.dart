@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
+import 'package:meri_sadak/screens/home/home_screen.dart';
 import 'package:meri_sadak/screens/login/login_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/utils/device_utils.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/app_colors.dart';
+import '../../services/LocalStorageService/local_storage.dart';
+import '../../viewmodels/login/login_view_model.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,6 +21,8 @@ class _SplashScreen extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
+  final LocalSecureStorage _localStorage = LocalSecureStorage();
+
   @override
   void initState() {
     super.initState();
@@ -26,16 +32,37 @@ class _SplashScreen extends State<SplashScreen>
       duration: const Duration(seconds: 2),
     );
 
+
     // Start the animation
     _controller.forward().then((_) async {
+
+
+      final isLoggedIn = await _checkLoginStatus();
+
+        if(isLoggedIn){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(), // Pass the profile data
+            ),
+          );
+        }
+        else{
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(), // Pass the profile data
+            ),
+          );
+        }
       // Check login status
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginScreen(), // Pass the profile data
-        ),
-      );
     });
+  }
+
+  Future<bool> _checkLoginStatus() async {
+    String? loggedInValue =
+    await _localStorage.getLoggingState(); // Read from secure storage
+    return loggedInValue == 'true'; // Convert string to boolean
   }
 
   @override

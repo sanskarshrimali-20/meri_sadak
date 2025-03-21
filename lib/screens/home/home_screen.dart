@@ -22,7 +22,7 @@ import '../registerFeedback/register_feedback_screen.dart';
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? userProfile;
 
-  const HomeScreen({super.key, this.userProfile});
+  HomeScreen({super.key, this.userProfile});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
             top: AppDimensions.di_50,
           ),
           // Add space outside the drawer
-          child: const CustomDrawer(),
+          child: CustomDrawer(),
         ),
         body: SingleChildScrollView(
             child: Container(

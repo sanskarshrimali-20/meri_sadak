@@ -6,13 +6,10 @@ class ImageAssetsPath {
   static const submittedFeedbackScreen = "$folderPath/submitted_feedback.png";
   // static const loginBg = "$folderPath/login_bg.png";
   static const loginBg = "$folderPath/merisadaklogo_bg.png";
-  static const phone = "$folderPath/phone.svg";
-  static const user = "$folderPath/user.svg";
   static const forgetPasswordBg = "$folderPath/forget_password_bg.png";
   static const signupBg = "$folderPath/signup_bg.png";
   static const iconPerson = "$folderPath/icon_person.svg";
   static const personIcon = "$folderPath/person_icon.svg";
-  static const mail = "$folderPath/mail.svg";
   static const contacts = "$folderPath/contacts.svg";
   static const beneficiaries = "$folderPath/beneficiaries.svg";
   static const home = "$folderPath/home.svg";
@@ -21,8 +18,6 @@ class ImageAssetsPath {
   static const logout = "$folderPath/logout.svg";
   static const info = "$folderPath/info.svg";
   static const appVersion = "$folderPath/appversion.svg";
-  static const lock = "$folderPath/lock.svg";
-  static const lock2 = "$folderPath/lock2.svg";
   static const replace = "$folderPath/replace.svg";
   static const rightArrow = "$folderPath/right_arrow.svg";
   static const drawerIcon = "$folderPath/drawer_icon.svg";
@@ -56,8 +51,12 @@ class ImageAssetsPath {
   static const fontSize = "$folderPath/font_size.svg";
   static const language = "$folderPath/language.svg";
   static const clear = "$folderPath/clear.svg";
-  static const userIcon = "$folderPath/user_icon.svg";
+  static const user = "$folderPath/user.svg";
   static const passLock = "$folderPath/pass_lock.svg";
+  static const mail = "$folderPath/mail.svg";
+  static const phone = "$folderPath/phone.svg";
+
+
 
 
 

@@ -18,19 +18,31 @@ import '../screens/AboutMeriSadak/about_meri_sadak.dart';
 import '../screens/AppVersion/app_version.dart';
 import '../screens/PrivacyAndSecurity/privacy_and_security.dart';
 import '../screens/login/login_screen.dart';
+import '../services/DatabaseHelper/database_helper.dart';
+import '../services/LocalStorageService/local_storage.dart';
 import '../utils/localization_provider.dart';
 import 'custom_base_dialog.dart';
 
 class CustomDrawer extends StatefulWidget {
-  const CustomDrawer({super.key});
+
+  CustomDrawer({super.key});
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+
+  final LocalSecureStorage _localStorage = LocalSecureStorage();
+  final dbHelper = DatabaseHelper();
+  String name = "";
+  String phone = "";
+  String email = "";
+  String char = "";
+
   @override
   void initState() {
+    _initializeUserDetails();
     super.initState();
   }
 
@@ -80,7 +92,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       radius: 40, // Radius of the avatar (half of the container size)
                       backgroundColor: AppColors.whiteColor, // Background color for the circle
                       child: Text(
-                        "S", // First character of the name
+                        char, // First character of the name
                         style: TextStyle(
                           color: AppColors.blueGradientColor1, // Color of the text
                           fontSize: AppDimensions.di_50, // Text size
@@ -99,21 +111,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         SizedBox(height: AppDimensions.di_20),
                         CustomTextWidget(
                           maxlines: 1,
-                          text:
-                              localizationProvider.localizedStrings['name'] ??
-                              'Sanskar Shrimali',
+                          text: name,
                           fontSize: AppDimensions.di_20,
                           color: AppColors.whiteColor,
                         ),
                         SizedBox(height: AppDimensions.di_5),
                         CustomTextWidget(
-                          text: 'Phone No: 9087654321',
+                          text: phone,
                           fontSize: AppDimensions.di_14,
                           color: AppColors.whiteColor,
                           maxlines: 1,
                         ),
                         CustomTextWidget(
-                          text: 'Email ID: sanskars@cdac.in',
+                          text: email,
                           fontSize: AppDimensions.di_14,
                           color: AppColors.whiteColor,
                           maxlines: 1,
@@ -298,6 +308,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               title: AppStrings.logout,
               icon: ImageAssetsPath.logout,
               onClick: () {
+                _localStorage.setLoggingState("false");
+
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -322,4 +334,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
       onYesPressed: () async {},
     );
   }
+
+  Future<void> _initializeUserDetails() async {
+
+    String? user = await _localStorage.getLoginUser();
+    final profile = await dbHelper.getSignupDetails(user!);
+
+    setState(() {
+     name =  profile?['fullName'] ?? 'No Name';
+     phone =  profile?['phoneNo'] ?? 'No Name';
+     email = profile?['email'] ?? 'No Name';
+     char  = name.isNotEmpty ? name[0] : '';
+    });
+  }
+
 }

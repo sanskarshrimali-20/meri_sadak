@@ -6,11 +6,11 @@ import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
-import '../../constants/app_image_path.dart';
+import '../../services/DatabaseHelper/database_helper.dart';
+import '../../services/LocalStorageService/local_storage.dart';
 import '../../utils/localization_provider.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_text_icon_button.dart';
-import '../../widgets/drawer_widget.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -20,6 +20,19 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreen extends State<ProfileScreen> {
+
+  final LocalSecureStorage _localStorage = LocalSecureStorage();
+  final dbHelper = DatabaseHelper();
+  String name = "";
+  String phone = "";
+  String email = "";
+  String char = "";
+
+  @override
+  void initState() {
+    _initializeUserDetails();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,24 +61,35 @@ class _ProfileScreen extends State<ProfileScreen> {
                   SizedBox(height: AppDimensions.di_15),
 
                   Center(
-                    child: CircleAvatar(
-                      radius: 50, // Size of the circle
-                      backgroundColor: Colors.lightGreenAccent, // Background color for the circle
-                      child: Text(
-                        "S", // First character of the name
-                        style: TextStyle(
-                          color: Colors.white, // Color of the text
-                          fontSize: 50, // Text size
-                          fontWeight: FontWeight.bold, // Text weight
+                    child: Container(
+                      width: 90, // Width of the circle (2 * radius)
+                      height: 90, // Height of the circle (2 * radius)
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle, // Make the container a circle
+                        border: Border.all(
+                          color: AppColors.toastBgColorGreen, // Color of the border
+                          width: 2, // Stroke width
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        radius: 50, // Radius of the avatar (half of the container size)
+                        backgroundColor: AppColors.whiteColor, // Background color for the circle
+                        child: Text(
+                          char, // First character of the name
+                          style: TextStyle(
+                            color: AppColors.blueGradientColor1, // Color of the text
+                            fontSize: AppDimensions.di_50, // Text size
+                            fontWeight: AppFontWeight.fontWeight600, // Text weight
+                          ),
                         ),
                       ),
                     ),
                   ),
 
-                  SizedBox(height: AppDimensions.di_40),
+                  SizedBox(height: AppDimensions.di_30),
 
                   CustomTextWidget(
-                   text: '${AppStrings.name} : Sanskar Shrimali', fontSize: AppDimensions.di_18, color: AppColors.black,
+                   text: '${AppStrings.name} : ${name}', fontSize: AppDimensions.di_18, color: AppColors.black,
                     fontWeight: AppFontWeight.fontWeight500,
                   ),
 
@@ -77,7 +101,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                   ),
 
                   CustomTextWidget(
-                    text: '${AppStrings.phoneNoO} : 9087654321', fontSize: AppDimensions.di_18, color: AppColors.black,
+                    text: '${AppStrings.phoneNoO} : ${phone}', fontSize: AppDimensions.di_18, color: AppColors.black,
                     fontWeight: AppFontWeight.fontWeight500,
                   ),
 
@@ -89,7 +113,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                   ),
 
                   CustomTextWidget(
-                    text: '${AppStrings.emailId} : sanskars@cdac.in', fontSize: AppDimensions.di_18, color: AppColors.black,
+                    text: '${AppStrings.emailId} : ${email}', fontSize: AppDimensions.di_18, color: AppColors.black,
                     fontWeight: AppFontWeight.fontWeight500,
                   ),
 
@@ -157,4 +181,17 @@ class _ProfileScreen extends State<ProfileScreen> {
     );
   }
 
+
+  Future<void> _initializeUserDetails() async {
+
+    String? user = await _localStorage.getLoginUser();
+    final profile = await dbHelper.getSignupDetails(user!);
+
+    setState(() {
+      name =  profile?['fullName'] ?? 'No Name';
+      phone =  profile?['phoneNo'] ?? 'No Name';
+      email = profile?['email'] ?? 'No Name';
+      char  = name.isNotEmpty ? name[0] : '';
+    });
+  }
 }

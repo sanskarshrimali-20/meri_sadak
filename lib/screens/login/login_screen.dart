@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_colors.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
@@ -10,10 +11,14 @@ import 'package:meri_sadak/screens/home/home_screen.dart';
 import 'package:meri_sadak/screens/passwordChange/forgot_reset_password_screen.dart';
 import 'package:meri_sadak/screens/signUp/sign_up_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
+import 'package:meri_sadak/viewmodels/login/login_view_model.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_container.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_textfield.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:meri_sadak/widgets/login_signup_bg_unactive.dart';
+import 'package:provider/provider.dart';
+import '../../providerData/theme_provider.dart';
+import '../../services/LocalStorageService/local_storage.dart';
 import '../../widgets/custom_password_widget.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/login_signup_bg_active.dart';
@@ -26,10 +31,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
+
   bool _isPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _usernameController = TextEditingController(text: "98765432019");
-  final TextEditingController _passwordController = TextEditingController(text: "Sanssdjj12@dkl");
+  final TextEditingController _usernameController = TextEditingController(/*text: "9876543201"*/);
+  final TextEditingController _passwordController = TextEditingController(/*text: "Sanssdjj12@dkl"*/);
+  final LocalSecureStorage _localStorage = LocalSecureStorage();
 
   final FocusNode _usernameFocusNode =
       FocusNode(); // FocusNode for the text field
@@ -40,7 +47,15 @@ class _LoginScreen extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return WillPopScope(
+        onWillPop: () async {
+      // When the back button is pressed, exit the app
+      SystemNavigator.pop();  // Exits the app
+      return false; // Return false to prevent the default back navigation
+    },
+    child: Scaffold(
       body: SingleChildScrollView(
         // Wrap everything in SingleChildScrollView
         child: Form(
@@ -74,6 +89,9 @@ class _LoginScreen extends State<LoginScreen> {
 
                   // Adjusting the container's height so it fills the remaining space
                   CustomLoginSignupContainer(
+                    backgroundColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.authDarkModeColor,
                     marginHeight: 0.40,
                     height: DeviceSize.getScreenHeight(context),
                     // Set remaining height for the container (full height - image height)
@@ -81,14 +99,12 @@ class _LoginScreen extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         // Example: Add a TextField inside the white container
-                        Text(
-                          AppStrings.login,
-                          style: TextStyle(
-                            color: AppColors.textColor,
-                            fontSize: AppDimensions.di_24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        CustomTextWidget(
+                         text: AppStrings.login, fontSize: AppDimensions.di_24, color: themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.textColor
+                            : AppColors.authDarkModeTextColor, fontWeight: AppFontWeight.fontWeight600,
                         ),
+
                         SizedBox(height: AppDimensions.di_20),
 
                         // Space between widgets
@@ -97,6 +113,12 @@ class _LoginScreen extends State<LoginScreen> {
                           child: Column(
                             children: [
                               CustomLoginSignupTextFieldWidget(
+                                textColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.textColor
+                                    : AppColors.authDarkModeTextColor,
+                                backgroundColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.whiteColor
+                                    : AppColors.authDarkModeColor,
                                 controller: _usernameController,
                                 focusNode: _usernameFocusNode,
                                 hintText:
@@ -154,7 +176,9 @@ class _LoginScreen extends State<LoginScreen> {
                                               ? AppStrings.useEmailInstead
                                               : AppStrings.usePhoneNumbInstead,
                                       fontSize: AppDimensions.di_15,
-                                      color: AppColors.blackMagicColor,
+                                      color: themeProvider.themeMode == ThemeMode.light
+                                          ? AppColors.textColor
+                                          : AppColors.authDarkModeTextColor,
                                       fontWeight: AppFontWeight.fontWeight600,
                                     ),
                                   ),
@@ -163,6 +187,12 @@ class _LoginScreen extends State<LoginScreen> {
                               const SizedBox(height: AppDimensions.di_20),
 
                               customPasswordWidget(
+                                textColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.textColor
+                                    : AppColors.authDarkModeTextColor,
+                                backgroundColor: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.whiteColor
+                                    : AppColors.authDarkModeColor,
                                 textEditController: _passwordController,
                                 hintText: AppStrings.password,
                                 errorText: passwordError,
@@ -195,7 +225,9 @@ class _LoginScreen extends State<LoginScreen> {
                                   child: CustomTextWidget(
                                     text: AppStrings.forgotPasswordQue,
                                     fontSize: AppDimensions.di_15,
-                                    color: AppColors.blackMagicColor,
+                                    color: themeProvider.themeMode == ThemeMode.light
+                                        ? AppColors.textColor
+                                        : AppColors.authDarkModeTextColor,
                                     fontWeight: AppFontWeight.fontWeight600,
                                   ),
                                 ),
@@ -234,7 +266,9 @@ class _LoginScreen extends State<LoginScreen> {
                                     TextSpan(
                                       text: AppStrings.signUp,
                                       style: TextStyle(
-                                        color: Colors.black,
+                                        color: themeProvider.themeMode == ThemeMode.light
+                                            ? AppColors.textColor
+                                            : AppColors.authDarkModeTextColor,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
                                       ),
@@ -242,7 +276,7 @@ class _LoginScreen extends State<LoginScreen> {
                                       recognizer:
                                           TapGestureRecognizer()
                                             ..onTap = () {
-                                              Navigator.pushReplacement(
+                                              Navigator.push(
                                                 // ignore: use_build_context_synchronously
                                                 context,
                                                 MaterialPageRoute(
@@ -285,7 +319,7 @@ class _LoginScreen extends State<LoginScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   void _togglePasswordVisibility() {
@@ -295,7 +329,7 @@ class _LoginScreen extends State<LoginScreen> {
   }
 
   // Function to handle login button click
-  void _onLoginClick() {
+  Future<void> _onLoginClick() async {
     String username = _usernameController.text.trim();
     String password = _passwordController.text.trim();
     validateEmailPhone(username);
@@ -304,17 +338,42 @@ class _LoginScreen extends State<LoginScreen> {
     if (emailPhoneError == null && passwordError == null) {
       // If the form is valid, proceed with the logic
       // If both username and password are valid, proceed to the next screen
-      showErrorDialog(
-        context,
-        "Login successfully !",
-        backgroundColor: Colors.green,
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(), // Navigate to home screen
-        ),
-      );
+
+      final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
+
+      String? loginOperationResultMessage = await loginViewModel.performLogin(_usernameController.text, _passwordController.text);
+      if(loginOperationResultMessage == "Success"){
+
+        _localStorage.setLoginUser(_usernameController.text);
+        showErrorDialog(
+          context,
+          "Login successfully !",
+          backgroundColor: Colors.green,
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) =>
+                HomeScreen(), // Pass the profile data
+          ),
+        );
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: CustomTextWidget(
+              text: "Username/password Invalid",
+              fontSize: AppDimensions.di_16,
+              color: AppColors.whiteColor,
+            ),
+            backgroundColor: Colors.red,
+            // Use orange or yellow for warnings
+            duration: Duration(seconds: 3), // Duration the SnackBar is visible
+          ),
+        );
+      }
+
     } else {
       // Handle invalid form (if needed)
       /*if(username.isEmpty){

@@ -1150,7 +1150,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                                           point.latitude,
                                           point.longitude,
                                         );
-                                      }, onMapReady: () {  },
+                                      }, onMapReady: () {
+
+                                },
                                     ),
                           ),
                         if (imgSource == 'Camera')

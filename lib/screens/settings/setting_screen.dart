@@ -5,9 +5,11 @@ import 'package:meri_sadak/screens/PrivacyAndSecurity/privacy_and_security.dart'
 import 'package:meri_sadak/screens/appearance/appearance.dart';
 import 'package:meri_sadak/screens/profile/profile.dart';
 import 'package:meri_sadak/utils/device_size.dart';
+import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_image_path.dart';
+import '../../providerData/theme_provider.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/drawer_widget.dart';
@@ -20,10 +22,16 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreen extends State<SettingScreen> {
+
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: AppColors.bgColorGainsBoro,
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.whiteColor
+          : AppColors.bgDarkModeColor,
      /* appBar: CustomAppBar(
         title: AppStrings.contactUs,
         leadingIcon: ImageAssetsPath.backArrow,
@@ -35,8 +43,9 @@ class _SettingScreen extends State<SettingScreen> {
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.whiteColor,
-              borderRadius: BorderRadius.all(
+              color: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,              borderRadius: BorderRadius.all(
                 Radius.circular(AppDimensions.di_20), // Rounded corners
               ),
             ),
@@ -47,8 +56,16 @@ class _SettingScreen extends State<SettingScreen> {
                   SizedBox(height: AppDimensions.di_15),
                   customDrawerWidget(
                     title: AppStrings.myProfile,
-                    icon: ImageAssetsPath.userIcon,
-                    iconColor: AppColors.black,
+                    icon: ImageAssetsPath.user,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Navigator.push(
                         context,
@@ -67,6 +84,15 @@ class _SettingScreen extends State<SettingScreen> {
                   customDrawerWidget(
                     title: AppStrings.appearance,
                     icon: ImageAssetsPath.appearanceIcon,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Navigator.push(
                         context,
@@ -85,6 +111,15 @@ class _SettingScreen extends State<SettingScreen> {
                   customDrawerWidget(
                     title: AppStrings.privacyAndSecurity,
                     icon: ImageAssetsPath.privacy,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Navigator.push(
                         context,
@@ -103,6 +138,15 @@ class _SettingScreen extends State<SettingScreen> {
                   customDrawerWidget(
                     title: AppStrings.checkVersionUpdate,
                     icon: ImageAssetsPath.replace,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Navigator.push(
                         context,

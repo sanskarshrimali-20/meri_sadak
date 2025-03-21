@@ -50,8 +50,8 @@ class _AppearanceScreen extends State<AppearanceScreen> {
 
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light
-          ? AppColors.app_bg_color
-          : AppColors.darkModeColor,
+          ? AppColors.whiteColor
+          : AppColors.bgDarkModeColor,
       body: CustomBodyWithGradient(
         title: localizationProvider.localizedStrings['appearance'] ?? "Appearance",
         childHeight: DeviceSize.getScreenHeight(context) * 0.3,
@@ -59,7 +59,9 @@ class _AppearanceScreen extends State<AppearanceScreen> {
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.whiteColor,
+              color: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,
               borderRadius: BorderRadius.all(
                 Radius.circular(AppDimensions.di_20), // Rounded corners
               ),
@@ -84,7 +86,7 @@ class _AppearanceScreen extends State<AppearanceScreen> {
                         text: localizationProvider.localizedStrings['theme_color'] ?? "Dark and Light Mode", fontSize: AppDimensions.di_18,
                         color: themeProvider.themeMode == ThemeMode.light
                             ? AppColors.black
-                            : AppColors.black,
+                            : AppColors.whiteColor,
                       ),
                       Spacer(),
                        Transform.scale(
@@ -113,6 +115,15 @@ class _AppearanceScreen extends State<AppearanceScreen> {
                   customDrawerWidget(
                     title: localizationProvider.localizedStrings['font_size'] ?? "Font Size",
                     icon: ImageAssetsPath.fontSize,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
 
                     },
@@ -127,6 +138,15 @@ class _AppearanceScreen extends State<AppearanceScreen> {
                   customDrawerWidget(
                     title: localizationProvider.localizedStrings['language'] ?? "Language",
                     icon: ImageAssetsPath.language,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
 
                      /* CustomSelectionDialog(
