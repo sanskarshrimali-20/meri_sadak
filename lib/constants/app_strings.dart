@@ -195,6 +195,11 @@ class AppStrings {
   static const selectLanguagePre = 'Select your preferred language.';
   static const termsAndPrivacy = 'Terms, Conditions & Privacy Policy';
 
+  //alert dialog
+
+static const allowLocationAlertTitle = 'Allow Location';
+static const allowLocationAlertContent = 'Enable Meri Sadak to access your location for accurate reports and better service.';
+
 
 
 

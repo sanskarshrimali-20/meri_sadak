@@ -17,14 +17,19 @@ import '../../widgets/custom_snackbar.dart';
 import '../../widgets/login_signup_bg_active.dart';
 
 class OtpValidationScreen extends StatefulWidget {
-
   String type;
   Map<String, dynamic> userSignUpDetails;
   String userCred;
 
-  OtpValidationScreen({super.key, required this.type,
-    this.userSignUpDetails = const {'fullName': '', 'phoneNo': '', 'email': ''}, // Default map
-    this.userCred = ""
+  OtpValidationScreen({
+    super.key,
+    required this.type,
+    this.userSignUpDetails = const {
+      'fullName': '',
+      'phoneNo': '',
+      'email': '',
+    }, // Default map
+    this.userCred = "",
   });
 
   @override
@@ -37,6 +42,16 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    String phoneNo = widget.userSignUpDetails['phoneNo'];
+    String email = widget.userSignUpDetails['email'];
+    String maskedPhone = maskPhoneNumber(phoneNo);
+    String maskedEmail = maskEmail(email);
+    String maskedUserCred = maskPhoneOrEmail(widget.userCred.toString());
+    String message =
+        widget.type.toString() == 'Forgot Password'
+            ? "OTP sent to $maskedUserCred"
+            : "OTP sent to your phone $maskedPhone and email $maskedEmail";
+
     return Scaffold(
       body: SingleChildScrollView(
         // Wrap everything in SingleChildScrollView
@@ -52,20 +67,28 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                     //  ImageAssetsPath.forgetPasswordBg,
                     // Path to the background image
                     fit:
-                    BoxFit
-                        .cover, // Make sure the image covers the container
+                        BoxFit
+                            .cover, // Make sure the image covers the container
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.only(top: AppDimensions.di_40, left: AppDimensions.di_20),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: AppDimensions.di_40,
+                    left: AppDimensions.di_20,
+                  ),
                   child: SizedBox(
                     child: GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.pop(context);
                       },
-                      child: SvgPicture.asset(ImageAssetsPath.backArrow, fit: BoxFit.cover),
+                      child: SvgPicture.asset(
+                        ImageAssetsPath.backArrow,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),),
+                  ),
+                ),
 
                 Container(
                   margin: EdgeInsets.only(
@@ -81,9 +104,10 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                 ),
 
                 CustomLoginSignupContainer(
-                  backgroundColor: themeProvider.themeMode == ThemeMode.light
-                      ? AppColors.whiteColor
-                      : AppColors.authDarkModeColor,
+                  backgroundColor:
+                      themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.whiteColor
+                          : AppColors.authDarkModeColor,
                   marginHeight: 0.40,
                   height: DeviceSize.getScreenHeight(context),
                   // Set remaining height for the container (full height - image height)
@@ -92,9 +116,13 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                     children: [
                       // Example: Add a TextField inside the white container
                       CustomTextWidget(
-                        text: AppStrings.otpVerification, fontSize: AppDimensions.di_24, color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.textColor
-                          : AppColors.authDarkModeTextColor, fontWeight: AppFontWeight.fontWeight600,
+                        text: AppStrings.otpVerification,
+                        fontSize: AppDimensions.di_24,
+                        color:
+                            themeProvider.themeMode == ThemeMode.light
+                                ? AppColors.textColor
+                                : AppColors.authDarkModeTextColor,
+                        fontWeight: AppFontWeight.fontWeight600,
                       ),
 
                       SizedBox(height: AppDimensions.di_20),
@@ -103,11 +131,12 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                       Column(
                         children: [
                           CustomTextWidget(
-                            text: AppStrings.weHaveSend,
+                            text: message, //AppStrings.weHaveSend,
                             fontSize: AppDimensions.di_16,
-                            color: themeProvider.themeMode == ThemeMode.light
-                                ? AppColors.textColor
-                                : AppColors.authDarkModeTextColor,
+                            color:
+                                themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.textColor
+                                    : AppColors.authDarkModeTextColor,
                           ),
 
                           const SizedBox(height: AppDimensions.di_20),
@@ -135,23 +164,30 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                               ),
                               // Default text style
                               children: [
-                                TextSpan(text: AppStrings.didntReceiveOtp, style: TextStyle(
-                                  color: themeProvider.themeMode == ThemeMode.light
-                                      ? AppColors.textColor
-                                      : AppColors.authDarkModeTextColor,
-                                ),),
+                                TextSpan(
+                                  text: AppStrings.didntReceiveOtp,
+                                  style: TextStyle(
+                                    color:
+                                        themeProvider.themeMode ==
+                                                ThemeMode.light
+                                            ? AppColors.textColor
+                                            : AppColors.authDarkModeTextColor,
+                                  ),
+                                ),
                                 TextSpan(text: ' '),
                                 TextSpan(
                                   text: AppStrings.resendOtp,
                                   style: TextStyle(
-                                    color: themeProvider.themeMode == ThemeMode.light
-                                        ? AppColors.textColor
-                                        : AppColors.authDarkModeTextColor,
+                                    color:
+                                        themeProvider.themeMode ==
+                                                ThemeMode.light
+                                            ? AppColors.textColor
+                                            : AppColors.authDarkModeTextColor,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   // Highlight color for the clickable text
                                   recognizer:
-                                  TapGestureRecognizer()..onTap = () {},
+                                      TapGestureRecognizer()..onTap = () {},
                                 ),
                               ],
                             ),
@@ -179,6 +215,7 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
   // Function to validate OTP and navigate
   void onContinuePressed() {
     print("otp.length---${otp.length}");
+    print("widget.userSignUpDetails---${widget.userSignUpDetails}");
     if (otp.length != 6) {
       // Show an error message if OTP is incomplete
       showErrorDialog(
@@ -186,24 +223,68 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
         "Please enter the complete OTP",
         backgroundColor: Colors.red,
       );
-    } else if(otp == "123456"){
+    } else if (otp == "123456") {
       // If OTP is valid, navigate to the next screen
       Navigator.push(
         context,
         MaterialPageRoute(
           builder:
               (context) => PasswordCreateScreen(
-            type: widget.type, userSignUpDetails: widget.userSignUpDetails, userCred: widget.userCred,
-          ), // Pass the profile data
+                type: widget.type,
+                userSignUpDetails: widget.userSignUpDetails,
+                userCred: widget.userCred,
+              ), // Pass the profile data
         ),
       );
-    }
-    else{
+    } else {
       showErrorDialog(
         context,
         "Please enter the correct OTP",
         backgroundColor: Colors.red,
       );
+    }
+  }
+
+  // Mask phone number
+  String maskPhoneNumber(String phoneNo) {
+    if (phoneNo.length >= 10) {
+      return '*******${phoneNo.substring(7)}';
+    }
+    return phoneNo;
+  }
+
+  // Mask email
+  String maskEmail(String email) {
+    final parts = email.split('@');
+    if (parts.length == 2) {
+      String name = parts[0];
+      String domain = parts[1];
+      if (name.length > 2) {
+        return '${name.substring(0, 2)}****@$domain';
+      }
+    }
+    return email;
+  }
+
+  String maskPhoneOrEmail(String phoneOrEmail) {
+    // Check if it's a phone number (simple check for numeric and length)
+    if (phoneOrEmail.contains('@')) {
+      // It's an email, apply masking
+      final parts = phoneOrEmail.split('@');
+      String name = parts[0];
+      String domain = parts[1];
+
+      // Mask the email by showing first two characters of the name and domain
+      if (name.length > 2) {
+        return '${name.substring(0, 2)}****@$domain';
+      }
+      return phoneOrEmail; // If the name is shorter than 2 chars, return as is
+    } else {
+      // It's a phone number, apply masking
+      if (phoneOrEmail.length >= 10) {
+        return '*******${phoneOrEmail.substring(7)}';
+      }
+      return phoneOrEmail; // Return as is if it's less than 10 chars
     }
   }
 }

@@ -55,6 +55,7 @@ class ImageAssetsPath {
   static const passLock = "$folderPath/pass_lock.svg";
   static const mail = "$folderPath/mail.svg";
   static const phone = "$folderPath/phone.svg";
+  static const allowLocationPin = "$folderPath/allow_location_pin.svg";
 
 
 
