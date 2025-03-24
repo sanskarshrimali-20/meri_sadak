@@ -9,7 +9,6 @@ import '../../data/model/feedback_from_model.dart';
 import '../../data/model/image_item_model.dart';
 
 class DatabaseHelper {
-
   static final DatabaseHelper _instance = DatabaseHelper._internal();
 
   factory DatabaseHelper() => _instance;
@@ -23,6 +22,11 @@ class DatabaseHelper {
   static const columnImage = 'image';
   static const columnSource = 'source';
 
+  static const tableStatus = 'imagesStatus';
+  static const columnIdStatus = 'idStatus';
+  static const columnImageStatus = 'imageStatus';
+  static const columnSourceStatus = 'sourceStatus';
+
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDB();
@@ -30,13 +34,11 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDB() async {
-
     String path = join(await getDatabasesPath(), 'meri_sadak.db');
     return await openDatabase(
       path,
-      version: 8,
+      version:10,
       onCreate: (db, version) async {
-
         await db.execute('PRAGMA foreign_keys = ON;');
 
         await db.execute('''
@@ -117,6 +119,28 @@ class DatabaseHelper {
         )
       ''');
 
+        await db.execute('''
+            CREATE TABLE allFeedback(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            state TEXT,
+            district TEXT,
+            block TEXT,
+            roadName TEXT,
+            staticRoadName TEXT,
+            categoryOfComplaint TEXT,
+            feedback TEXT
+        )
+        ''');
+
+        await db.execute('''
+        CREATE TABLE feedbackImages (
+             id INTEGER PRIMARY KEY AUTOINCREMENT,
+             feedbackId INTEGER NOT NULL, -- Foreign key to reference feedback table
+             image TEXT NOT NULL,         -- Path or URL of the image
+             source TEXT NOT NULL,        -- Source of the image
+             FOREIGN KEY(feedbackId) REFERENCES feedback(id) ON DELETE CASCADE
+      )
+      ''');
       },
     );
   }
@@ -128,7 +152,8 @@ class DatabaseHelper {
       await db.insert(
         'sign_up',
         signUp,
-        conflictAlgorithm: ConflictAlgorithm.replace, // Ensures only one record exists
+        conflictAlgorithm:
+            ConflictAlgorithm.replace, // Ensures only one record exists
       );
       return "Success";
       debugPrint("User profile inserted successfully");
@@ -168,7 +193,10 @@ class DatabaseHelper {
     }
   }
 
-  Future<String> updatePassword(String userIdentifier, String newPassword) async {
+  Future<String> updatePassword(
+    String userIdentifier,
+    String newPassword,
+  ) async {
     try {
       final db = await database;
 
@@ -176,8 +204,12 @@ class DatabaseHelper {
       int updatedRows = await db.update(
         'sign_up',
         {'password': newPassword}, // Set the new password
-        where: 'email = ? OR phoneNo = ?', // Identify the user by email or phoneNo
-        whereArgs: [userIdentifier, userIdentifier], // Pass the userIdentifier for email or phoneNo
+        where: 'email = ? OR phoneNo = ?',
+        // Identify the user by email or phoneNo
+        whereArgs: [
+          userIdentifier,
+          userIdentifier,
+        ], // Pass the userIdentifier for email or phoneNo
       );
 
       if (updatedRows > 0) {
@@ -203,7 +235,8 @@ class DatabaseHelper {
       await db.insert(
         'user_details',
         userProfile,
-        conflictAlgorithm: ConflictAlgorithm.replace, // Ensures only one record exists
+        conflictAlgorithm:
+            ConflictAlgorithm.replace, // Ensures only one record exists
       );
       debugPrint("User profile inserted successfully");
     } catch (e, stackTrace) {
@@ -221,8 +254,10 @@ class DatabaseHelper {
       // Query the table to fetch the user with the specific ID
       final List<Map<String, dynamic>> result = await db.query(
         'user_details',
-        where: 'phoneNo = ?', // Assuming 'id' is the column for user identification
-        whereArgs: [userId], // The value to filter by (userId)
+        where: 'phoneNo = ?',
+        // Assuming 'id' is the column for user identification
+        whereArgs: [userId],
+        // The value to filter by (userId)
         limit: 1, // Fetch only one record
       );
 
@@ -292,7 +327,7 @@ class DatabaseHelper {
     return await db.delete(table);
   }
 
-// Save feedback form data to the database, ensuring it gets updated
+  // Save feedback form data to the database, ensuring it gets updated
   Future<void> saveFeedbackForm(FeedbackFormData feedbackFormData) async {
     final db = await database;
 
@@ -305,14 +340,17 @@ class DatabaseHelper {
         'feedback',
         feedbackFormData.toMap(),
         where: 'id = ?', // Assuming 'id' is the primary key
-        whereArgs: [result.first['id']], // Use the existing ID to update the correct row
+        whereArgs: [
+          result.first['id'],
+        ], // Use the existing ID to update the correct row
       );
     } else {
       // If no data exists, insert a new entry
       await db.insert(
         'feedback',
         feedbackFormData.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,  // Replaces any conflicting data
+        conflictAlgorithm:
+            ConflictAlgorithm.replace, // Replaces any conflicting data
       );
     }
   }
@@ -333,9 +371,9 @@ class DatabaseHelper {
   }
 
   Future<void> insertLocalization(
-      String languageCode,
-      Map<String, String> localizedStrings,
-      ) async {
+    String languageCode,
+    Map<String, String> localizedStrings,
+  ) async {
     final db = await database;
 
     final String localizedData = jsonEncode(localizedStrings);
@@ -364,5 +402,103 @@ class DatabaseHelper {
     }
     return null;
   }
+
+  Future<String> insertFeedbackWithImages({
+    required String state,
+    required String district,
+    required String block,
+    required String roadName,
+    required String staticRoadName,
+    required String categoryOfComplaint,
+    required String feedback,
+    required List<ImageItem> images, // List of image data (image path and source)
+  }) async {
+
+    try{
+      final db = await database;
+
+      // Insert into feedback table
+      int feedbackId = await db.insert(
+        'allFeedback',
+        {
+          'state': state,
+          'district': district,
+          'block': block,
+          'roadName': roadName,
+          'staticRoadName': staticRoadName,
+          'categoryOfComplaint': categoryOfComplaint,
+          'feedback': feedback
+        },
+      );
+
+      // Insert images associated with this feedbackId
+      for (var imageData in images) {
+        await db.insert(
+          'feedbackImages',
+          {
+            'feedbackId': feedbackId, // Associate image with feedback entry
+            'image': imageData.imagePath,
+            'source': imageData.source,
+          },
+        );
+      }
+
+      return "Success";
+    }catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to get user profile");
+        print(stackTrace);
+      }
+      return "Error"; // Return null on error
+    }
+
+  }
+
+  Future<List<Map<String, dynamic>>> getFeedbackWithImages(int feedbackId) async {
+    final db = await database;
+
+    // Query feedback data
+    final feedback = await db.query(
+      'allFeedback',
+      where: 'id = ?',
+      whereArgs: [feedbackId],
+    );
+
+    if (feedback.isEmpty) return []; // Return empty if no feedback found
+
+    // Query associated images
+    final images = await db.query(
+      'feedbackImages',
+      where: 'feedbackId = ?',
+      whereArgs: [feedbackId],
+    );
+
+    return [
+      {
+        ...feedback.first, // Combine feedback data
+        'images': images   // Add associated images as a list
+      }
+    ];
+  }
+
+
+  Future<List<Map<String, dynamic>>> getAllFeedbacks() async {
+    // Query to get all feedbacks
+    try {
+      final db = await database;
+
+      final List<Map<String, dynamic>> feedbacks = await db.query(
+          'allFeedback');
+      return feedbacks;
+    }
+    catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to get user profile");
+        print(stackTrace);
+      }
+      return []; // Return null on error
+    }
+  }
+
 
 }

@@ -21,6 +21,8 @@ class CustomTextField extends StatefulWidget {
   final bool editable;
   final bool isNumberWithPrefix;
   final double fontSize;
+  final String counterText;
+  final FocusNode? focusNode;
 
   const CustomTextField({
     super.key,
@@ -39,6 +41,8 @@ class CustomTextField extends StatefulWidget {
     required this.isRequired,
     this.fontSize = AppDimensions.di_17,
     this.isNumberWithPrefix = false,
+    this.counterText = "",
+    this.focusNode,
   });
 
   @override
@@ -65,38 +69,50 @@ class _CustomTextFieldState extends State<CustomTextField> {
           LengthLimitingTextInputFormatter(widget.maxLength),
         ];
       }
-    }
-    else if(widget.keyboardType == TextInputType.name){
+    } else if (widget.keyboardType == TextInputType.name) {
       inputFormatters = [
-        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),];
-    }
-    else if(widget.keyboardType == TextInputType.text){
+        FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+      ];
+    } else if (widget.keyboardType == TextInputType.text) {
       inputFormatters = [
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9\a-zA-Z\s\-]')),];
+        FilteringTextInputFormatter.allow(RegExp(r'[0-9\a-zA-Z\s\-]')),
+      ];
+    } else if (widget.keyboardType == TextInputType.multiline) {
+      inputFormatters = [
+        FilteringTextInputFormatter.allow(RegExp(r"^[a-zA-Z0-9\s,.'-\/()]+")),
+      ];
     }
-
+    //TextInputType.multiline,
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-            widget.isRequired
-                ? Text("*", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red))
-                : SizedBox.shrink(),
+        widget.isRequired
+            ? Text(
+          "*",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+        )
+            : SizedBox.shrink(),
 
         Padding(
           padding: const EdgeInsets.only(bottom: AppDimensions.di_12),
           child: Container(
-            padding: const EdgeInsets.only( left: AppDimensions.di_5,right: AppDimensions.di_5),
+            padding: const EdgeInsets.only(
+              left: AppDimensions.di_5,
+              right: AppDimensions.di_5,
+            ),
             decoration: BoxDecoration(
-             color: AppColors.textFieldBorderColor.withAlpha(12), // Use a neutral color or AppColors.greyHundred
+              color: AppColors.textFieldBorderColor.withAlpha(12),
+              // Use a neutral color or AppColors.greyHundred
               borderRadius: BorderRadius.circular(AppDimensions.di_5),
               border: Border.all(
                 color: AppColors.textFieldBorderColor, // First border color
-                width:  AppDimensions.di_1,
+                width: AppDimensions.di_1,
               ),
             ),
             child: TextFormField(
               enabled: widget.editable,
               controller: widget.controller,
+              focusNode: widget.focusNode,
               onChanged: (value) {
                 widget.onChanged?.call(value);
               },
@@ -111,14 +127,30 @@ class _CustomTextFieldState extends State<CustomTextField> {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: widget.label,
-                hintStyle: TextStyle(color: AppColors.black.withAlpha(90), fontSize: widget.fontSize),
-                counterText: "",
+                hintStyle: TextStyle(
+                  color: AppColors.black.withAlpha(90),
+                  fontSize: widget.fontSize,
+                ),
+                //counterText: widget.counterText,
               ),
+              buildCounter: (context, {required currentLength, required isFocused, maxLength}) {
+                return widget.keyboardType == TextInputType.multiline? Align(
+                  alignment: Alignment.bottomRight, // Align to the bottom-right
+                  child: Text(
+                    "$currentLength/$maxLength",
+                    style: TextStyle(
+                      fontSize: AppDimensions.di_12, // Adjust the font size
+                      color: AppColors.black.withAlpha(100), // Adjust text color if needed
+                    ),
+                  ),
+                ): null;
+              },
               style: TextStyle(
-                fontSize: widget.fontSize,  // Adjust the font size here for the text input
-                color: AppColors.black,  // Adjust text color if needed
+                fontSize: widget.fontSize,
+                // Adjust the font size here for the text input
+                color: AppColors.black, // Adjust text color if needed
               ),
-            )
+            ),
           ),
         ),
       ],

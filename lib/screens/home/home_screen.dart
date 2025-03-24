@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/screens/aboutPmgsy/about_pmgsy.dart';
+import 'package:meri_sadak/screens/allFeedback/all_feedback_screen.dart';
 import 'package:meri_sadak/screens/registerFeedback/register_feedback_new_screen.dart';
 import 'package:meri_sadak/screens/roadList/road_list_screen.dart';
 import 'package:meri_sadak/widgets/custom_dropdown_field.dart';
@@ -96,6 +97,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   SizedBox(height: 20),
+
+                  Align(
+                    alignment: Alignment.center,
+                    child: CustomButton(
+                      text: "All Feedback",
+                      onPressed: () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AllFeedbackScreen(),
+                          ),
+                        );
+                      },
+                      textColor: AppColors.whiteColor,
+                      backgroundColor: AppColors.color_E77728,
+                      fontSize: AppDimensions.di_18,
+                      padding: EdgeInsets.symmetric(
+                        vertical: AppDimensions.di_6,
+                        horizontal: AppDimensions.di_15,
+                      ),
+                      borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                      buttonWidth: AppDimensions.di_300,
+                    ),
+                  ),
 
                  /* Align(
                     alignment: Alignment.center,

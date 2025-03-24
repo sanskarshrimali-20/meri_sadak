@@ -50,7 +50,7 @@ class _AppearanceScreen extends State<AppearanceScreen> {
 
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light
-          ? AppColors.whiteColor
+          ? AppColors.bgColorGainsBoro
           : AppColors.bgDarkModeColor,
       body: CustomBodyWithGradient(
         title: localizationProvider.localizedStrings['appearance'] ?? "Appearance",
@@ -79,7 +79,9 @@ class _AppearanceScreen extends State<AppearanceScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 12.0),  // Margin from the start
-                        child: SvgPicture.asset(ImageAssetsPath.appearanceIcon),
+                        child: SvgPicture.asset(ImageAssetsPath.appearanceIcon, color: themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.black
+                            : AppColors.whiteColor,),
                       ),
                       SizedBox(width: AppDimensions.di_18),
                       CustomTextWidget(

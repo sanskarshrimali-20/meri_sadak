@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import '../../constants/api_end_point.dart';
 import '../../services/ApiService/api_service.dart';
+import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 
 class RegisterFeedbackViewModel extends ChangeNotifier {
@@ -17,6 +18,9 @@ class RegisterFeedbackViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   String? get userName => _userName;
+
+  final dbHelper = DatabaseHelper();
+
 
   Future<String?> registerFeedback(
     Map<String, dynamic> feeBackDetails,

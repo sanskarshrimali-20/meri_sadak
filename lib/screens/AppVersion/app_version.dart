@@ -8,6 +8,7 @@ import '../../constants/app_font_weight.dart';
 import '../../constants/app_image_path.dart';
 import '../../constants/app_strings.dart';
 import '../../providerData/permission_provider.dart';
+import '../../providerData/theme_provider.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_carousel_slider.dart';
@@ -25,8 +26,13 @@ class AppVersion extends StatefulWidget {
 class _AppVersionState extends State<AppVersion> {
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: AppColors.bgColorGainsBoro,
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.bgColorGainsBoro
+          : AppColors.bgDarkModeColor,
       body: CustomBodyWithGradient(
         title: AppStrings.appVersion,
         childHeight: DeviceSize.getScreenHeight(context),
@@ -36,11 +42,16 @@ class _AppVersionState extends State<AppVersion> {
             CustomExpansionTile(
               title: 'Version 6.2.4', //AppStrings.aboutPMGSYHeading,
               subheading: '', //AppStrings.aboutMeriSadakSubHeading,
+              textColor: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.black
+                  : AppColors.whiteColor,
               content: Text(
                 AppStrings.appVersionDesc,
                 textAlign: TextAlign.justify,
                 style: TextStyle(
-                  color: AppColors.blackMagicColor,
+                  color:  themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.black
+                      : AppColors.whiteColor,
                   fontSize: AppDimensions.di_14,
                   fontWeight: AppFontWeight.fontWeight400,
                 ),
@@ -63,7 +74,9 @@ class _AppVersionState extends State<AppVersion> {
                 height: 50,
                 padding: EdgeInsets.only(left: AppDimensions.di_10, right: AppDimensions.di_10, top: AppDimensions.di_5, bottom: AppDimensions.di_5),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.whiteColor
+                      : AppColors.boxDarkModeColor,
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,12 +84,16 @@ class _AppVersionState extends State<AppVersion> {
                     CustomTextWidget(
                    text:   AppStrings.appVersionUpdate,
                       fontSize: AppDimensions.di_16,
-                      color: AppColors.blackMagicColor,
+                      color:  themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black
+                          : AppColors.whiteColor,
                       fontWeight: AppFontWeight.fontWeight600,
                       // textAlign: AppFontSizeWeight.textAlignJustify,
                       // letterSpacing: AppFontSizeWeight.letterSpacing_0_5,
                     ),
-                    SvgPicture.asset(ImageAssetsPath.replace,)
+                    SvgPicture.asset(ImageAssetsPath.replace, color:  themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,)
                   ],
                 ),
               ),

@@ -6,11 +6,10 @@ import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
+import '../../providerData/theme_provider.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/LocalStorageService/local_storage.dart';
-import '../../utils/localization_provider.dart';
 import '../../widgets/custom_body_with_gradient.dart';
-import '../../widgets/custom_text_icon_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -36,16 +35,22 @@ class _ProfileScreen extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: AppColors.bgColorGainsBoro,
-      body: CustomBodyWithGradient(
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.bgColorGainsBoro
+          : AppColors.bgDarkModeColor,      body: CustomBodyWithGradient(
         title: AppStrings.myProfile,
         childHeight: DeviceSize.getScreenHeight(context) * 0.6,
         child: Padding(
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.whiteColor,
+              color: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,
               borderRadius: BorderRadius.all(
                 Radius.circular(AppDimensions.di_20), // Rounded corners
               ),
@@ -89,8 +94,11 @@ class _ProfileScreen extends State<ProfileScreen> {
                   SizedBox(height: AppDimensions.di_30),
 
                   CustomTextWidget(
-                   text: '${AppStrings.name} : ${name}', fontSize: AppDimensions.di_18, color: AppColors.black,
+                   text: '${AppStrings.name} : $name', fontSize: AppDimensions.di_18,
                     fontWeight: AppFontWeight.fontWeight500,
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                   ),
 
                   Divider(
@@ -101,8 +109,11 @@ class _ProfileScreen extends State<ProfileScreen> {
                   ),
 
                   CustomTextWidget(
-                    text: '${AppStrings.phoneNoO} : ${phone}', fontSize: AppDimensions.di_18, color: AppColors.black,
+                    text: '${AppStrings.phoneNoO} : ${phone}', fontSize: AppDimensions.di_18,
                     fontWeight: AppFontWeight.fontWeight500,
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                   ),
 
                   Divider(
@@ -113,8 +124,11 @@ class _ProfileScreen extends State<ProfileScreen> {
                   ),
 
                   CustomTextWidget(
-                    text: '${AppStrings.emailId} : ${email}', fontSize: AppDimensions.di_18, color: AppColors.black,
+                    text: '${AppStrings.emailId} : ${email}', fontSize: AppDimensions.di_18,
                     fontWeight: AppFontWeight.fontWeight500,
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                   ),
 
                   Divider(
@@ -125,8 +139,10 @@ class _ProfileScreen extends State<ProfileScreen> {
                   ),
 
                   CustomTextWidget(
-                    text: '${AppStrings.address} : CDAC Pune', fontSize: AppDimensions.di_18, color: AppColors.black,
-                    fontWeight: AppFontWeight.fontWeight500,
+                    text: '${AppStrings.address} : CDAC Pune', fontSize: AppDimensions.di_18,
+                    fontWeight: AppFontWeight.fontWeight500, color: themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.black
+                      : AppColors.whiteColor,
                   ),
                 ],
               ),
@@ -136,51 +152,6 @@ class _ProfileScreen extends State<ProfileScreen> {
       ),
     );
   }
-
-  Future<void> _showLanguageSelectionDialog() async {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Choose Language'),
-          actions: [
-            Consumer<LocalizationProvider>(
-              builder: (context, provider, child) {
-                return Row(
-                  children: [
-                    CustomTextIconButton(
-                      icon: Icons.language,
-                      label: 'English',
-                      onPressed: () {
-                        provider.setLocale(Locale('en', 'US'));
-                        Navigator.pop(context); // Close the dialog
-                      },
-                      backgroundColor: Colors.blue[50],
-                      textColor: Colors.blue,
-                      iconColor: Colors.blue,
-                    ),
-                    Spacer(),
-                    CustomTextIconButton(
-                      icon: Icons.temple_hindu,
-                      label: 'Hindi',
-                      onPressed: () {
-                        provider.setLocale(Locale('hi', 'IN'));
-                        Navigator.pop(context); // Close the dialog
-                      },
-                      backgroundColor: Colors.blue[50],
-                      textColor: Colors.blue,
-                      iconColor: Colors.blue,
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
 
   Future<void> _initializeUserDetails() async {
 

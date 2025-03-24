@@ -5,6 +5,7 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_image_path.dart';
 import '../../constants/app_strings.dart';
 import '../../providerData/permission_provider.dart';
+import '../../providerData/theme_provider.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_carousel_slider.dart';
@@ -34,10 +35,12 @@ class _AboutPMGSYState extends State<AboutPMGSY> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<PermissionProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: AppColors.bgColorGainsBoro,
-      body: CustomBodyWithGradient(
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.bgColorGainsBoro
+          : AppColors.bgDarkModeColor,      body: CustomBodyWithGradient(
         title: AppStrings.aboutTitle,
         childHeight: DeviceSize.getScreenHeight(context),
         child: ListView(
@@ -59,6 +62,12 @@ class _AboutPMGSYState extends State<AboutPMGSY> {
               content:
               Container(), // Content can be empty or add custom widgets here
               initiallyExpanded: true,
+              backgroundColor: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,
+              textColor: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.black
+                  : AppColors.whiteColor,
             ),
 
             // Use CustomExpansionTile for "How to identify PMGSY Roads"
@@ -67,12 +76,24 @@ class _AboutPMGSYState extends State<AboutPMGSY> {
               subheading: AppStrings.aboutPMGSYRoadIdentifySubHeading,
               content: Image.asset(ImageAssetsPath.pmgsyAndPmgsySignBoards),
               imagePath: ImageAssetsPath.pmgsyAndPmgsySignBoards,
+              backgroundColor: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,
+              textColor: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.black
+                  : AppColors.whiteColor,
             ),
 
             // Use CustomExpansionTile for "Find Nearby PMGSY Roads"
             CustomExpansionTile(
               title: AppStrings.aboutPMGSYRoadNearbyHeading,
               subheading: provider.address.toString(),
+              backgroundColor: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,
+              textColor: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.black
+                  : AppColors.whiteColor,
               content: provider.isLoading
                   ? Align(
                   alignment: Alignment.center,
@@ -93,6 +114,7 @@ class _AboutPMGSYState extends State<AboutPMGSY> {
                   await provider.setLocation(
                       point.latitude, point.longitude);
                 }, onMapReady: () {  },
+
               ),
             ),
           ],

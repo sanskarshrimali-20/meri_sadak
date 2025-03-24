@@ -56,42 +56,59 @@ class _CustomDropdownField extends State<CustomDropdownField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        widget.isRequired == true?Text("*", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red)): SizedBox.shrink(),
+        widget.isRequired == true
+            ? Text(
+          "*",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+        )
+            : SizedBox.shrink(),
         Padding(
           padding: const EdgeInsets.only(bottom: AppDimensions.di_12),
           child: Container(
-            padding: const EdgeInsets.only( left: AppDimensions.di_5,right: AppDimensions.di_5),
+            padding: const EdgeInsets.only(
+              left: AppDimensions.di_5,
+              right: AppDimensions.di_5,
+            ),
             height: 50,
             decoration: BoxDecoration(
-             color: AppColors.textFieldBorderColor.withAlpha(12), // Use a neutral color or AppColors.greyHundred
+              color: AppColors.textFieldBorderColor.withAlpha(12),
+              // Use a neutral color or AppColors.greyHundred
               borderRadius: BorderRadius.circular(AppDimensions.di_5),
               border: Border.all(
                 color: AppColors.textFieldBorderColor, // First border color
-                width:  AppDimensions.di_1,
+                width: AppDimensions.di_1,
               ),
             ),
             child: TextFormField(
               controller: widget.textController,
               onChanged: (val) {
                 setState(() {
-                  widget.onChanged?.call(widget.textController!.text);
-                  _filteredList = _subFilteredList
-                      .where((element) => element
-                      .toLowerCase()
-                      .contains(widget.textController!.text.toLowerCase()))
-                      .toList();
+                  //widget.onChanged?.call(widget.textController!.text);
+                  _filteredList =
+                      _subFilteredList
+                          .where(
+                            (element) => element.toLowerCase().contains(
+                          widget.textController!.text.toLowerCase(),
+                        ),
+                      )
+                          .toList();
                 });
               },
               validator: (val) => val!.isEmpty ? 'Field can\'t be empty' : null,
-              style: widget.style ?? TextStyle(color: AppColors.black, fontSize: AppDimensions.di_16),
+              style:
+              widget.style ??
+                  TextStyle(
+                    color: AppColors.black,
+                    fontSize: AppDimensions.di_16,
+                  ),
               onTap: () {
                 setState(() {
                   _isTapped = true; // Show dropdown when tapped
                 });
               },
               decoration: InputDecoration(
-               // filled: true,
-               // fillColor:  AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
+                // filled: true,
+                // fillColor:  AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
                 border: InputBorder.none,
                 hintText: widget.hintText,
                 hintStyle: TextStyle(color: AppColors.black.withAlpha(95)),
@@ -102,13 +119,18 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                     });
                   },
                   child: Icon(
-                    _isTapped ? Icons.keyboard_arrow_up_outlined: Icons.keyboard_arrow_down_outlined,
+                    _isTapped
+                        ? Icons.keyboard_arrow_up_outlined
+                        : Icons.keyboard_arrow_down_outlined,
                     size: AppDimensions.di_25,
                   ),
                 ),
-                suffixIconConstraints: BoxConstraints.loose(MediaQuery.of(context).size),
+                suffixIconConstraints: BoxConstraints.loose(
+                  MediaQuery.of(context).size,
+                ),
                 // Show the clear icon only when the text field is not empty
-                suffix: widget.textController!.text.isNotEmpty
+                suffix:
+                widget.textController!.text.isNotEmpty
                     ? InkWell(
                   onTap: () {
                     widget.textController!.clear();
@@ -127,26 +149,37 @@ class _CustomDropdownField extends State<CustomDropdownField> {
         // Dropdown Items
         _isTapped && _filteredList.isNotEmpty
             ? Container(
-          height: widget.dropdownHeight ??  AppDimensions.di_150,
+          height: widget.dropdownHeight ?? AppDimensions.di_150,
           color: widget.dropdownBgColor ?? Colors.grey.shade200,
-          padding: const EdgeInsets.only(left: AppDimensions.di_12, right: AppDimensions.di_8),
+          padding: const EdgeInsets.only(
+            left: AppDimensions.di_12,
+            right: AppDimensions.di_8,
+          ),
           child: ListView.builder(
             itemCount: _filteredList.length,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
                   setState(() {
-                    _isTapped = false; // Close dropdown when item is selected
-                    widget.textController!.text = _filteredList[index]; // Set the selected item
+                    _isTapped =
+                    false; // Close dropdown when item is selected
+                    widget.textController!.text =
+                    _filteredList[index]; // Set the selected item
                     widget.onChanged?.call(widget.textController!.text);
                   });
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: AppDimensions.di_8),
+                  padding: const EdgeInsets.only(
+                    bottom: AppDimensions.di_8,
+                  ),
                   child: Text(
                     _filteredList[index],
-                    style: widget.dropdownTextStyle ??
-                        TextStyle(color: Colors.grey.shade800, fontSize: AppDimensions.di_16),
+                    style:
+                    widget.dropdownTextStyle ??
+                        TextStyle(
+                          color: Colors.grey.shade800,
+                          fontSize: AppDimensions.di_16,
+                        ),
                   ),
                 ),
               );
