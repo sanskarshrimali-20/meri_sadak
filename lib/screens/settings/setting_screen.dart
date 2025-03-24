@@ -30,7 +30,7 @@ class _SettingScreen extends State<SettingScreen> {
 
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light
-          ? AppColors.whiteColor
+          ? AppColors.bgColorGainsBoro
           : AppColors.bgDarkModeColor,
      /* appBar: CustomAppBar(
         title: AppStrings.contactUs,

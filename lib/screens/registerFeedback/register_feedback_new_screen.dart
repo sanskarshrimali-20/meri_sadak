@@ -44,11 +44,11 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   final TextEditingController _blockController = TextEditingController();
   final TextEditingController _roadNameController = TextEditingController();
   final TextEditingController _staticRoadNameController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _writeFeedbackController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _categoryOfComplaintController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   String? isClickedBy = AppStrings.noOne;
   bool _showFeedbackForm = true;
@@ -126,6 +126,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     'Surat': ['Choryasi', 'Ichhpur'],
   };
 
+  final int writeYourFeedbackMaxLength = 200;
+
   @override
   void initState() {
     super.initState();
@@ -176,7 +178,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         // Set road controller
         _roadNameController.text = feedbackData?.roadName ?? '';
 
-        if(feedbackData?.roadName == "Enter Manually"){
+        if (feedbackData?.roadName == "Enter Manually") {
           roadNameEnable = true;
         }
 
@@ -229,22 +231,20 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     Radius.circular(AppDimensions.di_20), // Rounded corners
                   ),
                 ),
-
                 padding: EdgeInsets.all(AppDimensions.di_15),
-
                 child: SingleChildScrollView(
                   child: SizedBox(
                     child: Column(
                       children: [
                         _showFeedbackForm
                             ? feedbackForm(
-                              imagePickerProvider,
-                              permissionProvider,
-                            )
+                          imagePickerProvider,
+                          permissionProvider,
+                        )
                             : previewForm(
-                              imagePickerProvider,
-                              permissionProvider,
-                            ),
+                          imagePickerProvider,
+                          permissionProvider,
+                        ),
                       ],
                     ),
                   ),
@@ -258,15 +258,16 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   }
 
   Widget feedbackForm(
-    ImagePickerProvider imagePickerProvider,
-    PermissionProvider permissionProvider,
-  ) {
+      ImagePickerProvider imagePickerProvider,
+      PermissionProvider permissionProvider,
+      ) {
     return Column(
       children: [
         SizedBox(
           height: DeviceSize.getScreenHeight(context) * 0.48, // Fixed height
           width: DeviceSize.getScreenWidth(context), // Fixed width
-          child: permissionProvider.isLoading
+          child:
+          permissionProvider.isLoading
               ? Align(
             alignment: Alignment.center,
             child: CircularProgressIndicator(), // Loading indicator
@@ -278,8 +279,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             longitude: permissionProvider.longitude,
             initialAddress: permissionProvider.address.toString(),
             isLoading: permissionProvider.isLoading,
-            mapHeight: DeviceSize.getScreenHeight(context) * 0.25, // Same height as parent
-            mapWidth: DeviceSize.getScreenWidth(context), // Same width as parent
+            mapHeight: DeviceSize.getScreenHeight(context) * 0.25,
+            // Same height as parent
+            mapWidth: DeviceSize.getScreenWidth(context),
+            // Same width as parent
             onRefresh: () async {
               await permissionProvider.fetchCurrentLocation();
             },
@@ -289,16 +292,23 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                 point.longitude,
               );
 
-              if(feedbackData!.state!.isEmpty){
+              if (feedbackData!.state!.isEmpty) {
                 setState(() {
                   // debugPrint("state $state");
 
                   // Update text controllers with new values
                   _stateController.text = permissionProvider.state;
-                  selectedState =  permissionProvider.state; // Update selectedState
-                  selectedDistricts = districts[selectedState] ?? []; // Update districts based on new state
-                  _districtController.text =  permissionProvider.district; // Set district controller
-                  selectedBlocks = blocks[permissionProvider.district] ?? []; // Update blocks based on new district
+                  selectedState =
+                      permissionProvider.state; // Update selectedState
+                  selectedDistricts =
+                      districts[selectedState] ??
+                          []; // Update districts based on new state
+                  _districtController.text =
+                      permissionProvider
+                          .district; // Set district controller
+                  selectedBlocks =
+                      blocks[permissionProvider.district] ??
+                          []; // Update blocks based on new district
                 });
 
                 // Optionally save form data if needed
@@ -306,13 +316,16 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               }
             },
             onMapReady: () {
-              if (feedbackData == null || feedbackData!.state!.isEmpty) {
+              if (feedbackData == null ||
+                  feedbackData!.state!.isEmpty) {
                 setState(() {
                   _stateController.text = permissionProvider.state;
                   selectedState = permissionProvider.state;
                   selectedDistricts = districts[selectedState] ?? [];
-                  _districtController.text = permissionProvider.district;
-                  selectedBlocks = blocks[permissionProvider.district] ?? [];
+                  _districtController.text =
+                      permissionProvider.district;
+                  selectedBlocks =
+                      blocks[permissionProvider.district] ?? [];
                 });
                 _saveFormData();
               }
@@ -320,8 +333,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           ),
         ),
 
-        const SizedBox(height: AppDimensions.di_20),
-
+        // const SizedBox(height: AppDimensions.di_20),
         Align(
           alignment: Alignment.centerLeft,
           child: CustomTextWidget(
@@ -335,83 +347,83 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         const SizedBox(height: AppDimensions.di_5),
 
         imagePickerProvider.imageFiles.isEmpty ||
-                isClickedBy == AppStrings.camera
+            isClickedBy == AppStrings.camera
             ? CustomGestureContainer(
-              text: AppStrings.openCameraText,
-              icon: cameraSvg,
-              onTap: () async {
-                isClickedBy = AppStrings.camera;
-                _storage.setClickedBy(AppStrings.camera);
-                if (imagePickerProvider.imageFiles.length >= 3) {
-                  showCustomSnackBar(context, AppStrings.imageLimitText);
-                } else {
-                  String? result = await imagePickerProvider.pickImage(
-                    ImageSource.camera,
-                  );
-                  if (result != null) {
-                    showCustomSnackBar(
-                      context,
-                      result,
-                      backgroundColor: Colors.red,
-                    );
-                  }
-                }
-              },
-              width: DeviceSize.getScreenWidth(context),
-              height: 50,
-              textColor: AppColors.selectImageColor,
-            )
+          text: AppStrings.openCameraText,
+          icon: cameraSvg,
+          onTap: () async {
+            isClickedBy = AppStrings.camera;
+            _storage.setClickedBy(AppStrings.camera);
+            if (imagePickerProvider.imageFiles.length >= 3) {
+              showCustomSnackBar(context, AppStrings.imageLimitText);
+            } else {
+              String? result = await imagePickerProvider.pickImage(
+                ImageSource.camera,
+              );
+              if (result != null) {
+                showCustomSnackBar(
+                  context,
+                  result,
+                  backgroundColor: Colors.red,
+                );
+              }
+            }
+          },
+          width: DeviceSize.getScreenWidth(context),
+          height: 50,
+          textColor: AppColors.selectImageColor,
+        )
             : Container(),
 
         imagePickerProvider.imageFiles.isEmpty
             ? Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: AppDimensions.di_10,
-                horizontal: AppDimensions.di_25,
+          padding: const EdgeInsets.symmetric(
+            vertical: AppDimensions.di_10,
+            horizontal: AppDimensions.di_25,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Flexible(child: Divider()),
+              CustomTextWidget(
+                text: ' or ',
+                fontSize: AppDimensions.di_16,
+                color: AppColors.black,
+                fontWeight: AppFontWeight.fontWeight500,
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Flexible(child: Divider()),
-                  CustomTextWidget(
-                    text: ' or ',
-                    fontSize: AppDimensions.di_16,
-                    color: AppColors.black,
-                    fontWeight: AppFontWeight.fontWeight500,
-                  ),
-                  Flexible(child: Divider()),
-                ],
-              ),
-            )
+              Flexible(child: Divider()),
+            ],
+          ),
+        )
             : Container(),
 
         imagePickerProvider.imageFiles.isEmpty ||
-                isClickedBy == AppStrings.gallery
+            isClickedBy == AppStrings.gallery
             ? CustomGestureContainer(
-              text: AppStrings.selectImagesText,
-              icon: gallerySvg,
-              onTap: () async {
-                isClickedBy = AppStrings.gallery;
-                _storage.setClickedBy(AppStrings.gallery);
-                if (imagePickerProvider.imageFiles.length >= 3) {
-                  showCustomSnackBar(context, AppStrings.imageLimitText);
-                } else {
-                  String? result = await imagePickerProvider.pickImage(
-                    ImageSource.gallery,
-                  );
-                  if (result != null) {
-                    showCustomSnackBar(
-                      context,
-                      result,
-                      backgroundColor: Colors.red,
-                    );
-                  }
-                }
-              },
-              width: DeviceSize.getScreenWidth(context),
-              height: 50,
-              textColor: AppColors.selectImageColor,
-            )
+          text: AppStrings.selectImagesText,
+          icon: gallerySvg,
+          onTap: () async {
+            isClickedBy = AppStrings.gallery;
+            _storage.setClickedBy(AppStrings.gallery);
+            if (imagePickerProvider.imageFiles.length >= 3) {
+              showCustomSnackBar(context, AppStrings.imageLimitText);
+            } else {
+              String? result = await imagePickerProvider.pickImage(
+                ImageSource.gallery,
+              );
+              if (result != null) {
+                showCustomSnackBar(
+                  context,
+                  result,
+                  backgroundColor: Colors.red,
+                );
+              }
+            }
+          },
+          width: DeviceSize.getScreenWidth(context),
+          height: 50,
+          textColor: AppColors.selectImageColor,
+        )
             : Container(),
 
         const SizedBox(height: AppDimensions.di_10),
@@ -419,57 +431,57 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         // If no images are selected, show a message and icons
         imagePickerProvider.imageFiles.isEmpty
             ? const Center(
-              child: Column(mainAxisSize: MainAxisSize.min, children: []),
-            )
+          child: Column(mainAxisSize: MainAxisSize.min, children: []),
+        )
             : SizedBox(
-              height: DeviceSize.getScreenHeight(context) * 0.15,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal, // Horizontal scrolling
-                itemCount: imagePickerProvider.imageFiles.length,
-                itemBuilder: (context, index) {
-                  final imageItem = imagePickerProvider.imageFiles[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.di_8,
-                    ),
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          onTap:
-                              () => _showProfileImageDialog(
-                                context,
-                                imageItem.imagePath,
-                                DeviceSize.getScreenHeight(context),
-                                DeviceSize.getScreenWidth(context),
-                                permissionProvider,
-                                imageItem.source,
-                              ),
-                          child: Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  AppDimensions.di_8,
-                                ),
-                                child: Image.file(
-                                  File(imageItem.imagePath),
-                                  width: AppDimensions.di_100,
-                                  height: AppDimensions.di_100,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap:
-                                    () =>
-                                        imagePickerProvider.deleteImage(index),
-                                child: SvgPicture.asset(
-                                  ImageAssetsPath.deleteImage,
-                                ),
-                              ),
-                            ],
+          height: DeviceSize.getScreenHeight(context) * 0.15,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal, // Horizontal scrolling
+            itemCount: imagePickerProvider.imageFiles.length,
+            itemBuilder: (context, index) {
+              final imageItem = imagePickerProvider.imageFiles[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.di_8,
+                ),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap:
+                          () => _showProfileImageDialog(
+                        context,
+                        imageItem.imagePath,
+                        DeviceSize.getScreenHeight(context),
+                        DeviceSize.getScreenWidth(context),
+                        permissionProvider,
+                        imageItem.source,
+                      ),
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.di_8,
+                            ),
+                            child: Image.file(
+                              File(imageItem.imagePath),
+                              width: AppDimensions.di_100,
+                              height: AppDimensions.di_100,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        /* SizedBox(height: AppDimensions.di_6),
+                          GestureDetector(
+                            onTap:
+                                () =>
+                                imagePickerProvider.deleteImage(index),
+                            child: SvgPicture.asset(
+                              ImageAssetsPath.deleteImage,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    /* SizedBox(height: AppDimensions.di_6),
                         GestureDetector(
                           onTap: () => imagePickerProvider.deleteImage(index),
                           child: Container(
@@ -488,12 +500,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                             ),
                           ),
                         ),*/
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
 
         SizedBox(height: AppDimensions.di_5),
 
@@ -529,7 +541,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     isRequired: false,
                     onChanged: (value) async {
                       setState(() {
-                        debugPrint("statedata $value");
+                        debugPrint("stated_data: $value");
                         selectedState = value;
                         selectedDistricts = districts[selectedState] ?? [];
                         selectedBlocks
@@ -556,7 +568,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     onChanged: (value) async {
                       setState(() {
                         selectedBlocks = blocks[value] ?? [];
-                        selectedRoads.clear(); // Clear roads when district changes
+                        selectedRoads
+                            .clear(); // Clear roads when district changes
                         _blockController.clear();
                         _roadNameController
                             .clear(); // Clear the road controller when district changes
@@ -595,12 +608,11 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     isRequired: false,
                     onChanged: (value) async {
                       setState(() {
-                        if("Enter Manually"!= value){
+                        if ("Enter Manually" != value) {
                           _saveFormData();
                           roadNameEnable = false;
                           _staticRoadNameController.clear();
-                        }
-                        else{
+                        } else {
                           roadNameEnable = true;
                         }
                       });
@@ -613,19 +625,20 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             }
           },
         ),
-
-        CustomTextField(
-          editable: roadNameEnable,
-          onChanged: (text) => _saveFormData(),
-          label: AppStrings.enterRoadName,
-          controller: _staticRoadNameController,
-          keyboardType: TextInputType.text,
-          maxLines: 1,
-          fontSize: AppDimensions.di_16,
-          validator: null,
-          isRequired: false,
-          labelText: '',
-        ),
+        //enter manually
+        if (_roadNameController.text == 'Enter Manually')
+          CustomTextField(
+            editable: roadNameEnable,
+            onChanged: (text) => _saveFormData(),
+            label: AppStrings.enterRoadName,
+            controller: _staticRoadNameController,
+            keyboardType: TextInputType.text,
+            maxLines: 1,
+            fontSize: AppDimensions.di_16,
+            validator: null,
+            isRequired: false,
+            labelText: '',
+          ),
 
         CustomDropdownField(
           onChanged: (text) => _saveFormData(),
@@ -636,19 +649,21 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           isRequired: false,
         ),
 
+        //writeYourFeedback
         CustomTextField(
           onChanged: (text) => _saveFormData(),
           labelText: AppStrings.feedback,
           label: AppStrings.writeYourFeedback,
           controller: _writeFeedbackController,
-          keyboardType: TextInputType.text,
-          maxLines: 4,
+          keyboardType: TextInputType.multiline,
+          maxLines: 5,
           fontSize: AppDimensions.di_16,
-          maxLength: 200,
+          maxLength: writeYourFeedbackMaxLength,
           validator: null,
           isRequired: false,
         ),
 
+        //final preview button
         Align(
           alignment: Alignment.centerRight,
           child: CustomButton(
@@ -686,9 +701,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   }
 
   Widget previewForm(
-    ImagePickerProvider imagePickerProvider,
-    PermissionProvider permissionProvider,
-  ) {
+      ImagePickerProvider imagePickerProvider,
+      PermissionProvider permissionProvider,
+      ) {
     return Column(
       children: [
         Align(
@@ -702,19 +717,23 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         ),
         SizedBox(height: 5),
 
-        CustomTextField(
+        /*CustomTextField(
           labelText: AppStrings.feedback,
           label: permissionProvider.address.toString(),
           controller: _locationController,
           keyboardType: TextInputType.name,
-          maxLines: 1,
-          maxLength: 30,
+          maxLines: 2,
+          //maxLength: 30,
           validator: null,
           editable: false,
           isRequired: false,
           fontSize: AppDimensions.di_15,
+        ),*/
+        CustomContainerText(
+          label: permissionProvider.address.toString(),
+          fontSize: AppDimensions.di_14,
         ),
-
+        SizedBox(height: 10),
         Align(
           alignment: Alignment.centerLeft,
           child: CustomTextWidget(
@@ -728,43 +747,44 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
         imagePickerProvider.imageFiles.isEmpty
             ? const Center(
-              child: Column(mainAxisSize: MainAxisSize.min, children: []),
-            )
+          child: Column(mainAxisSize: MainAxisSize.min, children: []),
+        )
             : SizedBox(
-              height: DeviceSize.getScreenHeight(context) * 0.15,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal, // Horizontal scrolling
-                itemCount: imagePickerProvider.imageFiles.length,
-                itemBuilder: (context, index) {
-                  final imageItem = imagePickerProvider.imageFiles[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppDimensions.di_8,
-                    ),
-                    child: Column(
+          height: DeviceSize.getScreenHeight(context) * 0.15,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: imagePickerProvider.imageFiles.length,
+            itemBuilder: (context, index) {
+              final imageItem = imagePickerProvider.imageFiles[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.di_8,
+                  vertical: AppDimensions.di_8,
+                ),
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: Alignment.topRight,
                       children: [
-                        Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                AppDimensions.di_8,
-                              ),
-                              child: Image.file(
-                                File(imageItem.imagePath),
-                                width: AppDimensions.di_100,
-                                height: AppDimensions.di_100,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.di_8,
+                          ),
+                          child: Image.file(
+                            File(imageItem.imagePath),
+                            width: AppDimensions.di_100,
+                            height: AppDimensions.di_100,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ],
                     ),
-                  );
-                },
-              ),
-            ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
 
         Align(
           alignment: Alignment.centerLeft,
@@ -781,7 +801,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         Container(
           color: AppColors.textFieldBorderColor.withAlpha(12),
           child: Table(
-            border: TableBorder.all(color: AppColors.textFieldBorderColor),
+            border: TableBorder.all(
+              color: AppColors.textFieldBorderColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(AppDimensions.di_5),
+                topRight: Radius.circular(AppDimensions.di_5),
+              ),
+            ),
             columnWidths: {
               0: FixedColumnWidth(110.0),
               // Set fixed width for the first column
@@ -797,16 +823,16 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       text: AppStrings.state,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.black.withAlpha(95),
-                      fontWeight: AppFontWeight.fontWeight600,
+                      fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWidget(
                       text:
-                          _stateController.text.isEmpty
-                              ? "--"
-                              : _stateController.text,
+                      _stateController.text.isEmpty
+                          ? "--"
+                          : _stateController.text,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.black.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
@@ -822,16 +848,16 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       text: AppStrings.district,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.black.withAlpha(95),
-                      fontWeight: AppFontWeight.fontWeight600,
+                      fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWidget(
                       text:
-                          _districtController.text.isEmpty
-                              ? "--"
-                              : _districtController.text,
+                      _districtController.text.isEmpty
+                          ? "--"
+                          : _districtController.text,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.black.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
@@ -847,16 +873,16 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       text: AppStrings.block,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.black.withAlpha(95),
-                      fontWeight: AppFontWeight.fontWeight600,
+                      fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWidget(
                       text:
-                          _blockController.text.isEmpty
-                              ? "--"
-                              : _blockController.text,
+                      _blockController.text.isEmpty
+                          ? "--"
+                          : _blockController.text,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.black.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
@@ -872,16 +898,18 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       text: AppStrings.roadName,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.black.withAlpha(95),
-                      fontWeight: AppFontWeight.fontWeight600,
+                      fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWidget(
                       text:
-                          _roadNameController.text.isEmpty
-                              ? "--"
-                              : _roadNameController.text,
+                      _roadNameController.text.isEmpty
+                          ? "--"
+                          : _roadNameController.text == 'Enter Manually'
+                          ? _staticRoadNameController.text
+                          : _roadNameController.text,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.black.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
@@ -897,16 +925,16 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       text: AppStrings.categoryOfComplaint,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.black.withAlpha(95),
-                      fontWeight: AppFontWeight.fontWeight600,
+                      fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: CustomTextWidget(
+                    child: CustomTextWithoutFadeWidget(
                       text:
-                          _categoryOfComplaintController.text.isEmpty
-                              ? "--"
-                              : _categoryOfComplaintController.text,
+                      _categoryOfComplaintController.text.isEmpty
+                          ? "--"
+                          : _categoryOfComplaintController.text,
                       fontSize: AppDimensions.di_14,
                       color: AppColors.black.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
@@ -920,7 +948,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         Container(
           color: AppColors.textFieldBorderColor.withAlpha(12),
           child: Table(
-            border: TableBorder.all(color: AppColors.textFieldBorderColor),
+            border: TableBorder.all(
+              color: AppColors.textFieldBorderColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(AppDimensions.di_5),
+                bottomRight: Radius.circular(AppDimensions.di_5),
+              ),
+            ),
             children: [
               TableRow(
                 children: [
@@ -928,22 +962,22 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 4.0,
                       children: [
                         CustomTextWidget(
-                          text: AppStrings.feedback,
+                          text: "${AppStrings.feedback} :",
                           fontSize: AppDimensions.di_14,
                           color: AppColors.black.withAlpha(95),
-                          fontWeight: AppFontWeight.fontWeight600,
+                          fontWeight: AppFontWeight.fontWeight700,
                         ),
 
-                        CustomTextWidget(
+                        CustomTextWithoutFadeWidget(
                           text:
-                              _writeFeedbackController.text.isEmpty
-                                  ? "--"
-                                  : _writeFeedbackController.text,
+                          _writeFeedbackController.text.isEmpty
+                              ? "--"
+                              : _writeFeedbackController.text,
                           fontSize: AppDimensions.di_14,
                           color: AppColors.black.withAlpha(95),
-                          maxlines: 5,
                           fontWeight: AppFontWeight.fontWeight500,
                         ),
                       ],
@@ -1024,14 +1058,15 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         backgroundColor: Colors.red,
         // Use orange or yellow for warnings
         duration: Duration(seconds: 3), // Duration the SnackBar is visible
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
 
   void _showSaveConfirmationDialog(
-    BuildContext context,
-    ImagePickerProvider imagePickerProvider,
-  ) {
+      BuildContext context,
+      ImagePickerProvider imagePickerProvider,
+      ) {
     showCustomConfirmationDialog(
       context: context,
       title: 'Are you sure?',
@@ -1077,120 +1112,119 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   }
 
   void _showProfileImageDialog(
-    BuildContext context,
-    String picPath,
-    screenH,
-    screenW,
-    PermissionProvider permissionProvider,
-    String imgSource,
-  ) {
+      BuildContext context,
+      String picPath,
+      screenH,
+      screenW,
+      PermissionProvider permissionProvider,
+      String imgSource,
+      ) {
     if (picPath.isNotEmpty) {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true, // Allows for custom height
         builder:
             (context) => Container(
-              height: imgSource == 'Camera' ? screenH * 0.75 : screenH * 0.5,
-              width: screenW,
-              padding: EdgeInsets.all(AppDimensions.di_8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(AppDimensions.di_30),
-                ), // Rounded top corners
-              ),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: AppDimensions.di_10,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            AppDimensions.di_15,
-                          ),
-                          // Rounded corners for image
-                          child: Image.file(
-                            File(picPath),
-                            width: screenW * 0.8, // Image width responsive
-                            height: screenH * 0.3, // Image height responsive
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        if (imgSource == 'Camera')
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: AppDimensions.di_8,
-                            ),
-                            child:
-                                permissionProvider.isLoading
-                                    ? Align(
-                                      alignment: Alignment.center,
-                                      child: CircularProgressIndicator(),
-                                    )
-                                    : CustomLocationWidget(
-                                      labelText:
-                                          AppStrings.confirmTheRoadLocation,
-                                      isRequired: false,
-                                      latitude: permissionProvider.latitude,
-                                      longitude: permissionProvider.longitude,
-                                      initialAddress:
-                                          permissionProvider.address.toString(),
-                                      isLoading: permissionProvider.isLoading,
-                                      mapHeight: screenH * 0.2,
-                                      mapWidth: screenW,
-                                      onRefresh: () async {
-                                        await permissionProvider
-                                            .fetchCurrentLocation();
-                                      },
-                                      onMapTap: (point) async {
-                                        await permissionProvider.setLocation(
-                                          point.latitude,
-                                          point.longitude,
-                                        );
-                                      }, onMapReady: () {
-
-                                },
-                                    ),
-                          ),
-                        if (imgSource == 'Camera')
-                          Container(
-                            color: Colors.yellow[100],
-                            padding: EdgeInsets.all(AppDimensions.di_8),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              spacing: AppDimensions.di_4,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.location_pin, color: Colors.red),
-                                Flexible(
-                                  child: Text(permissionProvider.address),
-                                ),
-                              ],
-                            ),
-                          ),
-                        SizedBox(height: AppDimensions.di_16),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    right: 1,
-                    top: 2,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: CircleAvatar(
-                        radius: AppDimensions.di_20,
-                        backgroundColor: Colors.redAccent,
-                        child: const Icon(Icons.close, color: Colors.white),
+          height: imgSource == 'Camera' ? screenH * 0.75 : screenH * 0.5,
+          width: screenW,
+          padding: EdgeInsets.all(AppDimensions.di_8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppDimensions.di_30),
+            ), // Rounded top corners
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: AppDimensions.di_10,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.di_15,
+                      ),
+                      // Rounded corners for image
+                      child: Image.file(
+                        File(picPath),
+                        width: screenW * 0.8, // Image width responsive
+                        height: screenH * 0.3, // Image height responsive
+                        fit: BoxFit.contain,
                       ),
                     ),
-                  ),
-                ],
+                    if (imgSource == 'Camera')
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppDimensions.di_8,
+                        ),
+                        child:
+                        permissionProvider.isLoading
+                            ? Align(
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(),
+                        )
+                            : CustomLocationWidget(
+                          labelText:
+                          AppStrings.confirmTheRoadLocation,
+                          isRequired: false,
+                          latitude: permissionProvider.latitude,
+                          longitude: permissionProvider.longitude,
+                          initialAddress:
+                          permissionProvider.address.toString(),
+                          isLoading: permissionProvider.isLoading,
+                          mapHeight: screenH * 0.2,
+                          mapWidth: screenW,
+                          onRefresh: () async {
+                            await permissionProvider
+                                .fetchCurrentLocation();
+                          },
+                          onMapTap: (point) async {
+                            await permissionProvider.setLocation(
+                              point.latitude,
+                              point.longitude,
+                            );
+                          },
+                          onMapReady: () {},
+                        ),
+                      ),
+                    if (imgSource == 'Camera')
+                      Container(
+                        color: Colors.yellow[100],
+                        padding: EdgeInsets.all(AppDimensions.di_8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          spacing: AppDimensions.di_4,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.location_pin, color: Colors.red),
+                            Flexible(
+                              child: Text(permissionProvider.address),
+                            ),
+                          ],
+                        ),
+                      ),
+                    SizedBox(height: AppDimensions.di_16),
+                  ],
+                ),
               ),
-            ),
+              Positioned(
+                right: 1,
+                top: 2,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: CircleAvatar(
+                    radius: AppDimensions.di_20,
+                    backgroundColor: Colors.redAccent,
+                    child: const Icon(Icons.close, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     } else {
       showCustomSnackBar(
@@ -1202,10 +1236,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   }
 
   void showCustomSnackBar(
-    BuildContext context,
-    String message, {
-    Color backgroundColor = Colors.red,
-  }) {
+      BuildContext context,
+      String message, {
+        Color backgroundColor = Colors.red,
+      }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),

@@ -46,8 +46,7 @@ class ContactUsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start, // Aligns text to the left
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: SvgPicture.asset(icon, fit: BoxFit.fill, width: 18, height: 18,),
+            child: SvgPicture.asset(icon, color: color,),
           ),
 
           SizedBox(width: AppDimensions.di_15,),

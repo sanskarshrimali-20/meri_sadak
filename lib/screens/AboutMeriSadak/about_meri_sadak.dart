@@ -7,6 +7,7 @@ import '../../constants/app_font_weight.dart';
 import '../../constants/app_image_path.dart';
 import '../../constants/app_strings.dart';
 import '../../providerData/permission_provider.dart';
+import '../../providerData/theme_provider.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_carousel_slider.dart';
@@ -24,8 +25,13 @@ class AboutMeriSadak extends StatefulWidget {
 class _AboutMeriSadakState extends State<AboutMeriSadak> {
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: AppColors.bgColorGainsBoro,
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.bgColorGainsBoro
+          : AppColors.bgDarkModeColor,
       body: CustomBodyWithGradient(
         title: AppStrings.aboutMeriSadakHeading,
         childHeight: DeviceSize.getScreenHeight(context),
@@ -41,13 +47,21 @@ class _AboutMeriSadakState extends State<AboutMeriSadak> {
 
             // Use CustomExpansionTile for "About PMGSY"
             CustomExpansionTile(
+              backgroundColor: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,
+              textColor: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.black
+                  : AppColors.whiteColor,
               title: AppStrings.aboutMeriSadakHeading,
               subheading: '', //AppStrings.aboutMeriSadakSubHeading,
               content: Text(
                 AppStrings.aboutMeriSadakSubHeading,
                 textAlign: TextAlign.justify,
                 style: TextStyle(
-                  color: AppColors.blackMagicColor,
+                  color: themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.black
+                      : AppColors.whiteColor,
                   fontSize: AppDimensions.di_14,
                   fontWeight: AppFontWeight.fontWeight400,
                 ),

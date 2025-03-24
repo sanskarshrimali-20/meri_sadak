@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/screens/legalPolicy/legal_policy_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
+import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_image_path.dart';
+import '../../providerData/theme_provider.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/drawer_widget.dart';
 import '../passwordChange/forgot_reset_password_screen.dart';
@@ -20,8 +22,13 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: AppColors.bgColorGainsBoro,
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.bgColorGainsBoro
+          : AppColors.bgDarkModeColor,
       body: CustomBodyWithGradient(
         title: AppStrings.privacyAndSecurity,
         childHeight: DeviceSize.getScreenHeight(context) * 0.3,
@@ -29,7 +36,9 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.whiteColor,
+              color: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,
               borderRadius: BorderRadius.all(
                 Radius.circular(AppDimensions.di_20), // Rounded corners
               ),
@@ -43,6 +52,15 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
                   SizedBox(height: AppDimensions.di_15),
 
                   customDrawerWidget(
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     title: AppStrings.resetPassword,
                     icon: ImageAssetsPath.passLock,
                     onClick: () {
@@ -65,6 +83,15 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
                   ),
 
                   customDrawerWidget(
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     title: AppStrings.clearCacheData,
                     icon: ImageAssetsPath.clear,
                     onClick: () {
@@ -95,6 +122,15 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
                   customDrawerWidget(
                     title: AppStrings.legalAndPolicies,
                     icon: ImageAssetsPath.privacy,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    iconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
                     onClick: () {
                       Navigator.push(
                         context,

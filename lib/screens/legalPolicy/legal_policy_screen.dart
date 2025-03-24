@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/utils/device_size.dart';
+import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
+import '../../providerData/theme_provider.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 
 class LegalPolicyScreen extends StatefulWidget {
@@ -29,16 +31,22 @@ class _LegalPolicyScreen extends State<LegalPolicyScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: AppColors.bgColorGainsBoro,
-      body: CustomBodyWithGradient(
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.bgColorGainsBoro
+          : AppColors.bgDarkModeColor,      body: CustomBodyWithGradient(
         title: AppStrings.legalAndPolicies,
         childHeight: DeviceSize.getScreenHeight(context) * 0.7,
         child: Padding(
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.whiteColor,
+              color: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,
               borderRadius: BorderRadius.all(
                 Radius.circular(AppDimensions.di_20), // Rounded corners
               ),
@@ -53,11 +61,15 @@ class _LegalPolicyScreen extends State<LegalPolicyScreen> {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("• ", style: TextStyle(fontSize: 18)), // Bullet point
+                      Text("• ", style: TextStyle(fontSize: 18, color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black
+                          : AppColors.whiteColor,)), // Bullet point
                       Expanded(
                         child: Text(
                           items[index],
-                          style: TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: 14,  color: themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black
+                              : AppColors.whiteColor, ),
                         ),
                       ),
                     ],
