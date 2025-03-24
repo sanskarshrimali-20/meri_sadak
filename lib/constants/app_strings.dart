@@ -161,39 +161,33 @@ class AppStrings {
   static const noOne = "NoOne";
   static const preview = "Preview";
   static const roadLocation = "Road location";
-
   static const roadImages = "Road Images";
-
   static const roadDetails = "Road Details";
-
   static const edit = "Edit";
-
   static const enterRoadName = " Enter Road Name";
-
   static const location = "Location";
-
   static const myProfile = "My Profile";
   static const checkVersionUpdate = "Check version update";
   static const themeMode = "Dark and Light Mode";
   static const fontSize = "Font Size";
   static const language = "Language ";
-
   static const verify = "Verify";
   static const pleaseSelectImage = "Please Select At Least One Image";
   static const pleaseSelectState = "Please Select State";
   static const pleaseSelectDistrict = "Please Select District";
   static const pleaseSelectComplaint = "Please Select Complaint Type";
   static const pleaseWriteFeedback = "Please Write Your Feedback";
-
   static const roadName = "Road Name";
-
   static const regular = 'Regular';
-
   static const small = "Small";
   static const large = "Large";
-
   static const selectLanguagePre = 'Select your preferred language.';
   static const termsAndPrivacy = 'Terms, Conditions & Privacy Policy';
+  static const areYouSure = "Are you sure you want to submit your feedback?";
+  static const freeUpSpace = "Free up space by clearing cache.";
+  static const skipForNow = "Skip for now";
+
+  static const chooseFont = "Choose your font size.";
 
 
 

@@ -9,6 +9,7 @@ import '../../constants/app_image_path.dart';
 import '../../providerData/theme_provider.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/drawer_widget.dart';
+import '../../widgets/selection_dialog.dart';
 import '../passwordChange/forgot_reset_password_screen.dart';
 
 class PrivacyAndSecurityScreen extends StatefulWidget {
@@ -95,7 +96,22 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
                     title: AppStrings.clearCacheData,
                     icon: ImageAssetsPath.clear,
                     onClick: () {
-
+                      showCustomSelectionDialog(
+                        title: "Select Language",
+                        titleVisibility: false,
+                        content: AppStrings.freeUpSpace,
+                        icon: "assets/icons/language_icon.svg",
+                        iconVisibility: false,
+                        buttonLabels: [ AppStrings.continues, AppStrings.skipForNow],
+                        onButtonPressed: [
+                              () {
+                                Navigator.pop(context);
+                              },
+                              () {
+                            Navigator.pop(context);
+                          }
+                        ], isButtonActive: [true, false], context: context,
+                      );
                     },
                   ),
                  /* Divider(

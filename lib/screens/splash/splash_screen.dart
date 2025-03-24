@@ -36,7 +36,7 @@ class _SplashScreen extends State<SplashScreen>
     // Start the animation
     _controller.forward().then((_) async {
 
-     /* Navigator.pushReplacement(
+    /*  Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomeScreen(), // Pass the profile data

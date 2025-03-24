@@ -17,9 +17,11 @@ import '../../data/model/feedback_from_model.dart';
 import '../../data/model/image_item_model.dart';
 import '../../providerData/image_picker_provider.dart';
 import '../../providerData/permission_provider.dart';
+import '../../providerData/theme_provider.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 import '../../utils/device_size.dart';
+import '../../utils/localization_provider.dart';
 import '../../utils/toast_util.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
@@ -28,6 +30,7 @@ import '../../widgets/custom_confirmation_dialog.dart';
 import '../../widgets/custom_dropdown_field.dart';
 import '../../widgets/custom_gesture_container.dart';
 import '../../widgets/custom_text_field.dart';
+import '../../widgets/selection_dialog.dart';
 import '../location/location_widget.dart';
 
 class RegisterFeedbackNewScreen extends StatefulWidget {
@@ -108,11 +111,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   };
 
   final List<String> complaints = [
-    '1. Missing or unclear road signs, causing confusion for drivers and pedestrians.',
-    '2. Absence of pedestrian crossings or footpaths, posing safety risks to pedestrians.',
-    '3. Ongoing construction causing road damage or detours without proper maintenance.',
-    '4. Unnecessary or poorly placed speed breakers causing disruption to traffic flow.',
-    '5. The road surface is cracked and uneven, causing discomfort and potential accidents.'
+    'Road Selection or Alignment',
+    'Slow Progress',
+    'Abandoned Work',
+    'Poor Quality',
+    'Land Disputes',
+    'Bid/Tendering related issue',
+    'Corruption related issue',
   ];
 
   final Map<String, List<String>> blocks = {
@@ -215,9 +220,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   @override
   Widget build(BuildContext context) {
     final permissionProvider = Provider.of<PermissionProvider>(context);
+    final localizationProvider = Provider.of<LocalizationProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: AppColors.bgColorGainsBoro,
-      body: Consumer<ImagePickerProvider>(
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.bgColorGainsBoro
+          : AppColors.bgDarkModeColor,      body: Consumer<ImagePickerProvider>(
         builder: (context, imagePickerProvider, child) {
           return CustomBodyWithGradient(
             title: AppStrings.registerFeedback,
@@ -226,7 +235,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               padding: EdgeInsets.all(AppDimensions.di_5),
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
+                  color: themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.whiteColor
+                      : AppColors.boxDarkModeColor,
                   borderRadius: BorderRadius.all(
                     Radius.circular(AppDimensions.di_20), // Rounded corners
                   ),
@@ -240,10 +251,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                             ? feedbackForm(
                           imagePickerProvider,
                           permissionProvider,
+                            themeProvider
                         )
                             : previewForm(
                           imagePickerProvider,
                           permissionProvider,
+                            localizationProvider,
+                            themeProvider
                         ),
                       ],
                     ),
@@ -259,7 +273,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
   Widget feedbackForm(
       ImagePickerProvider imagePickerProvider,
-      PermissionProvider permissionProvider,
+      PermissionProvider permissionProvider, ThemeProvider themeProvider,
       ) {
     return Column(
       children: [
@@ -333,22 +347,27 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           ),
         ),
 
-        // const SizedBox(height: AppDimensions.di_20),
+        const SizedBox(height: AppDimensions.di_20),
         Align(
           alignment: Alignment.centerLeft,
           child: CustomTextWidget(
             text: AppStrings.uploadRoadImages,
             fontSize: AppDimensions.di_16,
             fontWeight: AppFontWeight.fontWeight600,
-            color: AppColors.black,
+            color:  themeProvider.themeMode == ThemeMode.light
+          ? AppColors.black
+              : AppColors.whiteColor,
           ),
         ),
 
-        const SizedBox(height: AppDimensions.di_5),
+        const SizedBox(height: AppDimensions.di_10),
 
         imagePickerProvider.imageFiles.isEmpty ||
             isClickedBy == AppStrings.camera
             ? CustomGestureContainer(
+          backgroundColor: themeProvider.themeMode == ThemeMode.light
+              ? AppColors.whiteColor
+              : AppColors.textBoxDarkModeColor,
           text: AppStrings.openCameraText,
           icon: cameraSvg,
           onTap: () async {
@@ -388,7 +407,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               CustomTextWidget(
                 text: ' or ',
                 fontSize: AppDimensions.di_16,
-                color: AppColors.black,
+                color:  themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.black
+                    : AppColors.whiteColor,
                 fontWeight: AppFontWeight.fontWeight500,
               ),
               Flexible(child: Divider()),
@@ -401,6 +422,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             isClickedBy == AppStrings.gallery
             ? CustomGestureContainer(
           text: AppStrings.selectImagesText,
+          backgroundColor: themeProvider.themeMode == ThemeMode.light
+              ? AppColors.whiteColor
+              : AppColors.textBoxDarkModeColor,
           icon: gallerySvg,
           onTap: () async {
             isClickedBy = AppStrings.gallery;
@@ -515,7 +539,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             text: AppStrings.enterRoadDetails,
             fontSize: AppDimensions.di_16,
             fontWeight: AppFontWeight.fontWeight600,
-            color: AppColors.black,
+            color:  themeProvider.themeMode == ThemeMode.light
+                ? AppColors.black
+                : AppColors.whiteColor,
           ),
         ),
 
@@ -537,6 +563,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     hintText: "Please Select State",
                     textController: _stateController,
                     items: snapshot.data!,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                         ? AppColors.black
+                         : AppColors.whiteColor,
+                    boxBgColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.textBoxDarkModeColor,
                     dropdownHeight: 150,
                     isRequired: false,
                     onChanged: (value) async {
@@ -563,6 +595,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     hintText: "Please Select District",
                     textController: _districtController,
                     items: selectedDistricts.isEmpty ? [''] : selectedDistricts,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    boxBgColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.textBoxDarkModeColor,
                     dropdownHeight: 150,
                     isRequired: false,
                     onChanged: (value) async {
@@ -585,6 +623,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     hintText: "Please Select Block",
                     textController: _blockController,
                     items: selectedBlocks.isEmpty ? [''] : selectedBlocks,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    boxBgColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.textBoxDarkModeColor,
                     dropdownHeight: 150,
                     isRequired: false,
                     onChanged: (value) async {
@@ -605,6 +649,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     textController: _roadNameController,
                     items: selectedRoads.isEmpty ? [''] : selectedRoads,
                     dropdownHeight: 150,
+                    textColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.black
+                        : AppColors.whiteColor,
+                    boxBgColor: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.textBoxDarkModeColor,
                     isRequired: false,
                     onChanged: (value) async {
                       setState(() {
@@ -629,6 +679,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         if (_roadNameController.text == 'Enter Manually')
           CustomTextField(
             editable: roadNameEnable,
+            textColor: themeProvider.themeMode == ThemeMode.light
+                ? AppColors.black
+                : AppColors.whiteColor,
+            boxBgColor: themeProvider.themeMode == ThemeMode.light
+                ? AppColors.whiteColor
+                : AppColors.textBoxDarkModeColor,
             onChanged: (text) => _saveFormData(),
             label: AppStrings.enterRoadName,
             controller: _staticRoadNameController,
@@ -645,6 +701,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           hintText: AppStrings.selectCategoryOfComplaint,
           textController: _categoryOfComplaintController,
           items: complaints,
+          textColor: themeProvider.themeMode == ThemeMode.light
+              ? AppColors.black
+              : AppColors.whiteColor,
+          boxBgColor: themeProvider.themeMode == ThemeMode.light
+              ? AppColors.whiteColor
+              : AppColors.textBoxDarkModeColor,
           dropdownHeight: AppDimensions.di_200,
           isRequired: false,
         ),
@@ -657,6 +719,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           controller: _writeFeedbackController,
           keyboardType: TextInputType.multiline,
           maxLines: 5,
+          textColor: themeProvider.themeMode == ThemeMode.light
+              ? AppColors.black
+              : AppColors.whiteColor,
+          boxBgColor: themeProvider.themeMode == ThemeMode.light
+              ? AppColors.whiteColor
+              : AppColors.textBoxDarkModeColor,
           fontSize: AppDimensions.di_16,
           maxLength: writeYourFeedbackMaxLength,
           validator: null,
@@ -702,7 +770,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
   Widget previewForm(
       ImagePickerProvider imagePickerProvider,
-      PermissionProvider permissionProvider,
+      PermissionProvider permissionProvider, LocalizationProvider localizationProvider, ThemeProvider themeProvider,
       ) {
     return Column(
       children: [
@@ -711,7 +779,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           child: CustomTextWidget(
             text: AppStrings.roadLocation,
             fontSize: AppDimensions.di_16,
-            color: AppColors.black,
+            color: themeProvider.themeMode == ThemeMode.light
+                ? AppColors.black
+                : AppColors.whiteColor,
             fontWeight: AppFontWeight.fontWeight600,
           ),
         ),
@@ -732,6 +802,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         CustomContainerText(
           label: permissionProvider.address.toString(),
           fontSize: AppDimensions.di_14,
+          textColor: themeProvider.themeMode == ThemeMode.light
+              ? AppColors.black.withAlpha(95)
+              : AppColors.whiteColor.withAlpha(95),
+          boxBgColor: themeProvider.themeMode == ThemeMode.light
+              ? AppColors.whiteColor
+              : AppColors.textBoxDarkModeColor,
         ),
         SizedBox(height: 10),
         Align(
@@ -739,7 +815,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           child: CustomTextWidget(
             text: AppStrings.roadImages,
             fontSize: AppDimensions.di_16,
-            color: AppColors.black,
+            color: themeProvider.themeMode == ThemeMode.light
+                ? AppColors.black
+                : AppColors.whiteColor,
             fontWeight: AppFontWeight.fontWeight600,
           ),
         ),
@@ -750,7 +828,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           child: Column(mainAxisSize: MainAxisSize.min, children: []),
         )
             : SizedBox(
-          height: DeviceSize.getScreenHeight(context) * 0.15,
+          height: DeviceSize.getScreenHeight(context) * 0.18,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: imagePickerProvider.imageFiles.length,
@@ -786,12 +864,16 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           ),
         ),
 
+        // SizedBox(height: AppDimensions.di_15,),
+
         Align(
           alignment: Alignment.centerLeft,
           child: CustomTextWidget(
             text: AppStrings.roadDetails,
             fontSize: AppDimensions.di_16,
-            color: AppColors.black,
+            color: themeProvider.themeMode == ThemeMode.light
+                ? AppColors.black
+                : AppColors.whiteColor,
             fontWeight: AppFontWeight.fontWeight600,
           ),
         ),
@@ -822,7 +904,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     child: CustomTextWidget(
                       text: AppStrings.state,
                       fontSize: AppDimensions.di_14,
-                      color: AppColors.black.withAlpha(95),
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black.withAlpha(95)
+                          : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -834,11 +918,18 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           ? "--"
                           : _stateController.text,
                       fontSize: AppDimensions.di_14,
-                      color: AppColors.black.withAlpha(95),
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black.withAlpha(95)
+                          : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
                 ],
+                  decoration: BoxDecoration(
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.textBoxDarkModeColor,
+                  )
               ),
               TableRow(
                 children: [
@@ -847,7 +938,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     child: CustomTextWidget(
                       text: AppStrings.district,
                       fontSize: AppDimensions.di_14,
-                      color: AppColors.black.withAlpha(95),
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black.withAlpha(95)
+                          : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -859,11 +952,18 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           ? "--"
                           : _districtController.text,
                       fontSize: AppDimensions.di_14,
-                      color: AppColors.black.withAlpha(95),
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black.withAlpha(95)
+                          : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
                 ],
+                  decoration: BoxDecoration(
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.textBoxDarkModeColor,
+                  )
               ),
               TableRow(
                 children: [
@@ -872,7 +972,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     child: CustomTextWidget(
                       text: AppStrings.block,
                       fontSize: AppDimensions.di_14,
-                      color: AppColors.black.withAlpha(95),
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black.withAlpha(95)
+                          : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -884,11 +986,18 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           ? "--"
                           : _blockController.text,
                       fontSize: AppDimensions.di_14,
-                      color: AppColors.black.withAlpha(95),
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black.withAlpha(95)
+                          : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
                 ],
+                  decoration: BoxDecoration(
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.textBoxDarkModeColor,
+                  )
               ),
               TableRow(
                 children: [
@@ -897,7 +1006,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     child: CustomTextWidget(
                       text: AppStrings.roadName,
                       fontSize: AppDimensions.di_14,
-                      color: AppColors.black.withAlpha(95),
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black.withAlpha(95)
+                          : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -911,11 +1022,18 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           ? _staticRoadNameController.text
                           : _roadNameController.text,
                       fontSize: AppDimensions.di_14,
-                      color: AppColors.black.withAlpha(95),
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black.withAlpha(95)
+                          : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
                 ],
+                  decoration: BoxDecoration(
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.textBoxDarkModeColor,
+                  )
               ),
               TableRow(
                 children: [
@@ -924,7 +1042,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     child: CustomTextWidget(
                       text: AppStrings.categoryOfComplaint,
                       fontSize: AppDimensions.di_14,
-                      color: AppColors.black.withAlpha(95),
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black.withAlpha(95)
+                          : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -936,11 +1056,18 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           ? "--"
                           : _categoryOfComplaintController.text,
                       fontSize: AppDimensions.di_14,
-                      color: AppColors.black.withAlpha(95),
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black.withAlpha(95)
+                          : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
                 ],
+                  decoration: BoxDecoration(
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.textBoxDarkModeColor,
+                  )
               ),
             ],
           ),
@@ -967,7 +1094,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                         CustomTextWidget(
                           text: "${AppStrings.feedback} :",
                           fontSize: AppDimensions.di_14,
-                          color: AppColors.black.withAlpha(95),
+                          color: themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                           fontWeight: AppFontWeight.fontWeight700,
                         ),
 
@@ -977,13 +1106,20 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                               ? "--"
                               : _writeFeedbackController.text,
                           fontSize: AppDimensions.di_14,
-                          color: AppColors.black.withAlpha(95),
+                          color: themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                           fontWeight: AppFontWeight.fontWeight500,
                         ),
                       ],
                     ),
                   ),
                 ],
+                  decoration: BoxDecoration(
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? AppColors.whiteColor
+                        : AppColors.textBoxDarkModeColor,
+                  )
               ),
             ],
           ),
@@ -1020,16 +1156,29 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               child: CustomButton(
                 text: AppStrings.submit,
                 onPressed: () async {
-                  /* Navigator.push(
-                    // ignore: use_build_context_synchronously
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) =>
-                      const SubmittedFeedbackScree(),
-                    ),
-                  );*/
-                  _showSaveConfirmationDialog(context, imagePickerProvider);
+
+                  showCustomSelectionDialog(
+                    title: "Submit",
+                    titleVisibility: false,
+                    content: AppStrings.areYouSure,
+                    icon: "assets/icons/language_icon.svg",
+                    iconVisibility: false,
+                    buttonLabels: [ localizationProvider.localizedStrings['yes'] ?? "Yes",
+                      localizationProvider.localizedStrings['no'] ?? "No" ],
+                    onButtonPressed: [
+                          () {
+                            _saveFeedbackStatus(imagePickerProvider, _stateController.text, _districtController.text, _blockController.text, _roadNameController.text, _staticRoadNameController.text,
+                                _categoryOfComplaintController.text, _writeFeedbackController.text, imagePickerProvider.imageFiles);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => HomeScreen()),
+                            );
+                      },
+                          () {
+                        Navigator.pop(context);
+                      }
+                    ], isButtonActive: [true, false], context: context,
+                  );
                 },
                 textColor: AppColors.whiteColor,
                 backgroundColor: AppColors.blueGradientColor1,
@@ -1075,8 +1224,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       backgroundColor: Colors.blue,
       iconColor: Colors.blue,
       onYesPressed: () async {
-        imagePickerProvider.clearImages();
-        dbHelper.clearFeedbackTable();
+        _saveFeedbackStatus(imagePickerProvider, _stateController.text, _districtController.text, _blockController.text, _roadNameController.text, _staticRoadNameController.text,
+            _categoryOfComplaintController.text, _writeFeedbackController.text, imagePickerProvider.imageFiles);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -1248,4 +1397,17 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       ),
     );
   }
+
+  Future<void> _saveFeedbackStatus(ImagePickerProvider imagePickerProvider,String state,String district,String block,String roadName,String staticRoadName,String categoryOfComplaint,String feedback, List<ImageItem> imageFiles,
+      ) async {
+
+    String insertFeedback =  await dbHelper.insertFeedbackWithImages(state: state, district: district, block: block, roadName: roadName, staticRoadName: staticRoadName,
+        categoryOfComplaint: categoryOfComplaint, feedback: feedback, images: imageFiles);
+
+    if(insertFeedback == "Success"){
+      imagePickerProvider.clearImages();
+      dbHelper.clearFeedbackTable();
+    }
+  }
+
 }

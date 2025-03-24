@@ -74,11 +74,17 @@ class CustomTextWithoutFadeWidget extends StatelessWidget {
 class CustomContainerText extends StatelessWidget {
   final String label;
   final double fontSize;
+  final Color textColor;
+  final Color boxBgColor;
+
 
   const CustomContainerText({
     Key? key,
     required this.label,
     required this.fontSize,
+    this.textColor = AppColors.black,
+    this.boxBgColor =  AppColors.black,
+
   }) : super(key: key);
 
   @override
@@ -86,7 +92,7 @@ class CustomContainerText extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.di_8),
       decoration: BoxDecoration(
-        color: AppColors.textFieldBorderColor.withAlpha(12),
+        color: boxBgColor,
         borderRadius: BorderRadius.circular(AppDimensions.di_5),
         border: Border.all(
           color: AppColors.textFieldBorderColor, // First border color
@@ -97,7 +103,7 @@ class CustomContainerText extends StatelessWidget {
         label,
         //textAlign: TextAlign.start,
         style: TextStyle(
-          color: AppColors.black.withAlpha(90),
+          color: textColor,
           fontSize: fontSize,
           fontWeight: AppFontWeight.fontWeight500,
         ),

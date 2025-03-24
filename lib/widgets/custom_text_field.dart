@@ -23,6 +23,8 @@ class CustomTextField extends StatefulWidget {
   final double fontSize;
   final String counterText;
   final FocusNode? focusNode;
+  final Color textColor;
+  final Color boxBgColor;
 
   const CustomTextField({
     super.key,
@@ -43,6 +45,8 @@ class CustomTextField extends StatefulWidget {
     this.isNumberWithPrefix = false,
     this.counterText = "",
     this.focusNode,
+    this.textColor = AppColors.black,
+    this.boxBgColor =  AppColors.black,
   });
 
   @override
@@ -101,7 +105,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               right: AppDimensions.di_5,
             ),
             decoration: BoxDecoration(
-              color: AppColors.textFieldBorderColor.withAlpha(12),
+              color:  widget.boxBgColor,
               // Use a neutral color or AppColors.greyHundred
               borderRadius: BorderRadius.circular(AppDimensions.di_5),
               border: Border.all(
@@ -128,7 +132,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 border: InputBorder.none,
                 hintText: widget.label,
                 hintStyle: TextStyle(
-                  color: AppColors.black.withAlpha(90),
+                  color: widget.textColor.withAlpha(90),
                   fontSize: widget.fontSize,
                 ),
                 //counterText: widget.counterText,
@@ -148,7 +152,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               style: TextStyle(
                 fontSize: widget.fontSize,
                 // Adjust the font size here for the text input
-                color: AppColors.black, // Adjust text color if needed
+                color: widget.textColor, // Adjust text color if needed
               ),
             ),
           ),
