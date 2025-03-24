@@ -5,6 +5,7 @@ import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_dialog_button.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
+import 'package:meri_sadak/widgets/selection_dialog.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
@@ -128,6 +129,27 @@ class _AppearanceScreen extends State<AppearanceScreen> {
                         : AppColors.whiteColor,
                     onClick: () {
 
+                      showCustomSelectionDialog(
+                        title: "Select Language",
+                        titleVisibility: false,
+                        content: AppStrings.chooseFont,
+                        icon: "assets/icons/language_icon.svg",
+                        iconVisibility: false,
+                        buttonLabels: [ localizationProvider.localizedStrings['small'] ?? "Small", localizationProvider.localizedStrings['regular'] ?? "Regular",
+                          localizationProvider.localizedStrings['large'] ?? "Large" ],
+                        onButtonPressed: [
+                              () {
+                            Navigator.pop(context);
+                          },
+                              () {
+                            Navigator.pop(context);
+                          },
+                      () {
+                      Navigator.pop(context);
+                      }
+                        ], isButtonActive: [true, false, false], context: context,
+                        dialogHeight: 320
+                      );
                     },
                   ),
                   Divider(
@@ -151,27 +173,7 @@ class _AppearanceScreen extends State<AppearanceScreen> {
                         : AppColors.whiteColor,
                     onClick: () {
 
-                     /* CustomSelectionDialog(
-                        title: "Select Language",
-                        titleVisibility: false,
-                        content: AppStrings.selectLanguagePre,
-                        icon: "assets/icons/language_icon.svg",
-                        iconVisibility: false,
-                        buttonLabels: [ localizationProvider.localizedStrings['english'] ?? "English",
-                          localizationProvider.localizedStrings['hindi'] ?? "Hindi" ],
-                        onButtonPressed: [
-                              () {
-                            localizationProvider.setLocale(Locale('en', 'US'));
-                            Navigator.pop(context);
-                          },
-                              () {
-                            localizationProvider.setLocale(Locale('hi', 'IN'));
-                            Navigator.pop(context);
-                          }
-                        ], isButtonActive: [languageEnglish, languageHindi]
-                      );*/
-
-                      _showCustomSelectionDialog(
+                      showCustomSelectionDialog(
                         title: "Select Language",
                         titleVisibility: false,
                         content: AppStrings.selectLanguagePre,
@@ -202,90 +204,6 @@ class _AppearanceScreen extends State<AppearanceScreen> {
     );
   }
 
-  Future<void> _showCustomSelectionDialog({
-    required BuildContext context,
-    String? title, // Optional title
-    String? icon, // Optional icon (if you want to show it)
-    String? content, // Optional content (if you want custom content)
-    List<String>? buttonLabels, // List of button labels for 1 to 3 buttons
-    required List<VoidCallback> onButtonPressed, // List of callback functions for buttons
-    required List<bool> isButtonActive, // List of boolean values to determine button activeness
-    bool titleVisibility = false, // To show or hide the title
-    bool iconVisibility = false, // To show or hide buttons
-  }) async
-  {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: AppColors.whiteColor,
-          contentPadding: EdgeInsets.zero, // Remove default padding from the AlertDialog
-          content: Consumer<LocalizationProvider>(
-            builder: (context, provider, child) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0), // Custom padding for the content
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min, // Allow the Column to take as little space as possible
-                  children: [
-                    // Show the icon if iconVisibility is true
-                    if (iconVisibility && icon != null)
-                      ClipRect(
-                        child: SvgPicture.asset(icon), // Show the icon
-                      ),
-
-                    // Show title if titleVisibility is true
-                    if (titleVisibility && title != null)
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: CustomTextWidget(
-                          text: title,
-                          fontSize: AppDimensions.di_15,
-                          color: AppColors.black.withAlpha(150),
-                          fontWeight: AppFontWeight.fontWeight600,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-
-                    // Show content if available
-                    if (content != null)
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: CustomTextWidget(
-                          text: content,
-                          fontSize: AppDimensions.di_15,
-                          color: AppColors.black.withAlpha(200),
-                          fontWeight: AppFontWeight.fontWeight500,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-
-                    SizedBox(height: AppDimensions.di_5), // Space between content and buttons
-
-                    // Conditionally show buttons based on the button count in `buttonLabels`
-                    if (buttonLabels != null && buttonLabels.isNotEmpty)
-                      for (int i = 0; i < buttonLabels.length; i++)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
-                          child: CustomDialogButton(
-                            text: buttonLabels[i],
-                            fontSize: AppDimensions.di_15,
-                            onClick:  onButtonPressed[i], // If button is active, assign onClick callback
-                            isActive: isButtonActive[i], // Pass the button active state
-                          ),
-                        ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
-
-
   void saveLocalizationData() async {
     final dbHelper = DatabaseHelper();
 
@@ -299,7 +217,12 @@ class _AppearanceScreen extends State<AppearanceScreen> {
       "general_settings": "General Settings",
       "appearance":"Appearance",
       "english":"English",
-      "hindi":"Hindi"
+      "hindi":"Hindi",
+      "yes":"Yes",
+      "no":"No",
+      "small":"Small",
+      "regular":"Regular",
+      "large":"Large",
 
       // other English translations
     };
@@ -314,7 +237,14 @@ class _AppearanceScreen extends State<AppearanceScreen> {
       "general_settings": "सामान्य सेटिंग्स",
       "appearance":"स्वरूप",
       "english":"अंग्रेज़ी",
-      "hindi":"हिंदी"
+      "hindi":"हिंदी",
+      "yes":"हाँ",
+      "no":"नहीं",
+      "small":"छोटा",
+      "regular":"नियमित",
+      "large":"बड़ा",
+
+
       // other Hindi translations
     };
 

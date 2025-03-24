@@ -16,6 +16,8 @@ class CustomDropdownField extends StatefulWidget {
   final InputBorder? textFieldBorder;
   final EdgeInsetsGeometry? contentPadding;
   final bool isRequired;
+  final Color textColor;
+  final Color boxBgColor;
   final Function(String)? onChanged;
 
   const CustomDropdownField({
@@ -33,6 +35,9 @@ class CustomDropdownField extends StatefulWidget {
     this.contentPadding,
     required this.isRequired,
     this.onChanged,
+    this.textColor = AppColors.black,
+    this.boxBgColor =  AppColors.black,
+
   });
 
   @override
@@ -71,7 +76,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
             ),
             height: 50,
             decoration: BoxDecoration(
-              color: AppColors.textFieldBorderColor.withAlpha(12),
+              color: widget.boxBgColor,
               // Use a neutral color or AppColors.greyHundred
               borderRadius: BorderRadius.circular(AppDimensions.di_5),
               border: Border.all(
@@ -98,7 +103,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
               style:
               widget.style ??
                   TextStyle(
-                    color: AppColors.black,
+                    color: widget.textColor,
                     fontSize: AppDimensions.di_16,
                   ),
               onTap: () {
@@ -111,7 +116,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                 // fillColor:  AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
                 border: InputBorder.none,
                 hintText: widget.hintText,
-                hintStyle: TextStyle(color: AppColors.black.withAlpha(95)),
+                hintStyle: TextStyle(color: widget.textColor.withAlpha(95)),
                 suffixIcon: InkWell(
                   onTap: () {
                     setState(() {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:meri_sadak/data/model/image_item_model.dart';
 import 'package:meri_sadak/utils/device_size.dart';
@@ -119,16 +121,18 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                 itemBuilder: (context, index) {
                                   ImageItem imageItem =
                                   feedback['images'][index];
+                                  debugPrint("Imagepath${imageItem.imagePath}");
+                                  File imageFile = File(imageItem.imagePath);
                                   return Padding(
                                     padding:
                                     const EdgeInsets.symmetric(horizontal: AppDimensions.di_8),
                                     child: Column(
                                       children: [
-                                        GestureDetector(
-                                          onTap:
-                                              () => print("Tapped on image"), // Handle tap event here
+                                        SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Image.file(imageFile, width: 100, height: 100, fit: BoxFit.cover,),  // Use Image.file to load the image from the file system// Placeholder image
                                         ),
-                                        Image.asset(imageItem.imagePath)
                                       ],
                                     ),
                                   );
