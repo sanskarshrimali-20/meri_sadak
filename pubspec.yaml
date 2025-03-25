@@ -54,6 +54,7 @@ dependencies:
   carousel_slider: ^5.0.0
   share_plus: ^10.1.4
   fluttertoast: ^8.0.9
+  connectivity_plus: ^6.1.1  # Upgrade this to a compatible version
 
 
   flutter_localizations:

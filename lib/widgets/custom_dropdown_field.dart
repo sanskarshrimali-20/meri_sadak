@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../constants/app_colors.dart';
 import '../constants/app_dimensions.dart';
 
@@ -36,8 +35,7 @@ class CustomDropdownField extends StatefulWidget {
     required this.isRequired,
     this.onChanged,
     this.textColor = AppColors.black,
-    this.boxBgColor =  AppColors.black,
-
+    this.boxBgColor = AppColors.black,
   });
 
   @override
@@ -48,12 +46,22 @@ class _CustomDropdownField extends State<CustomDropdownField> {
   bool _isTapped = false; // Used to show or hide the dropdown
   List<String> _filteredList = [];
   List<String> _subFilteredList = [];
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _filteredList = widget.items!;
     _subFilteredList = _filteredList;
+
+    // Add listener to focus node to control keyboard behavior
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        setState(() {
+          _isTapped = false; // Hide dropdown when focus is lost
+        });
+      }
+    });
   }
 
   @override
@@ -77,7 +85,6 @@ class _CustomDropdownField extends State<CustomDropdownField> {
             height: 50,
             decoration: BoxDecoration(
               color: widget.boxBgColor,
-              // Use a neutral color or AppColors.greyHundred
               borderRadius: BorderRadius.circular(AppDimensions.di_5),
               border: Border.all(
                 color: AppColors.textFieldBorderColor, // First border color
@@ -86,22 +93,23 @@ class _CustomDropdownField extends State<CustomDropdownField> {
             ),
             child: TextFormField(
               controller: widget.textController,
+              focusNode: _focusNode,
               onChanged: (val) {
                 setState(() {
-                  //widget.onChanged?.call(widget.textController!.text);
-                  _filteredList =
-                      _subFilteredList
-                          .where(
-                            (element) => element.toLowerCase().contains(
-                          widget.textController!.text.toLowerCase(),
-                        ),
-                      )
-                          .toList();
+                  _filteredList = _subFilteredList
+                      .where(
+                        (element) => element
+                        .toLowerCase()
+                        .contains(val.toLowerCase()),
+                  )
+                      .toList();
+                  // Show dropdown when text is entered
+                  _isTapped = val.isNotEmpty;
                 });
               },
-              validator: (val) => val!.isEmpty ? 'Field can\'t be empty' : null,
-              style:
-              widget.style ??
+              validator: (val) =>
+              val!.isEmpty ? 'Field can\'t be empty' : null,
+              style: widget.style ??
                   TextStyle(
                     color: widget.textColor,
                     fontSize: AppDimensions.di_16,
@@ -112,8 +120,6 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                 });
               },
               decoration: InputDecoration(
-                // filled: true,
-                // fillColor:  AppColors.textFieldColor.withAlpha(8), // Use a neutral color or AppColors.greyHundred
                 border: InputBorder.none,
                 hintText: widget.hintText,
                 hintStyle: TextStyle(color: widget.textColor.withAlpha(95)),
@@ -134,8 +140,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                   MediaQuery.of(context).size,
                 ),
                 // Show the clear icon only when the text field is not empty
-                suffix:
-                widget.textController!.text.isNotEmpty
+                suffix: widget.textController!.text.isNotEmpty
                     ? InkWell(
                   onTap: () {
                     widget.textController!.clear();
@@ -166,10 +171,8 @@ class _CustomDropdownField extends State<CustomDropdownField> {
               return InkWell(
                 onTap: () {
                   setState(() {
-                    _isTapped =
-                    false; // Close dropdown when item is selected
-                    widget.textController!.text =
-                    _filteredList[index]; // Set the selected item
+                    _isTapped = false; // Close dropdown when item is selected
+                    widget.textController!.text = _filteredList[index]; // Set the selected item
                     widget.onChanged?.call(widget.textController!.text);
                   });
                 },
@@ -179,8 +182,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                   ),
                   child: Text(
                     _filteredList[index],
-                    style:
-                    widget.dropdownTextStyle ??
+                    style: widget.dropdownTextStyle ??
                         TextStyle(
                           color: Colors.grey.shade800,
                           fontSize: AppDimensions.di_16,

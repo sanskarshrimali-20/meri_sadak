@@ -11,6 +11,7 @@ import 'package:meri_sadak/screens/home/home_screen.dart';
 import 'package:meri_sadak/screens/passwordChange/forgot_reset_password_screen.dart';
 import 'package:meri_sadak/screens/signUp/sign_up_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
+import 'package:meri_sadak/utils/network_provider.dart';
 import 'package:meri_sadak/viewmodels/login/login_view_model.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_container.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_textfield.dart';
@@ -48,6 +49,8 @@ class _LoginScreen extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final networkProvider = Provider.of<NetworkProviderController>(context);
+
 
     return WillPopScope(
         onWillPop: () async {
@@ -241,7 +244,9 @@ class _LoginScreen extends State<LoginScreen> {
                                 fontWeight: AppFontWeight.fontWeight500,
                                 color: AppColors.whiteColor,
                                 textAlign: TextAlign.center,
-                                onClick: _onLoginClick,
+                                onClick: () async {
+                                  _onLoginClick(networkProvider);
+                                },
                               ),
 
                               const SizedBox(height: AppDimensions.di_20),
@@ -329,54 +334,56 @@ class _LoginScreen extends State<LoginScreen> {
   }
 
   // Function to handle login button click
-  Future<void> _onLoginClick() async {
-    String username = _usernameController.text.trim();
-    String password = _passwordController.text.trim();
-    validateEmailPhone(username);
-    validatePassword(password);
+  Future<void> _onLoginClick(NetworkProviderController networkProvider) async {
 
-    if (emailPhoneError == null && passwordError == null) {
-      // If the form is valid, proceed with the logic
-      // If both username and password are valid, proceed to the next screen
+    if(networkProvider.status == ConnectivityStatus.online){
+      String username = _usernameController.text.trim();
+      String password = _passwordController.text.trim();
+      validateEmailPhone(username);
+      validatePassword(password);
 
-      final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
+      if (emailPhoneError == null && passwordError == null) {
+        // If the form is valid, proceed with the logic
+        // If both username and password are valid, proceed to the next screen
 
-      String? loginOperationResultMessage = await loginViewModel.performLogin(_usernameController.text, _passwordController.text);
-      if(loginOperationResultMessage == "Success"){
+        final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
 
-        _localStorage.setLoginUser(_usernameController.text);
-        showErrorDialog(
-          context,
-          "Login successfully !",
-          backgroundColor: Colors.green,
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder:
-                (context) =>
-                HomeScreen(), // Pass the profile data
-          ),
-        );
-      }
-      else{
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: CustomTextWidget(
-              text: "Username/password Invalid",
-              fontSize: AppDimensions.di_16,
-              color: AppColors.whiteColor,
+        String? loginOperationResultMessage = await loginViewModel.performLogin(_usernameController.text, _passwordController.text);
+        if(loginOperationResultMessage == "Success"){
+
+          _localStorage.setLoginUser(_usernameController.text);
+          showErrorDialog(
+            context,
+            "Login successfully !",
+            backgroundColor: Colors.green,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) =>
+                  HomeScreen(), // Pass the profile data
             ),
-            backgroundColor: Colors.red,
-            // Use orange or yellow for warnings
-            duration: Duration(seconds: 3), // Duration the SnackBar is visible
-          ),
-        );
-      }
+          );
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: CustomTextWidget(
+                text: "Username/password Invalid",
+                fontSize: AppDimensions.di_16,
+                color: AppColors.whiteColor,
+              ),
+              backgroundColor: Colors.red,
+              // Use orange or yellow for warnings
+              duration: Duration(seconds: 3), // Duration the SnackBar is visible
+            ),
+          );
+        }
 
-    } else {
-      // Handle invalid form (if needed)
-      /*if(username.isEmpty){
+      } else {
+        // Handle invalid form (if needed)
+        /*if(username.isEmpty){
         _showErrorDialog(
           context,
           "Enter Phone Number / Email ID",
@@ -395,6 +402,14 @@ class _LoginScreen extends State<LoginScreen> {
           backgroundColor: Colors.red,
         );
       }*/
+    }
+    }
+    else{
+      showErrorDialog(
+        context,
+        AppStrings.noInternet,
+        backgroundColor: Colors.red,
+      );
     }
   }
 

@@ -197,4 +197,8 @@ class AppStrings {
   static const allowCameraAlertTitle = "Allow Camera";
   static const allowCameraAlertContent =
       'Enable Meri Sadak to access your camera for capturing and reporting.';
+
+
+  static const noInternet = "No Internet Connection";
+
 }
