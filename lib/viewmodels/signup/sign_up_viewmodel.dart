@@ -53,6 +53,7 @@ class SignUpViewModel extends ChangeNotifier {
         final signUpOperation = await dbHelper.setSignupDetails(signUp);
 
         if(signUpOperation == "Success"){
+          _localStorage.setLoggingState("true");
           return "Success";
         }else{
           return "Error";

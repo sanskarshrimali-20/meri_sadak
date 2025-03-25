@@ -361,7 +361,9 @@ class _SignUpScreen extends State<SignUpScreen> {
                                 color: AppColors.whiteColor,
                                 textAlign: TextAlign.center,
                                 onClick: () async {
-                                  _onSignInClick(networkProvider);
+                                  if (fullNameError == null && emailError == null && phoneError == null) {
+                                    _onSignInClick(networkProvider);
+                                  }
                                 },
                               ),
 
@@ -434,6 +436,15 @@ class _SignUpScreen extends State<SignUpScreen> {
 
   Future<void> _onSignInClick(NetworkProviderController networkProvider) async {
 
+    if (_isChecked == false) {
+      showErrorDialog(
+        context,
+        "Please select Terms & Conditions and Privacy Policy",
+        backgroundColor: Colors.red,
+      );
+      return;
+    }
+
     if(networkProvider.status == ConnectivityStatus.online) {
       String fullName = _fullNameController.text.trim();
       String email = _emailController.text.trim();
@@ -442,19 +453,8 @@ class _SignUpScreen extends State<SignUpScreen> {
       validateFullName(fullName);
       validateEmail(email);
       validatePhoneNum(phoneNo);
-
-      if (fullNameError == null && emailError == null && phoneError == null) {
         // If the form is valid, proceed with the logic
         // If both username and password are valid, proceed to the next screen
-
-        if (_isChecked == false) {
-          showErrorDialog(
-            context,
-            "Please select Terms & Conditions and Privacy Policy",
-            backgroundColor: Colors.red,
-          );
-          return;
-        }
 
         final profile = await dbHelper.getSignupDetails(
             _phoneNoController.text);
@@ -481,7 +481,6 @@ class _SignUpScreen extends State<SignUpScreen> {
             ),
           );
         }
-      }
     }
     else{
       showErrorDialog(

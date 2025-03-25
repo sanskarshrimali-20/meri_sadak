@@ -48,9 +48,9 @@ class _LoginScreen extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final themeProvider = Provider.of<ThemeProvider>(context);
     final networkProvider = Provider.of<NetworkProviderController>(context);
-
 
     return WillPopScope(
         onWillPop: () async {
@@ -245,7 +245,10 @@ class _LoginScreen extends State<LoginScreen> {
                                 color: AppColors.whiteColor,
                                 textAlign: TextAlign.center,
                                 onClick: () async {
-                                  _onLoginClick(networkProvider);
+
+                                  if(emailPhoneError == null && passwordError == null){
+                                    _onLoginClick(networkProvider);
+                                  }
                                 },
                               ),
 

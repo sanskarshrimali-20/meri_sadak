@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_image_path.dart';
+import '../../providerData/permission_provider.dart';
 import '../../providerData/theme_provider.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/drawer_widget.dart';
@@ -25,6 +26,7 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
   Widget build(BuildContext context) {
 
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final permissionProvider = Provider.of<PermissionProvider>(context, listen: false);
 
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light
@@ -32,7 +34,7 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
           : AppColors.bgDarkModeColor,
       body: CustomBodyWithGradient(
         title: AppStrings.privacyAndSecurity,
-        childHeight: DeviceSize.getScreenHeight(context) * 0.3,
+        childHeight: DeviceSize.getScreenHeight(context) * 0.4,
         child: Padding(
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
@@ -114,7 +116,7 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
                       );
                     },
                   ),
-                 /* Divider(
+                  Divider(
                     color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
@@ -125,8 +127,9 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
                     title: AppStrings.managePermissions,
                     icon: ImageAssetsPath.contacts,
                     onClick: () {
+                      permissionProvider.openSettingsAppForPermission(context);
                     },
-                  ),*/
+                  ),
 
                   Divider(
                     color: Colors.grey.withAlpha(60), // Line color

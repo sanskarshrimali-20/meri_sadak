@@ -43,7 +43,7 @@ class _SplashScreen extends State<SplashScreen>
         ),
       );
 
-      /*final isLoggedIn = await _checkLoginStatus();
+     /* final isLoggedIn = await _checkLoginStatus();
 
         if(isLoggedIn){
           Navigator.pushReplacement(
