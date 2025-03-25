@@ -299,39 +299,49 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
 
   Future<void> _handleForgetChangePassword(BuildContext context, String userCred, NetworkProviderController networkProvider) async {
 
-    final forgotChangePasswordViewModel = Provider.of<ForgotChangePasswordViewModel>(context, listen: false);
+    if(networkProvider.status == ConnectivityStatus.online) {
+      final forgotChangePasswordViewModel = Provider.of<
+          ForgotChangePasswordViewModel>(context, listen: false);
 
-    String? forgotChangePasswordOperationResultMessage = await
-    forgotChangePasswordViewModel.forgotChangePassword(userCred, _passwordController.text);
+      String? forgotChangePasswordOperationResultMessage = await
+      forgotChangePasswordViewModel.forgotChangePassword(
+          userCred, _passwordController.text);
 
-    if(forgotChangePasswordOperationResultMessage == "Success"){
-
-      showErrorDialog(
-        context,
-        "Password updated successfully",
-        backgroundColor: Colors.green,
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) =>
-              LoginScreen(), // Pass the profile data
-        ),
-      );
+      if (forgotChangePasswordOperationResultMessage == "Success") {
+        showErrorDialog(
+          context,
+          "Password updated successfully",
+          backgroundColor: Colors.green,
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) =>
+                LoginScreen(), // Pass the profile data
+          ),
+        );
+      }
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: CustomTextWidget(
+              text: forgotChangePasswordOperationResultMessage!,
+              fontSize: AppDimensions.di_16,
+              color: AppColors.whiteColor,
+            ),
+            backgroundColor: Colors.red,
+            // Use orange or yellow for warnings
+            duration: Duration(seconds: 3), // Duration the SnackBar is visible
+          ),
+        );
+      }
     }
     else{
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: CustomTextWidget(
-            text: forgotChangePasswordOperationResultMessage!,
-            fontSize: AppDimensions.di_16,
-            color: AppColors.whiteColor,
-          ),
-          backgroundColor: Colors.red,
-          // Use orange or yellow for warnings
-          duration: Duration(seconds: 3), // Duration the SnackBar is visible
-        ),
+      showErrorDialog(
+        context,
+        AppStrings.noInternet,
+        backgroundColor: Colors.red,
       );
     }
   }

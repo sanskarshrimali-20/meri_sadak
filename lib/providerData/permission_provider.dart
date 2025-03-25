@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:meri_sadak/widgets/custom_snackbar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -267,6 +268,21 @@ class PermissionProvider extends ChangeNotifier {
         context: context,
         dialogHeight: 350,
       );*/
+    }
+  }
+
+  Future<void> openSettingsAppForPermission(BuildContext context) async {
+    final locationStatus = await Permission.location.status;
+    final cameraStatus = await Permission.camera.status;
+    if (locationStatus.isPermanentlyDenied || cameraStatus.isPermanentlyDenied) {
+      openAppSettings();
+    }
+    else if(locationStatus.isDenied || cameraStatus.isDenied){
+      showErrorDialog(context, "Please allow permission", backgroundColor: Colors.red);
+    }
+    else{
+      openAppSettings();
+      showErrorDialog(context, "Already Permission given", backgroundColor:  Colors.green);
     }
   }
 }
