@@ -5,6 +5,7 @@ import 'package:meri_sadak/providerData/permission_provider.dart';
 import 'package:meri_sadak/providerData/theme_provider.dart';
 import 'package:meri_sadak/screens/splash/splash_screen.dart';
 import 'package:meri_sadak/utils/localization_provider.dart';
+import 'package:meri_sadak/utils/network_provider.dart';
 import 'package:meri_sadak/viewmodels/forgotChangePassword/forgot_change_password_viewmodel.dart';
 import 'package:meri_sadak/viewmodels/login/login_view_model.dart';
 import 'package:meri_sadak/viewmodels/signup/sign_up_viewmodel.dart';
@@ -52,6 +53,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => PermissionProvider()),
         ChangeNotifierProvider(create: (_) => ImagePickerProvider()),
         ChangeNotifierProvider(create: (_) => widget.themeProvider),
+        ChangeNotifierProvider(create: (_) => NetworkProviderController()),
 
       ],
       child: Consumer2<LocalizationProvider, ThemeProvider>(

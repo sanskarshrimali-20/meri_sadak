@@ -22,6 +22,7 @@ import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 import '../../utils/device_size.dart';
 import '../../utils/localization_provider.dart';
+import '../../utils/network_provider.dart';
 import '../../utils/toast_util.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
@@ -29,6 +30,7 @@ import '../../widgets/custom_button.dart';
 import '../../widgets/custom_confirmation_dialog.dart';
 import '../../widgets/custom_dropdown_field.dart';
 import '../../widgets/custom_gesture_container.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/selection_dialog.dart';
 import '../location/location_widget.dart';
@@ -202,8 +204,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
   // Save the form data to DB
   void _saveFormData() {
-    String text = _stateController.text.toString();
-    debugPrint("Save data$text");
     final feedbackFormData = FeedbackFormData(
       state: _stateController.text,
       district: _districtController.text,
@@ -222,6 +222,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     final permissionProvider = Provider.of<PermissionProvider>(context);
     final localizationProvider = Provider.of<LocalizationProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final networkProvider = Provider.of<NetworkProviderController>(context);
+
 
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light
@@ -251,13 +253,15 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                             ? feedbackForm(
                           imagePickerProvider,
                           permissionProvider,
-                            themeProvider
+                            themeProvider,
+                            networkProvider
                         )
                             : previewForm(
                           imagePickerProvider,
                           permissionProvider,
                             localizationProvider,
-                            themeProvider
+                            themeProvider,
+                            networkProvider
                         ),
                       ],
                     ),
@@ -273,7 +277,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
   Widget feedbackForm(
       ImagePickerProvider imagePickerProvider,
-      PermissionProvider permissionProvider, ThemeProvider themeProvider,
+      PermissionProvider permissionProvider, ThemeProvider themeProvider, NetworkProviderController networkProvider,
       ) {
     return Column(
       children: [
@@ -770,7 +774,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
   Widget previewForm(
       ImagePickerProvider imagePickerProvider,
-      PermissionProvider permissionProvider, LocalizationProvider localizationProvider, ThemeProvider themeProvider,
+      PermissionProvider permissionProvider, LocalizationProvider localizationProvider, ThemeProvider themeProvider, NetworkProviderController networkProvider,
       ) {
     return Column(
       children: [
@@ -1157,28 +1161,37 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                 text: AppStrings.submit,
                 onPressed: () async {
 
-                  showCustomSelectionDialog(
-                    title: "Submit",
-                    titleVisibility: false,
-                    content: AppStrings.areYouSure,
-                    icon: "assets/icons/language_icon.svg",
-                    iconVisibility: false,
-                    buttonLabels: [ localizationProvider.localizedStrings['yes'] ?? "Yes",
-                      localizationProvider.localizedStrings['no'] ?? "No" ],
-                    onButtonPressed: [
-                          () {
-                            _saveFeedbackStatus(imagePickerProvider, _stateController.text, _districtController.text, _blockController.text, _roadNameController.text, _staticRoadNameController.text,
-                                _categoryOfComplaintController.text, _writeFeedbackController.text, imagePickerProvider.imageFiles);
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => HomeScreen()),
-                            );
-                      },
-                          () {
-                        Navigator.pop(context);
-                      }
-                    ], isButtonActive: [true, false], context: context,
-                  );
+                  if(networkProvider.status == ConnectivityStatus.online){
+                    showCustomSelectionDialog(
+                      title: "Submit",
+                      titleVisibility: false,
+                      content: AppStrings.areYouSure,
+                      icon: "assets/icons/language_icon.svg",
+                      iconVisibility: false,
+                      buttonLabels: [ localizationProvider.localizedStrings['yes'] ?? "Yes",
+                        localizationProvider.localizedStrings['no'] ?? "No" ],
+                      onButtonPressed: [
+                            () {
+                          _saveFeedbackStatus(imagePickerProvider, _stateController.text, _districtController.text, _blockController.text, _roadNameController.text, _staticRoadNameController.text,
+                              _categoryOfComplaintController.text, _writeFeedbackController.text, imagePickerProvider.imageFiles);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomeScreen()),
+                          );
+                        },
+                            () {
+                          Navigator.pop(context);
+                        }
+                      ], isButtonActive: [true, false], context: context,
+                    );
+                  }
+                  else{
+                    showErrorDialog(
+                      context,
+                      AppStrings.noInternet,
+                      backgroundColor: Colors.red,
+                    );
+                  }
                 },
                 textColor: AppColors.whiteColor,
                 backgroundColor: AppColors.blueGradientColor1,
