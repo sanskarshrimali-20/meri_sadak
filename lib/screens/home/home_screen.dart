@@ -11,6 +11,7 @@ import 'package:meri_sadak/widgets/custom_dropdown_field.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
+import '../../providerData/permission_provider.dart';
 import '../../providerData/theme_provider.dart';
 import '../../utils/device_size.dart';
 import '../../widgets/app_bar.dart';
@@ -18,6 +19,7 @@ import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drawer.dart';
 import '../../widgets/custom_home_tabs.dart';
+import '../../widgets/selection_dialog.dart';
 import '../registerFeedback/register_feedback_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,13 +38,19 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _blockController = TextEditingController();
 
   @override
+  void initState() {
+    _checkPermissions();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return WillPopScope(
       onWillPop: () async {
         // When the back button is pressed, exit the app
-        SystemNavigator.pop();  // Exits the app
+        SystemNavigator.pop(); // Exits the app
         return false; // Return false to prevent the default back navigation
       },
       child: Scaffold(
@@ -67,62 +75,62 @@ class _HomeScreenState extends State<HomeScreen> {
           child: CustomDrawer(),
         ),
         body: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(AppDimensions.di_16),
-              child: Column(
-                children: [
-                  SizedBox(height: 30,),
-                  Align(
-                    alignment: Alignment.center,
-                    child: CustomButton(
-                      text: "New Register Feedback",
-                      onPressed: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterFeedbackNewScreen(),
-                          ),
-                        );
-                      },
-                      textColor: AppColors.whiteColor,
-                      backgroundColor: AppColors.color_E77728,
-                      fontSize: AppDimensions.di_18,
-                      padding: EdgeInsets.symmetric(
-                        vertical: AppDimensions.di_6,
-                        horizontal: AppDimensions.di_15,
-                      ),
-                      borderRadius: BorderRadius.circular(AppDimensions.di_100),
-                      buttonWidth: AppDimensions.di_300,
+          child: Container(
+            padding: EdgeInsets.all(AppDimensions.di_16),
+            child: Column(
+              children: [
+                SizedBox(height: 30),
+                Align(
+                  alignment: Alignment.center,
+                  child: CustomButton(
+                    text: "New Register Feedback",
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterFeedbackNewScreen(),
+                        ),
+                      );
+                    },
+                    textColor: AppColors.whiteColor,
+                    backgroundColor: AppColors.color_E77728,
+                    fontSize: AppDimensions.di_18,
+                    padding: EdgeInsets.symmetric(
+                      vertical: AppDimensions.di_6,
+                      horizontal: AppDimensions.di_15,
                     ),
+                    borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                    buttonWidth: AppDimensions.di_300,
                   ),
+                ),
 
-                  SizedBox(height: 20),
+                SizedBox(height: 20),
 
-                  Align(
-                    alignment: Alignment.center,
-                    child: CustomButton(
-                      text: "All Feedback",
-                      onPressed: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AllFeedbackScreen(),
-                          ),
-                        );
-                      },
-                      textColor: AppColors.whiteColor,
-                      backgroundColor: AppColors.color_E77728,
-                      fontSize: AppDimensions.di_18,
-                      padding: EdgeInsets.symmetric(
-                        vertical: AppDimensions.di_6,
-                        horizontal: AppDimensions.di_15,
-                      ),
-                      borderRadius: BorderRadius.circular(AppDimensions.di_100),
-                      buttonWidth: AppDimensions.di_300,
+                Align(
+                  alignment: Alignment.center,
+                  child: CustomButton(
+                    text: "All Feedback",
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllFeedbackScreen(),
+                        ),
+                      );
+                    },
+                    textColor: AppColors.whiteColor,
+                    backgroundColor: AppColors.color_E77728,
+                    fontSize: AppDimensions.di_18,
+                    padding: EdgeInsets.symmetric(
+                      vertical: AppDimensions.di_6,
+                      horizontal: AppDimensions.di_15,
                     ),
+                    borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                    buttonWidth: AppDimensions.di_300,
                   ),
+                ),
 
-                 /* Align(
+                /* Align(
                     alignment: Alignment.center,
                     child: CustomButton(
                       text: "Old Register Feedback",
@@ -146,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),*/
 
-                  /* GestureDetector(
+                /* GestureDetector(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutPMGSY()));
                   },
@@ -262,11 +270,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 )*/
-                ],
-              ),
+              ],
             ),
           ),
         ),
+      ),
     );
   }
 
@@ -277,5 +285,16 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context) => RoadListScreen(label: label, value: value),
       ),
     );
+  }
+
+  // Function to check permissions and show dialogs if necessary
+  Future<void> _checkPermissions() async {
+    final permissionProvider = Provider.of<PermissionProvider>(context, listen: false);
+
+    // Request location permission
+    await permissionProvider.requestLocationPermissionNew(context);
+
+    // Request camera permission
+    await permissionProvider.requestCameraPermissionNew(context);
   }
 }
