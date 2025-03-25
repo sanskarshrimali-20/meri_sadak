@@ -22,7 +22,6 @@ class AllFeedbackScreen extends StatefulWidget {
 }
 
 class _AllFeedbackScreen extends State<AllFeedbackScreen> {
-
   final dbHelper = DatabaseHelper();
   List<Map<String, dynamic>> feedbackList = []; // List to hold feedback data
 
@@ -30,12 +29,12 @@ class _AllFeedbackScreen extends State<AllFeedbackScreen> {
   void initState() {
     super.initState();
     fetchAllFeedback(); // Fetch feedback data when the widget is initialized
-
   }
 
   Future<void> fetchAllFeedback() async {
-
-    final feedbacks = await dbHelper.getAllFeedbacks(); // Assuming you have this method in your provider
+    final feedbacks =
+        await dbHelper
+            .getAllFeedbacks(); // Assuming you have this method in your provider
     setState(() {
       feedbackList = feedbacks; // Update the state with fetched feedback
     });
@@ -46,37 +45,44 @@ class _AllFeedbackScreen extends State<AllFeedbackScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: themeProvider.themeMode == ThemeMode.light
-          ? AppColors.bgColorGainsBoro
-          : AppColors.bgDarkModeColor,      body: CustomBodyWithGradient(
-      title: AppStrings.feedbackStatus,
-      childHeight: DeviceSize.getScreenHeight(context),
-      child: ListView.builder(
-        itemCount: feedbackList.length,
-        itemBuilder: (context, index) {
-          final feedback = feedbackList[index];
-          return CustomExpansionTile(
-            title: "Feedback ID: ${feedback['id']}",
-            subheading: "",
-            content: Text(feedback['feedback'] ?? 'No Feedback'),
-            initiallyExpanded: false, // You can set this dynamically if needed
-            backgroundColor: themeProvider.themeMode == ThemeMode.light
-                ? AppColors.whiteColor
-                : AppColors.boxDarkModeColor,
-            textColor: themeProvider.themeMode == ThemeMode.light
-                ? AppColors.black
-                : AppColors.whiteColor,
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FeedbackDetailsScreen(id: feedback['id'])),
-              );
-            },
-          );
-        },
+      backgroundColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? AppColors.bgColorGainsBoro
+              : AppColors.bgDarkModeColor,
+      body: CustomBodyWithGradient(
+        title: AppStrings.feedbackStatus,
+        childHeight: DeviceSize.getScreenHeight(context),
+        child: ListView.builder(
+          itemCount: feedbackList.length,
+          itemBuilder: (context, index) {
+            final feedback = feedbackList[index];
+            return CustomExpansionTile(
+              title: "Feedback ID: ${feedback['id']}",
+              subheading: "",
+              content: Text(feedback['feedback'] ?? 'No Feedback'),
+              initiallyExpanded: false,
+              // You can set this dynamically if needed
+              backgroundColor:
+                  themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.whiteColor
+                      : AppColors.boxDarkModeColor,
+              textColor:
+                  themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.black
+                      : AppColors.whiteColor,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => FeedbackDetailsScreen(id: feedback['id']),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
-    ),
     );
   }
-
 }
