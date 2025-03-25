@@ -74,9 +74,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   List<String> selectedRoads = []; // New list for roads
 
   late FeedbackFormData? feedbackData;
+  bool isLoadingD = false;
+  bool isLoadingB = false;
+  bool isLoadingR = false;
 
   // Sample data
-  final List<String> states = [
+ /* final List<String> states = [
     'Madhya Pradesh',
     'Uttar Pradesh',
     'Maharashtra',
@@ -113,6 +116,17 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     'Ichhpur': ['Ichhpur road', 'Ichhpur road Second', 'Enter Manually'],
   };
 
+  final Map<String, List<String>> blocks = {
+    'Bhopal': ['Berasia', 'Raisen'],
+    'Indore': ['Mhow', 'Sanwer'],
+    'Lucknow': ['Malihabad', 'Mau'],
+    'Kanpur': ['Sadar', 'Vijay Nagar'],
+    'Mumbai': ['Bandra', 'Andheri'],
+    'Pune': ['Mulshi', 'Haveli'],
+    'Ahmedabad': ['Daskroi', 'Sanand'],
+    'Surat': ['Choryasi', 'Ichhpur'],
+  };*/
+
   final List<String> complaints = [
     'Road Selection or Alignment',
     'Slow Progress',
@@ -123,32 +137,146 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     'Corruption related issue',
   ];
 
-  final Map<String, List<String>> blocks = {
-    'Bhopal': ['Berasia', 'Raisen'],
-    'Indore': ['Mhow', 'Sanwer'],
-    'Lucknow': ['Malihabad', 'Mau'],
-    'Kanpur': ['Sadar', 'Vijay Nagar'],
-    'Mumbai': ['Bandra', 'Andheri'],
-    'Pune': ['Mulshi', 'Haveli'],
-    'Ahmedabad': ['Daskroi', 'Sanand'],
-    'Surat': ['Choryasi', 'Ichhpur'],
-  };
+  List<String> states = [];
+  Map<String, List<String>> districts = {};
+  Map<String, List<String>> blocks = {};
+  Map<String, List<String>> roadNames = {};
 
   final int writeYourFeedbackMaxLength = 200;
   bool? locationStatus;
+
+  Future<void> fetchInitialData() async {
+    // Simulate fetching states from an API or database
+    states = ['Madhya Pradesh',
+      'Uttar Pradesh',
+      'Maharashtra',
+      'Gujarat',];
+    // You can also initialize other maps here if needed
+
+    setState(() {
+      selectedDistricts.clear();
+      selectedBlocks.clear(); // Clear blocks when state changes
+      selectedRoads.clear(); // Clear roads when state changes
+      _stateController.clear();
+      _districtController.clear(); // Clear district controller
+      _blockController.clear(); // Clear block controller
+      _roadNameController.clear(); // Clear road controller
+    });
+  }
+
+  Future<void> fetchDistricts(String state) async {
+    setState(() {
+      isLoadingD = true; // Show loading indicator while fetching data
+    });
+    // Simulate fetching districts based on selected state
+    await Future.delayed(Duration(seconds: 1)); // Simulating network delay
+
+    districts ={
+      'Madhya Pradesh': ['Bhopal', 'Indore'],
+      'Uttar Pradesh': ['Lucknow', 'Kanpur'],
+      'Maharashtra': ['Mumbai', 'Pune'],
+      'Gujarat': ['Ahmedabad', 'Surat'],
+    };
+    // Verify that districts map has valid data for the selected state
+    if (districts.containsKey(state)) {
+      setState(() {
+        selectedDistricts = districts[state]!; // Update districts based on state
+        debugPrint("setDistricts: $selectedDistricts");
+
+        selectedBlocks.clear(); // Clear blocks when state changes
+        selectedRoads.clear(); // Clear roads when state changes
+        _districtController.clear(); // Clear district controller
+        _blockController.clear(); // Clear block controller
+        _roadNameController.clear(); // Clear road controller
+        isLoadingD = false; // Hide loading indicator after fetching data
+      });
+    } else {
+      setState(() {
+        selectedDistricts = []; // If no districts found, set an empty list
+      });
+      debugPrint("No districts found for state: $state");
+      isLoadingD = false; // Hide loading indicator after fetching data
+    }
+  }
+
+  Future<void> fetchBlocks(String district) async {
+    setState(() {
+      isLoadingB = true; // Show loading indicator while fetching data
+    });
+    // Simulate fetching blocks based on selected district
+    await Future.delayed(Duration(seconds: 1)); // Simulating network delay
+    blocks = {
+      'Bhopal': ['Berasia', 'Raisen'],
+      'Indore': ['Mhow', 'Sanwer'],
+      'Lucknow': ['Malihabad', 'Mau'],
+      'Kanpur': ['Sadar', 'Vijay Nagar'],
+      'Mumbai': ['Bandra', 'Andheri'],
+      'Pune': ['Mulshi', 'Haveli'],
+      'Ahmedabad': ['Daskroi', 'Sanand'],
+      'Surat': ['Choryasi', 'Ichhpur'],
+    };
+
+    setState(() {
+      selectedBlocks = blocks[district] ?? [];
+      selectedRoads.clear(); // Clear roads when district changes
+      _blockController.clear(); // Clear block controller
+      _roadNameController.clear(); // Clear road controller
+      isLoadingB = false; // Hide loading indicator after fetching data
+    });
+  }
+
+  Future<void> fetchRoads(String block) async {
+    setState(() {
+      isLoadingR = true; // Show loading indicator while fetching data
+    });
+    // Simulate fetching roads based on selected block
+    await Future.delayed(Duration(seconds: 1)); // Simulating network delay
+    roadNames = {
+      'Berasia': ['Berasia road', 'Berasia road Second', 'Enter Manually'],
+      'Raisen': ['Raisen road', 'Raisen road Second', 'Enter Manually'],
+      'Mhow': ['Mhow road', 'Mhow road Second', 'Enter Manually'],
+      'Sanwer': ['Sanwer road', 'Sanwer road Second', 'Enter Manually'],
+      'Malihabad': ['Malihabad road', 'Malihabad road Second', 'Enter Manually'],
+      'Mau': ['Mau road', 'Mau road Second', 'Enter Manually'],
+      'Sadar': ['Sadar road', 'Sadar road Second', 'Enter Manually'],
+      'Vijay Nagar': [
+        'Vijay Nagar road Second',
+        'Vijay Nagar road',
+        'Enter Manually',
+      ],
+      'Bandra': ['Bandra road', 'Bandra road Second', 'Enter Manually'],
+      'Andheri': ['Andheri road', 'Andheri road Second', 'Enter Manually'],
+      'Mulshi': ['Mulshi road', 'Mulshi road Second', 'Enter Manually'],
+      'Haveli': ['Haveli road', 'Haveli road Second', 'Enter Manually'],
+      'Daskroi': ['Daskroi road', 'Daskroi road Second', 'Enter Manually'],
+      'Sanand': ['Sanand road', 'Sanand road Second', 'Enter Manually'],
+      'Choryasi': ['Choryasi road', 'Choryasi road Second', 'Enter Manually'],
+      'Ichhpur': ['Ichhpur road', 'Ichhpur road Second', 'Enter Manually'],
+    };
+
+    setState(() {
+      selectedRoads = roadNames[block] ?? [];
+      _roadNameController.clear(); // Clear road name controller when block changes
+      isLoadingR = false; // Hide loading indicator after fetching data
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _initializePermissionProvider();
+    fetchInitialData();
     _loadFormData(); // Load the saved form data
     _loadClickedType();
   }
+
 
   Future<void> _loadClickedType() async {
     isClickedBy = await _storage.getClickedBy();
     debugPrint("clickBy--$isClickedBy");
   }
+
+  // Fetch saved form data from DB
 
   // Fetch saved form data from DB
   Future<void> _loadFormData() async {
@@ -160,29 +288,43 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
     debugPrint("feedbackdata $feedbackData");
 
-    setState(() {
+    setState(() async {
       _isLoading = false;
       if (feedbackData != null) {
         // Set state controller
         _stateController.text = feedbackData?.state ?? '';
         selectedState = feedbackData?.state; // Update selected state
 
+        /*debugPrint("selected state $selectedState");
+        debugPrint("already district ${feedbackData?.district}");
+        debugPrint("districts $selectedDistricts");*/
+
         // Update districts based on selected state
+/*
         selectedDistricts = districts[selectedState] ?? [];
+*/
+        await fetchDistricts(selectedState!);
 
         // Set district controller
         _districtController.text = feedbackData?.district ?? '';
         selectedDistrict = feedbackData?.district; // Update selected district
 
         // Update blocks based on selected district
+/*
         selectedBlocks = blocks[selectedDistrict] ?? [];
+*/
+        await fetchBlocks(selectedDistrict!);
+
 
         // Set block controller
         _blockController.text = feedbackData?.block ?? '';
         selectedBlock = feedbackData?.block; // Update selected block
 
         // Update roads based on selected block
+/*
         selectedRoads = roadNames[selectedBlock] ?? [];
+*/
+        await fetchRoads(selectedBlock!);
 
         // Set road controller
         _roadNameController.text = feedbackData?.roadName ?? '';
@@ -201,6 +343,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             feedbackData?.categoryOfComplaint ?? '';
         _writeFeedbackController.text = feedbackData?.feedback ?? '';
       }
+
+      isLoadingD = false;
+      isLoadingB = false;
+      isLoadingR = false;
     });
   }
 
@@ -317,22 +463,23 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       );
 
                       if (feedbackData!.state!.isEmpty) {
-                        setState(() {
+                        setState(() async {
                           // debugPrint("state $state");
 
                           // Update text controllers with new values
                           _stateController.text = permissionProvider.state;
                           selectedState =
                               permissionProvider.state; // Update selectedState
-                          selectedDistricts =
-                              districts[selectedState] ??
-                              []; // Update districts based on new state
+                          /*selectedDistricts =
+                      districts[selectedState] ??
+                          []; // Update districts based on new state*/
+                          await fetchDistricts(selectedState!);
                           _districtController.text =
                               permissionProvider
                                   .district; // Set district controller
-                          selectedBlocks =
-                              blocks[permissionProvider.district] ??
-                              []; // Update blocks based on new district
+                          /* selectedBlocks =
+                      blocks[permissionProvider.district] ??
+                          []; // Update blocks based on new district*/
                         });
 
                         // Optionally save form data if needed
@@ -342,14 +489,17 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     onMapReady: () {
                       if (feedbackData == null ||
                           feedbackData!.state!.isEmpty) {
-                        setState(() {
+                        setState(() async {
                           _stateController.text = permissionProvider.state;
                           selectedState = permissionProvider.state;
-                          selectedDistricts = districts[selectedState] ?? [];
+/*
+                  selectedDistricts = districts[selectedState] ?? [];
+*/
+                          await fetchDistricts(selectedState!);
                           _districtController.text =
                               permissionProvider.district;
-                          selectedBlocks =
-                              blocks[permissionProvider.district] ?? [];
+                          /*selectedBlocks =
+                      blocks[permissionProvider.district] ?? [];*/
                         });
                         _saveFormData();
                       }
@@ -596,6 +746,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
         SizedBox(height: AppDimensions.di_5),
 
+/*
         FutureBuilder<List<String>>(
           future: fetchStates(), // Use the initialized future
           builder: (context, snapshot) {
@@ -732,6 +883,110 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             }
           },
         ),
+*/
+
+        CustomDropdownField(
+          hintText: "Please Select State",
+          textController: _stateController,
+          items: states,
+          textColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? AppColors.black
+              : AppColors.whiteColor,
+          boxBgColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? AppColors.whiteColor
+              : AppColors.textBoxDarkModeColor,
+          dropdownHeight: 150,
+          isRequired: false,
+          onChanged: (value) async {
+            if(value.isNotEmpty){
+              await fetchDistricts(value); // Fetch districts asynchronously
+            }
+            else{
+              await fetchInitialData();
+            }
+            debugPrint("Selected State: $value");
+            _saveFormData(); // Save form data after selection if needed
+          },
+        ),
+
+        // District Dropdown
+        isLoadingD
+            ? CircularProgressIndicator():
+        CustomDropdownField(
+          hintText: "Please Select District",
+          textController: _districtController,
+          items: selectedDistricts.isEmpty ? [''] : selectedDistricts,
+          textColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? AppColors.black
+              : AppColors.whiteColor,
+          boxBgColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? AppColors.whiteColor
+              : AppColors.textBoxDarkModeColor, // Replace with your theme logic if needed
+          dropdownHeight: 150,
+          isRequired: false,
+          onChanged: (value) async {
+            await fetchBlocks(value); // Fetch blocks asynchronously
+            debugPrint("Selected District: $value");
+            _saveFormData(); // Save form data after selection if needed
+          },
+        ),
+
+        // Block Dropdown
+        isLoadingB
+            ? CircularProgressIndicator():
+        CustomDropdownField(
+          hintText: "Please Select Block",
+          textController: _blockController,
+          items: selectedBlocks.isEmpty ? [''] : selectedBlocks,
+          textColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? AppColors.black
+              : AppColors.whiteColor,
+          boxBgColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? AppColors.whiteColor
+              : AppColors.textBoxDarkModeColor, // Replace with your theme logic if needed
+          dropdownHeight: 150,
+          isRequired: false,
+          onChanged: (value) async {
+            await fetchRoads(value); // Fetch roads asynchronously
+            debugPrint("Selected Block: $value");
+            _saveFormData(); // Save form data after selection if needed
+          },
+        ),
+
+        // Road dropdown
+        isLoadingR
+            ? CircularProgressIndicator():
+        CustomDropdownField(
+          hintText: "Please Select Road Name",
+          textController: _roadNameController,
+          items: selectedRoads.isEmpty ? [''] : selectedRoads,
+          dropdownHeight: 150,
+          textColor: themeProvider.themeMode == ThemeMode.light
+              ? AppColors.black
+              : AppColors.whiteColor,
+          boxBgColor: themeProvider.themeMode == ThemeMode.light
+              ? AppColors.whiteColor
+              : AppColors.textBoxDarkModeColor,
+          isRequired: false,
+          onChanged: (value) async {
+            setState(() {
+              if ("Enter Manually" != value) {
+                _saveFormData();
+                roadNameEnable = false;
+                _staticRoadNameController.clear();
+              } else {
+                roadNameEnable = true;
+              }
+            });
+          },
+        ),
+
         //enter manually
         if (_roadNameController.text == 'Enter Manually')
           CustomTextField(
