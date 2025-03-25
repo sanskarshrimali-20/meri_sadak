@@ -14,6 +14,7 @@ import '../../providerData/theme_provider.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 import '../../utils/device_size.dart';
+import '../../utils/network_provider.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
 import '../../widgets/custom_snackbar.dart';
@@ -71,6 +72,7 @@ class _SignUpScreen extends State<SignUpScreen> {
   Widget build(BuildContext context) {
 
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final networkProvider = Provider.of<NetworkProviderController>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -358,7 +360,9 @@ class _SignUpScreen extends State<SignUpScreen> {
                                 fontWeight: AppFontWeight.fontWeight500,
                                 color: AppColors.whiteColor,
                                 textAlign: TextAlign.center,
-                                onClick: _onSignInClick,
+                                onClick: () async {
+                                  _onSignInClick(networkProvider);
+                                },
                               ),
 
                               const SizedBox(height: AppDimensions.di_20),
@@ -428,47 +432,63 @@ class _SignUpScreen extends State<SignUpScreen> {
     });
   }
 
-  Future<void> _onSignInClick() async {
-    String fullName = _fullNameController.text.trim();
-    String email = _emailController.text.trim();
-    String phoneNo = _phoneNoController.text.trim();
+  Future<void> _onSignInClick(NetworkProviderController networkProvider) async {
 
-    validateFullName(fullName);
-    validateEmail(email);
-    validatePhoneNum(phoneNo);
+    if(networkProvider.status == ConnectivityStatus.online) {
+      String fullName = _fullNameController.text.trim();
+      String email = _emailController.text.trim();
+      String phoneNo = _phoneNoController.text.trim();
 
-    if (fullNameError == null && emailError == null && phoneError == null) {
-      // If the form is valid, proceed with the logic
-      // If both username and password are valid, proceed to the next screen
+      validateFullName(fullName);
+      validateEmail(email);
+      validatePhoneNum(phoneNo);
 
-      if(_isChecked == false){
-        showErrorDialog(
-          context,
-          "Please select Terms & Conditions and Privacy Policy",
-          backgroundColor: Colors.red,
-        );
-        return;
+      if (fullNameError == null && emailError == null && phoneError == null) {
+        // If the form is valid, proceed with the logic
+        // If both username and password are valid, proceed to the next screen
+
+        if (_isChecked == false) {
+          showErrorDialog(
+            context,
+            "Please select Terms & Conditions and Privacy Policy",
+            backgroundColor: Colors.red,
+          );
+          return;
+        }
+
+        final profile = await dbHelper.getSignupDetails(
+            _phoneNoController.text);
+        String phoneNoExist = profile?['phoneNo'] ?? 'No Name';
+
+        if (phoneNoExist == _phoneNoController.text) {
+          showErrorDialog(
+            context,
+            "This account already existed!!",
+            backgroundColor: Colors.red,
+          );
+        }
+        else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  OtpValidationScreen(type: AppStrings.signUp,
+                    userSignUpDetails: {
+                      'fullName': fullName,
+                      'phoneNo': phoneNo,
+                      'email': email
+                    },), // Navigate to home screen
+            ),
+          );
+        }
       }
-
-      final profile = await dbHelper.getSignupDetails(_phoneNoController.text);
-      String phoneNoExist = profile?['phoneNo'] ?? 'No Name';
-
-      if(phoneNoExist == _phoneNoController.text){
-        showErrorDialog(
-          context,
-          "This account already existed!!",
-          backgroundColor: Colors.red,
-        );
-      }
-      else{
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OtpValidationScreen(type: AppStrings.signUp,
-              userSignUpDetails: {'fullName': fullName, 'phoneNo': phoneNo, 'email': email},), // Navigate to home screen
-          ),
-        );
-      }
+    }
+    else{
+      showErrorDialog(
+        context,
+        AppStrings.noInternet,
+        backgroundColor: Colors.red,
+      );
     }
   }
 

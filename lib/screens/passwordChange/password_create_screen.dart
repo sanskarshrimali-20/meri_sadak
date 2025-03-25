@@ -14,6 +14,7 @@ import '../../constants/app_strings.dart';
 import '../../providerData/theme_provider.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 import '../../utils/device_size.dart';
+import '../../utils/network_provider.dart';
 import '../../viewmodels/forgotChangePassword/forgot_change_password_viewmodel.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
@@ -51,6 +52,7 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final networkProvider = Provider.of<NetworkProviderController>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -207,15 +209,15 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
                                     if(_passwordController.text == _passwordConfirmController.text){
                                       if (widget.type == AppStrings.resetPassword) {
 
-                                        _handleForgetChangePassword(context, widget.userCred);
+                                        _handleForgetChangePassword(context, widget.userCred, networkProvider);
 
                                       }
                                       else if(widget.type == AppStrings.signUp){
 
-                                        _handleSignUp(context);
+                                        _handleSignUp(context, networkProvider);
 
                                       }else {
-                                        _handleForgetChangePassword(context, widget.userCred);
+                                        _handleForgetChangePassword(context, widget.userCred, networkProvider);
                                       }
                                     }
                                     else{
@@ -295,7 +297,7 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
     });
   }
 
-  Future<void> _handleForgetChangePassword(BuildContext context, String userCred) async {
+  Future<void> _handleForgetChangePassword(BuildContext context, String userCred, NetworkProviderController networkProvider) async {
 
     final forgotChangePasswordViewModel = Provider.of<ForgotChangePasswordViewModel>(context, listen: false);
 
@@ -334,20 +336,21 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
     }
   }
 
-  Future<void> _handleSignUp(BuildContext context) async {
+  Future<void> _handleSignUp(BuildContext context,NetworkProviderController networkProvider) async {
 
-    if(widget.userSignUpDetails.isEmpty){
-      return;
-    }
-    else{
-      widget.userSignUpDetails["password"] = _passwordController.text;
-    }
+    if(networkProvider.status == ConnectivityStatus.online){
+      if(widget.userSignUpDetails.isEmpty){
+        return;
+      }
+      else{
+        widget.userSignUpDetails["password"] = _passwordController.text;
+      }
 
-    debugPrint("userdetails${widget.userSignUpDetails}");
+      debugPrint("userdetails${widget.userSignUpDetails}");
 
-    final signUpViewModel = Provider.of<SignUpViewModel>(context, listen: false);
+      final signUpViewModel = Provider.of<SignUpViewModel>(context, listen: false);
 
-    String? signUpOperationResultMessage = await signUpViewModel.performSignUp(widget.userSignUpDetails);
+      String? signUpOperationResultMessage = await signUpViewModel.performSignUp(widget.userSignUpDetails);
 
 /*    if (kDebugMode) {
       log("Inside login screen");
@@ -383,36 +386,44 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
           )),
     );*/
 
-    if(signUpOperationResultMessage == "Success"){
+      if(signUpOperationResultMessage == "Success"){
 
-      _localStorage.setLoginUser(widget.userSignUpDetails["phoneNo"]);
+        _localStorage.setLoginUser(widget.userSignUpDetails["phoneNo"]);
 
+        showErrorDialog(
+          context,
+          "You're register successfully",
+          backgroundColor: Colors.green,
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) =>
+                HomeScreen(), // Pass the profile data
+          ),
+        );
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: CustomTextWidget(
+              text: signUpOperationResultMessage!,
+              fontSize: AppDimensions.di_16,
+              color: AppColors.whiteColor,
+            ),
+            backgroundColor: Colors.red,
+            // Use orange or yellow for warnings
+            duration: Duration(seconds: 3), // Duration the SnackBar is visible
+          ),
+        );
+      }
+    }
+    else {
       showErrorDialog(
         context,
-        "You're register successfully",
-        backgroundColor: Colors.green,
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) =>
-              HomeScreen(), // Pass the profile data
-        ),
-      );
-    }
-    else{
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: CustomTextWidget(
-            text: signUpOperationResultMessage!,
-            fontSize: AppDimensions.di_16,
-            color: AppColors.whiteColor,
-          ),
-          backgroundColor: Colors.red,
-          // Use orange or yellow for warnings
-          duration: Duration(seconds: 3), // Duration the SnackBar is visible
-        ),
+        AppStrings.noInternet,
+        backgroundColor: Colors.red,
       );
     }
   }

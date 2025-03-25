@@ -36,14 +36,14 @@ class _SplashScreen extends State<SplashScreen>
     // Start the animation
     _controller.forward().then((_) async {
 
-    /*  Navigator.pushReplacement(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomeScreen(), // Pass the profile data
         ),
-      );*/
+      );
 
-      final isLoggedIn = await _checkLoginStatus();
+      /*final isLoggedIn = await _checkLoginStatus();
 
         if(isLoggedIn){
           Navigator.pushReplacement(
@@ -60,7 +60,7 @@ class _SplashScreen extends State<SplashScreen>
               builder: (context) => LoginScreen(), // Pass the profile data
             ),
           );
-        }
+        }*/
       // Check login status
     });
   }

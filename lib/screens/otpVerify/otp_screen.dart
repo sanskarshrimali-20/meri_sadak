@@ -12,6 +12,7 @@ import '../../constants/app_font_weight.dart';
 import '../../constants/app_strings.dart';
 import '../../providerData/theme_provider.dart';
 import '../../utils/device_size.dart';
+import '../../utils/network_provider.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/login_signup_bg_active.dart';
@@ -41,6 +42,7 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final networkProvider = Provider.of<NetworkProviderController>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
     String phoneNo = widget.userSignUpDetails['phoneNo'];
     String email = widget.userSignUpDetails['email'];
@@ -151,7 +153,9 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                             fontWeight: AppFontWeight.fontWeight500,
                             color: AppColors.whiteColor,
                             textAlign: TextAlign.center,
-                            onClick: onContinuePressed,
+                            onClick: () async {
+                              _onContinuePressed(networkProvider);
+                            },
                           ),
 
                           const SizedBox(height: AppDimensions.di_20),
@@ -213,33 +217,44 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
   }
 
   // Function to validate OTP and navigate
-  void onContinuePressed() {
+  void _onContinuePressed(NetworkProviderController networkProvider) {
     print("otp.length---${otp.length}");
     print("widget.userSignUpDetails---${widget.userSignUpDetails}");
-    if (otp.length != 6) {
-      // Show an error message if OTP is incomplete
+
+    if(networkProvider.status == ConnectivityStatus.online) {
+      if (otp.length != 6) {
+        // Show an error message if OTP is incomplete
+        showErrorDialog(
+          context,
+          "Please enter the complete OTP",
+          backgroundColor: Colors.red,
+        );
+      } else if (otp == "123456") {
+        // If OTP is valid, navigate to the next screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) =>
+                PasswordCreateScreen(
+                  type: widget.type,
+                  userSignUpDetails: widget.userSignUpDetails,
+                  userCred: widget.userCred,
+                ), // Pass the profile data
+          ),
+        );
+      } else {
+        showErrorDialog(
+          context,
+          "Please enter the correct OTP",
+          backgroundColor: Colors.red,
+        );
+      }
+    }
+    else{
       showErrorDialog(
         context,
-        "Please enter the complete OTP",
-        backgroundColor: Colors.red,
-      );
-    } else if (otp == "123456") {
-      // If OTP is valid, navigate to the next screen
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) => PasswordCreateScreen(
-                type: widget.type,
-                userSignUpDetails: widget.userSignUpDetails,
-                userCred: widget.userCred,
-              ), // Pass the profile data
-        ),
-      );
-    } else {
-      showErrorDialog(
-        context,
-        "Please enter the correct OTP",
+        AppStrings.noInternet,
         backgroundColor: Colors.red,
       );
     }
