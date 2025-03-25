@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -49,11 +50,11 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   final TextEditingController _blockController = TextEditingController();
   final TextEditingController _roadNameController = TextEditingController();
   final TextEditingController _staticRoadNameController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _writeFeedbackController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _categoryOfComplaintController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   String? isClickedBy = AppStrings.noOne;
   bool _showFeedbackForm = true;
@@ -134,6 +135,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   };
 
   final int writeYourFeedbackMaxLength = 200;
+  bool? locationStatus;
 
   @override
   void initState() {
@@ -224,11 +226,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final networkProvider = Provider.of<NetworkProviderController>(context);
 
-
     return Scaffold(
-      backgroundColor: themeProvider.themeMode == ThemeMode.light
-          ? AppColors.bgColorGainsBoro
-          : AppColors.bgDarkModeColor,      body: Consumer<ImagePickerProvider>(
+      backgroundColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? AppColors.bgColorGainsBoro
+              : AppColors.bgDarkModeColor,
+      body: Consumer<ImagePickerProvider>(
         builder: (context, imagePickerProvider, child) {
           return CustomBodyWithGradient(
             title: AppStrings.registerFeedback,
@@ -237,9 +240,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               padding: EdgeInsets.all(AppDimensions.di_5),
               child: Container(
                 decoration: BoxDecoration(
-                  color: themeProvider.themeMode == ThemeMode.light
-                      ? AppColors.whiteColor
-                      : AppColors.boxDarkModeColor,
+                  color:
+                      themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.whiteColor
+                          : AppColors.boxDarkModeColor,
                   borderRadius: BorderRadius.all(
                     Radius.circular(AppDimensions.di_20), // Rounded corners
                   ),
@@ -251,18 +255,18 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       children: [
                         _showFeedbackForm
                             ? feedbackForm(
-                          imagePickerProvider,
-                          permissionProvider,
-                            themeProvider,
-                            networkProvider
-                        )
+                              imagePickerProvider,
+                              permissionProvider,
+                              themeProvider,
+                              networkProvider,
+                            )
                             : previewForm(
-                          imagePickerProvider,
-                          permissionProvider,
-                            localizationProvider,
-                            themeProvider,
-                            networkProvider
-                        ),
+                              imagePickerProvider,
+                              permissionProvider,
+                              localizationProvider,
+                              themeProvider,
+                              networkProvider,
+                            ),
                       ],
                     ),
                   ),
@@ -276,79 +280,81 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   }
 
   Widget feedbackForm(
-      ImagePickerProvider imagePickerProvider,
-      PermissionProvider permissionProvider, ThemeProvider themeProvider, NetworkProviderController networkProvider,
-      ) {
+    ImagePickerProvider imagePickerProvider,
+    PermissionProvider permissionProvider,
+    ThemeProvider themeProvider,
+    NetworkProviderController networkProvider,
+  ) {
     return Column(
       children: [
         SizedBox(
           height: DeviceSize.getScreenHeight(context) * 0.48, // Fixed height
           width: DeviceSize.getScreenWidth(context), // Fixed width
           child:
-          permissionProvider.isLoading
-              ? Align(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(), // Loading indicator
-          )
-              : CustomLocationWidget(
-            labelText: AppStrings.confirmTheRoadLocation,
-            isRequired: false,
-            latitude: permissionProvider.latitude,
-            longitude: permissionProvider.longitude,
-            initialAddress: permissionProvider.address.toString(),
-            isLoading: permissionProvider.isLoading,
-            mapHeight: DeviceSize.getScreenHeight(context) * 0.25,
-            // Same height as parent
-            mapWidth: DeviceSize.getScreenWidth(context),
-            // Same width as parent
-            onRefresh: () async {
-              await permissionProvider.fetchCurrentLocation();
-            },
-            onMapTap: (point) async {
-              await permissionProvider.setLocation(
-                point.latitude,
-                point.longitude,
-              );
+              permissionProvider.isLoading
+                  ? Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(), // Loading indicator
+                  )
+                  : CustomLocationWidget(
+                    labelText: AppStrings.confirmTheRoadLocation,
+                    isRequired: false,
+                    latitude: permissionProvider.latitude,
+                    longitude: permissionProvider.longitude,
+                    initialAddress: permissionProvider.address.toString(),
+                    isLoading: permissionProvider.isLoading,
+                    mapHeight: DeviceSize.getScreenHeight(context) * 0.25,
+                    // Same height as parent
+                    mapWidth: DeviceSize.getScreenWidth(context),
+                    // Same width as parent
+                    onRefresh: () async {
+                      await permissionProvider.fetchCurrentLocation();
+                    },
+                    onMapTap: (point) async {
+                      await permissionProvider.setLocation(
+                        point.latitude,
+                        point.longitude,
+                      );
 
-              if (feedbackData!.state!.isEmpty) {
-                setState(() {
-                  // debugPrint("state $state");
+                      if (feedbackData!.state!.isEmpty) {
+                        setState(() {
+                          // debugPrint("state $state");
 
-                  // Update text controllers with new values
-                  _stateController.text = permissionProvider.state;
-                  selectedState =
-                      permissionProvider.state; // Update selectedState
-                  selectedDistricts =
-                      districts[selectedState] ??
-                          []; // Update districts based on new state
-                  _districtController.text =
-                      permissionProvider
-                          .district; // Set district controller
-                  selectedBlocks =
-                      blocks[permissionProvider.district] ??
-                          []; // Update blocks based on new district
-                });
+                          // Update text controllers with new values
+                          _stateController.text = permissionProvider.state;
+                          selectedState =
+                              permissionProvider.state; // Update selectedState
+                          selectedDistricts =
+                              districts[selectedState] ??
+                              []; // Update districts based on new state
+                          _districtController.text =
+                              permissionProvider
+                                  .district; // Set district controller
+                          selectedBlocks =
+                              blocks[permissionProvider.district] ??
+                              []; // Update blocks based on new district
+                        });
 
-                // Optionally save form data if needed
-                _saveFormData();
-              }
-            },
-            onMapReady: () {
-              if (feedbackData == null ||
-                  feedbackData!.state!.isEmpty) {
-                setState(() {
-                  _stateController.text = permissionProvider.state;
-                  selectedState = permissionProvider.state;
-                  selectedDistricts = districts[selectedState] ?? [];
-                  _districtController.text =
-                      permissionProvider.district;
-                  selectedBlocks =
-                      blocks[permissionProvider.district] ?? [];
-                });
-                _saveFormData();
-              }
-            },
-          ),
+                        // Optionally save form data if needed
+                        _saveFormData();
+                      }
+                    },
+                    onMapReady: () {
+                      if (feedbackData == null ||
+                          feedbackData!.state!.isEmpty) {
+                        setState(() {
+                          _stateController.text = permissionProvider.state;
+                          selectedState = permissionProvider.state;
+                          selectedDistricts = districts[selectedState] ?? [];
+                          _districtController.text =
+                              permissionProvider.district;
+                          selectedBlocks =
+                              blocks[permissionProvider.district] ?? [];
+                        });
+                        _saveFormData();
+                      }
+                    },
+                  ),
         ),
 
         const SizedBox(height: AppDimensions.di_20),
@@ -358,100 +364,138 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             text: AppStrings.uploadRoadImages,
             fontSize: AppDimensions.di_16,
             fontWeight: AppFontWeight.fontWeight600,
-            color:  themeProvider.themeMode == ThemeMode.light
-          ? AppColors.black
-              : AppColors.whiteColor,
+            color:
+                themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.black
+                    : AppColors.whiteColor,
           ),
         ),
 
         const SizedBox(height: AppDimensions.di_10),
 
         imagePickerProvider.imageFiles.isEmpty ||
-            isClickedBy == AppStrings.camera
+                isClickedBy == AppStrings.camera
             ? CustomGestureContainer(
-          backgroundColor: themeProvider.themeMode == ThemeMode.light
-              ? AppColors.whiteColor
-              : AppColors.textBoxDarkModeColor,
-          text: AppStrings.openCameraText,
-          icon: cameraSvg,
-          onTap: () async {
-            isClickedBy = AppStrings.camera;
-            _storage.setClickedBy(AppStrings.camera);
-            if (imagePickerProvider.imageFiles.length >= 3) {
-              showCustomSnackBar(context, AppStrings.imageLimitText);
-            } else {
-              String? result = await imagePickerProvider.pickImage(
-                ImageSource.camera,
-              );
-              if (result != null) {
-                showCustomSnackBar(
-                  context,
-                  result,
-                  backgroundColor: Colors.red,
-                );
-              }
-            }
-          },
-          width: DeviceSize.getScreenWidth(context),
-          height: 50,
-          textColor: AppColors.selectImageColor,
-        )
+              backgroundColor:
+                  themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.whiteColor
+                      : AppColors.textBoxDarkModeColor,
+              text: AppStrings.openCameraText,
+              icon: cameraSvg,
+              onTap: () async {
+                // Logging the current state of location, address, and network status
+                if (kDebugMode) {
+                  print(locationStatus);
+                  print(permissionProvider.address.toString());
+                  print("networkProvider.status: ${networkProvider.status}");
+                }
+                // Error checks
+                if (permissionProvider.address.toLowerCase().contains(
+                  'error',
+                )) {
+                  showErrorDialog(
+                    context,
+                    "Failed to fetch location, try again",
+                    backgroundColor: Colors.red,
+                  );
+                } else if (networkProvider.status ==
+                    ConnectivityStatus.offline) {
+                  showErrorDialog(
+                    context,
+                    AppStrings.noInternet,
+                    backgroundColor: Colors.red,
+                  );
+                } else if (locationStatus == false) {
+                  showErrorDialog(
+                    context,
+                    "Location permission not granted",
+                    backgroundColor: Colors.red,
+                  );
+                } else {
+                  // Proceed if no errors found
+                  isClickedBy = AppStrings.camera;
+                  _storage.setClickedBy(AppStrings.camera);
+
+                  // Check if the image limit is reached
+                  if (imagePickerProvider.imageFiles.length >= 3) {
+                    showCustomSnackBar(context, AppStrings.imageLimitText);
+                  } else {
+                    // Attempt to pick an image from the camera
+                    String? result = await imagePickerProvider.pickImage(
+                      ImageSource.camera,
+                    );
+                    if (result != null) {
+                      showCustomSnackBar(
+                        context,
+                        result,
+                        backgroundColor: Colors.red,
+                      );
+                    }
+                  }
+                }
+              },
+              width: DeviceSize.getScreenWidth(context),
+              height: 50,
+              textColor: AppColors.selectImageColor,
+            )
             : Container(),
 
         imagePickerProvider.imageFiles.isEmpty
             ? Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: AppDimensions.di_10,
-            horizontal: AppDimensions.di_25,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Flexible(child: Divider()),
-              CustomTextWidget(
-                text: ' or ',
-                fontSize: AppDimensions.di_16,
-                color:  themeProvider.themeMode == ThemeMode.light
-                    ? AppColors.black
-                    : AppColors.whiteColor,
-                fontWeight: AppFontWeight.fontWeight500,
+              padding: const EdgeInsets.symmetric(
+                vertical: AppDimensions.di_10,
+                horizontal: AppDimensions.di_25,
               ),
-              Flexible(child: Divider()),
-            ],
-          ),
-        )
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Flexible(child: Divider()),
+                  CustomTextWidget(
+                    text: ' or ',
+                    fontSize: AppDimensions.di_16,
+                    color:
+                        themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.black
+                            : AppColors.whiteColor,
+                    fontWeight: AppFontWeight.fontWeight500,
+                  ),
+                  Flexible(child: Divider()),
+                ],
+              ),
+            )
             : Container(),
 
         imagePickerProvider.imageFiles.isEmpty ||
-            isClickedBy == AppStrings.gallery
+                isClickedBy == AppStrings.gallery
             ? CustomGestureContainer(
-          text: AppStrings.selectImagesText,
-          backgroundColor: themeProvider.themeMode == ThemeMode.light
-              ? AppColors.whiteColor
-              : AppColors.textBoxDarkModeColor,
-          icon: gallerySvg,
-          onTap: () async {
-            isClickedBy = AppStrings.gallery;
-            _storage.setClickedBy(AppStrings.gallery);
-            if (imagePickerProvider.imageFiles.length >= 3) {
-              showCustomSnackBar(context, AppStrings.imageLimitText);
-            } else {
-              String? result = await imagePickerProvider.pickImage(
-                ImageSource.gallery,
-              );
-              if (result != null) {
-                showCustomSnackBar(
-                  context,
-                  result,
-                  backgroundColor: Colors.red,
-                );
-              }
-            }
-          },
-          width: DeviceSize.getScreenWidth(context),
-          height: 50,
-          textColor: AppColors.selectImageColor,
-        )
+              text: AppStrings.selectImagesText,
+              backgroundColor:
+                  themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.whiteColor
+                      : AppColors.textBoxDarkModeColor,
+              icon: gallerySvg,
+              onTap: () async {
+                isClickedBy = AppStrings.gallery;
+                _storage.setClickedBy(AppStrings.gallery);
+                if (imagePickerProvider.imageFiles.length >= 3) {
+                  showCustomSnackBar(context, AppStrings.imageLimitText);
+                } else {
+                  String? result = await imagePickerProvider.pickImage(
+                    ImageSource.gallery,
+                  );
+                  if (result != null) {
+                    showCustomSnackBar(
+                      context,
+                      result,
+                      backgroundColor: Colors.red,
+                    );
+                  }
+                }
+              },
+              width: DeviceSize.getScreenWidth(context),
+              height: 50,
+              textColor: AppColors.selectImageColor,
+            )
             : Container(),
 
         const SizedBox(height: AppDimensions.di_10),
@@ -459,57 +503,57 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         // If no images are selected, show a message and icons
         imagePickerProvider.imageFiles.isEmpty
             ? const Center(
-          child: Column(mainAxisSize: MainAxisSize.min, children: []),
-        )
+              child: Column(mainAxisSize: MainAxisSize.min, children: []),
+            )
             : SizedBox(
-          height: DeviceSize.getScreenHeight(context) * 0.15,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal, // Horizontal scrolling
-            itemCount: imagePickerProvider.imageFiles.length,
-            itemBuilder: (context, index) {
-              final imageItem = imagePickerProvider.imageFiles[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.di_8,
-                ),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap:
-                          () => _showProfileImageDialog(
-                        context,
-                        imageItem.imagePath,
-                        DeviceSize.getScreenHeight(context),
-                        DeviceSize.getScreenWidth(context),
-                        permissionProvider,
-                        imageItem.source,
-                      ),
-                      child: Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              AppDimensions.di_8,
-                            ),
-                            child: Image.file(
-                              File(imageItem.imagePath),
-                              width: AppDimensions.di_100,
-                              height: AppDimensions.di_100,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap:
-                                () =>
-                                imagePickerProvider.deleteImage(index),
-                            child: SvgPicture.asset(
-                              ImageAssetsPath.deleteImage,
-                            ),
-                          ),
-                        ],
-                      ),
+              height: DeviceSize.getScreenHeight(context) * 0.15,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal, // Horizontal scrolling
+                itemCount: imagePickerProvider.imageFiles.length,
+                itemBuilder: (context, index) {
+                  final imageItem = imagePickerProvider.imageFiles[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.di_8,
                     ),
-                    /* SizedBox(height: AppDimensions.di_6),
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap:
+                              () => _showProfileImageDialog(
+                                context,
+                                imageItem.imagePath,
+                                DeviceSize.getScreenHeight(context),
+                                DeviceSize.getScreenWidth(context),
+                                permissionProvider,
+                                imageItem.source,
+                              ),
+                          child: Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.di_8,
+                                ),
+                                child: Image.file(
+                                  File(imageItem.imagePath),
+                                  width: AppDimensions.di_100,
+                                  height: AppDimensions.di_100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap:
+                                    () =>
+                                        imagePickerProvider.deleteImage(index),
+                                child: SvgPicture.asset(
+                                  ImageAssetsPath.deleteImage,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        /* SizedBox(height: AppDimensions.di_6),
                         GestureDetector(
                           onTap: () => imagePickerProvider.deleteImage(index),
                           child: Container(
@@ -528,12 +572,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                             ),
                           ),
                         ),*/
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
 
         SizedBox(height: AppDimensions.di_5),
 
@@ -543,9 +587,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             text: AppStrings.enterRoadDetails,
             fontSize: AppDimensions.di_16,
             fontWeight: AppFontWeight.fontWeight600,
-            color:  themeProvider.themeMode == ThemeMode.light
-                ? AppColors.black
-                : AppColors.whiteColor,
+            color:
+                themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.black
+                    : AppColors.whiteColor,
           ),
         ),
 
@@ -567,12 +612,14 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     hintText: "Please Select State",
                     textController: _stateController,
                     items: snapshot.data!,
-                    textColor: themeProvider.themeMode == ThemeMode.light
-                         ? AppColors.black
-                         : AppColors.whiteColor,
-                    boxBgColor: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.whiteColor
-                        : AppColors.textBoxDarkModeColor,
+                    textColor:
+                        themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.black
+                            : AppColors.whiteColor,
+                    boxBgColor:
+                        themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.whiteColor
+                            : AppColors.textBoxDarkModeColor,
                     dropdownHeight: 150,
                     isRequired: false,
                     onChanged: (value) async {
@@ -599,12 +646,14 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     hintText: "Please Select District",
                     textController: _districtController,
                     items: selectedDistricts.isEmpty ? [''] : selectedDistricts,
-                    textColor: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.black
-                        : AppColors.whiteColor,
-                    boxBgColor: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.whiteColor
-                        : AppColors.textBoxDarkModeColor,
+                    textColor:
+                        themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.black
+                            : AppColors.whiteColor,
+                    boxBgColor:
+                        themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.whiteColor
+                            : AppColors.textBoxDarkModeColor,
                     dropdownHeight: 150,
                     isRequired: false,
                     onChanged: (value) async {
@@ -627,12 +676,14 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     hintText: "Please Select Block",
                     textController: _blockController,
                     items: selectedBlocks.isEmpty ? [''] : selectedBlocks,
-                    textColor: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.black
-                        : AppColors.whiteColor,
-                    boxBgColor: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.whiteColor
-                        : AppColors.textBoxDarkModeColor,
+                    textColor:
+                        themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.black
+                            : AppColors.whiteColor,
+                    boxBgColor:
+                        themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.whiteColor
+                            : AppColors.textBoxDarkModeColor,
                     dropdownHeight: 150,
                     isRequired: false,
                     onChanged: (value) async {
@@ -653,12 +704,14 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     textController: _roadNameController,
                     items: selectedRoads.isEmpty ? [''] : selectedRoads,
                     dropdownHeight: 150,
-                    textColor: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.black
-                        : AppColors.whiteColor,
-                    boxBgColor: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.whiteColor
-                        : AppColors.textBoxDarkModeColor,
+                    textColor:
+                        themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.black
+                            : AppColors.whiteColor,
+                    boxBgColor:
+                        themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.whiteColor
+                            : AppColors.textBoxDarkModeColor,
                     isRequired: false,
                     onChanged: (value) async {
                       setState(() {
@@ -683,12 +736,14 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         if (_roadNameController.text == 'Enter Manually')
           CustomTextField(
             editable: roadNameEnable,
-            textColor: themeProvider.themeMode == ThemeMode.light
-                ? AppColors.black
-                : AppColors.whiteColor,
-            boxBgColor: themeProvider.themeMode == ThemeMode.light
-                ? AppColors.whiteColor
-                : AppColors.textBoxDarkModeColor,
+            textColor:
+                themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.black
+                    : AppColors.whiteColor,
+            boxBgColor:
+                themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.whiteColor
+                    : AppColors.textBoxDarkModeColor,
             onChanged: (text) => _saveFormData(),
             label: AppStrings.enterRoadName,
             controller: _staticRoadNameController,
@@ -705,12 +760,14 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           hintText: AppStrings.selectCategoryOfComplaint,
           textController: _categoryOfComplaintController,
           items: complaints,
-          textColor: themeProvider.themeMode == ThemeMode.light
-              ? AppColors.black
-              : AppColors.whiteColor,
-          boxBgColor: themeProvider.themeMode == ThemeMode.light
-              ? AppColors.whiteColor
-              : AppColors.textBoxDarkModeColor,
+          textColor:
+              themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.black
+                  : AppColors.whiteColor,
+          boxBgColor:
+              themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.textBoxDarkModeColor,
           dropdownHeight: AppDimensions.di_200,
           isRequired: false,
         ),
@@ -721,14 +778,16 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           labelText: AppStrings.feedback,
           label: AppStrings.writeYourFeedback,
           controller: _writeFeedbackController,
-          keyboardType: TextInputType.multiline,
+          keyboardType: TextInputType.twitter,
           maxLines: 5,
-          textColor: themeProvider.themeMode == ThemeMode.light
-              ? AppColors.black
-              : AppColors.whiteColor,
-          boxBgColor: themeProvider.themeMode == ThemeMode.light
-              ? AppColors.whiteColor
-              : AppColors.textBoxDarkModeColor,
+          textColor:
+              themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.black
+                  : AppColors.whiteColor,
+          boxBgColor:
+              themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.textBoxDarkModeColor,
           fontSize: AppDimensions.di_16,
           maxLength: writeYourFeedbackMaxLength,
           validator: null,
@@ -773,22 +832,28 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   }
 
   Widget previewForm(
-      ImagePickerProvider imagePickerProvider,
-      PermissionProvider permissionProvider, LocalizationProvider localizationProvider, ThemeProvider themeProvider, NetworkProviderController networkProvider,
-      ) {
+    ImagePickerProvider imagePickerProvider,
+    PermissionProvider permissionProvider,
+    LocalizationProvider localizationProvider,
+    ThemeProvider themeProvider,
+    NetworkProviderController networkProvider,
+  ) {
     return Column(
       children: [
+        if(isClickedBy == AppStrings.camera)
         Align(
           alignment: Alignment.centerLeft,
           child: CustomTextWidget(
             text: AppStrings.roadLocation,
             fontSize: AppDimensions.di_16,
-            color: themeProvider.themeMode == ThemeMode.light
-                ? AppColors.black
-                : AppColors.whiteColor,
+            color:
+                themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.black
+                    : AppColors.whiteColor,
             fontWeight: AppFontWeight.fontWeight600,
           ),
         ),
+        if(isClickedBy == AppStrings.camera)
         SizedBox(height: 5),
 
         /*CustomTextField(
@@ -803,15 +868,18 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           isRequired: false,
           fontSize: AppDimensions.di_15,
         ),*/
+        if(isClickedBy == AppStrings.camera)
         CustomContainerText(
           label: permissionProvider.address.toString(),
           fontSize: AppDimensions.di_14,
-          textColor: themeProvider.themeMode == ThemeMode.light
-              ? AppColors.black.withAlpha(95)
-              : AppColors.whiteColor.withAlpha(95),
-          boxBgColor: themeProvider.themeMode == ThemeMode.light
-              ? AppColors.whiteColor
-              : AppColors.textBoxDarkModeColor,
+          textColor:
+              themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.black.withAlpha(95)
+                  : AppColors.whiteColor.withAlpha(95),
+          boxBgColor:
+              themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.textBoxDarkModeColor,
         ),
         SizedBox(height: 10),
         Align(
@@ -819,9 +887,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           child: CustomTextWidget(
             text: AppStrings.roadImages,
             fontSize: AppDimensions.di_16,
-            color: themeProvider.themeMode == ThemeMode.light
-                ? AppColors.black
-                : AppColors.whiteColor,
+            color:
+                themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.black
+                    : AppColors.whiteColor,
             fontWeight: AppFontWeight.fontWeight600,
           ),
         ),
@@ -829,55 +898,55 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
         imagePickerProvider.imageFiles.isEmpty
             ? const Center(
-          child: Column(mainAxisSize: MainAxisSize.min, children: []),
-        )
+              child: Column(mainAxisSize: MainAxisSize.min, children: []),
+            )
             : SizedBox(
-          height: DeviceSize.getScreenHeight(context) * 0.18,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: imagePickerProvider.imageFiles.length,
-            itemBuilder: (context, index) {
-              final imageItem = imagePickerProvider.imageFiles[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.di_8,
-                  vertical: AppDimensions.di_8,
-                ),
-                child: Column(
-                  children: [
-                    Stack(
-                      alignment: Alignment.topRight,
+              height: DeviceSize.getScreenHeight(context) * 0.18,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: imagePickerProvider.imageFiles.length,
+                itemBuilder: (context, index) {
+                  final imageItem = imagePickerProvider.imageFiles[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.di_8,
+                      vertical: AppDimensions.di_8,
+                    ),
+                    child: Column(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            AppDimensions.di_8,
-                          ),
-                          child: Image.file(
-                            File(imageItem.imagePath),
-                            width: AppDimensions.di_100,
-                            height: AppDimensions.di_100,
-                            fit: BoxFit.cover,
-                          ),
+                        Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.di_8,
+                              ),
+                              child: Image.file(
+                                File(imageItem.imagePath),
+                                width: AppDimensions.di_100,
+                                height: AppDimensions.di_100,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+                  );
+                },
+              ),
+            ),
 
         // SizedBox(height: AppDimensions.di_15,),
-
         Align(
           alignment: Alignment.centerLeft,
           child: CustomTextWidget(
             text: AppStrings.roadDetails,
             fontSize: AppDimensions.di_16,
-            color: themeProvider.themeMode == ThemeMode.light
-                ? AppColors.black
-                : AppColors.whiteColor,
+            color:
+                themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.black
+                    : AppColors.whiteColor,
             fontWeight: AppFontWeight.fontWeight600,
           ),
         ),
@@ -908,9 +977,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     child: CustomTextWidget(
                       text: AppStrings.state,
                       fontSize: AppDimensions.di_14,
-                      color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black.withAlpha(95)
-                          : AppColors.whiteColor.withAlpha(95),
+                      color:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -918,22 +988,24 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWidget(
                       text:
-                      _stateController.text.isEmpty
-                          ? "--"
-                          : _stateController.text,
+                          _stateController.text.isEmpty
+                              ? "--"
+                              : _stateController.text,
                       fontSize: AppDimensions.di_14,
-                      color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black.withAlpha(95)
-                          : AppColors.whiteColor.withAlpha(95),
+                      color:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
                 ],
-                  decoration: BoxDecoration(
-                    color: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.whiteColor
-                        : AppColors.textBoxDarkModeColor,
-                  )
+                decoration: BoxDecoration(
+                  color:
+                      themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.whiteColor
+                          : AppColors.textBoxDarkModeColor,
+                ),
               ),
               TableRow(
                 children: [
@@ -942,9 +1014,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     child: CustomTextWidget(
                       text: AppStrings.district,
                       fontSize: AppDimensions.di_14,
-                      color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black.withAlpha(95)
-                          : AppColors.whiteColor.withAlpha(95),
+                      color:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -952,22 +1025,24 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWidget(
                       text:
-                      _districtController.text.isEmpty
-                          ? "--"
-                          : _districtController.text,
+                          _districtController.text.isEmpty
+                              ? "--"
+                              : _districtController.text,
                       fontSize: AppDimensions.di_14,
-                      color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black.withAlpha(95)
-                          : AppColors.whiteColor.withAlpha(95),
+                      color:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
                 ],
-                  decoration: BoxDecoration(
-                    color: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.whiteColor
-                        : AppColors.textBoxDarkModeColor,
-                  )
+                decoration: BoxDecoration(
+                  color:
+                      themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.whiteColor
+                          : AppColors.textBoxDarkModeColor,
+                ),
               ),
               TableRow(
                 children: [
@@ -976,9 +1051,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     child: CustomTextWidget(
                       text: AppStrings.block,
                       fontSize: AppDimensions.di_14,
-                      color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black.withAlpha(95)
-                          : AppColors.whiteColor.withAlpha(95),
+                      color:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -986,22 +1062,24 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWidget(
                       text:
-                      _blockController.text.isEmpty
-                          ? "--"
-                          : _blockController.text,
+                          _blockController.text.isEmpty
+                              ? "--"
+                              : _blockController.text,
                       fontSize: AppDimensions.di_14,
-                      color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black.withAlpha(95)
-                          : AppColors.whiteColor.withAlpha(95),
+                      color:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
                 ],
-                  decoration: BoxDecoration(
-                    color: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.whiteColor
-                        : AppColors.textBoxDarkModeColor,
-                  )
+                decoration: BoxDecoration(
+                  color:
+                      themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.whiteColor
+                          : AppColors.textBoxDarkModeColor,
+                ),
               ),
               TableRow(
                 children: [
@@ -1010,9 +1088,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     child: CustomTextWidget(
                       text: AppStrings.roadName,
                       fontSize: AppDimensions.di_14,
-                      color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black.withAlpha(95)
-                          : AppColors.whiteColor.withAlpha(95),
+                      color:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -1020,24 +1099,26 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWidget(
                       text:
-                      _roadNameController.text.isEmpty
-                          ? "--"
-                          : _roadNameController.text == 'Enter Manually'
-                          ? _staticRoadNameController.text
-                          : _roadNameController.text,
+                          _roadNameController.text.isEmpty
+                              ? "--"
+                              : _roadNameController.text == 'Enter Manually'
+                              ? _staticRoadNameController.text
+                              : _roadNameController.text,
                       fontSize: AppDimensions.di_14,
-                      color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black.withAlpha(95)
-                          : AppColors.whiteColor.withAlpha(95),
+                      color:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
                 ],
-                  decoration: BoxDecoration(
-                    color: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.whiteColor
-                        : AppColors.textBoxDarkModeColor,
-                  )
+                decoration: BoxDecoration(
+                  color:
+                      themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.whiteColor
+                          : AppColors.textBoxDarkModeColor,
+                ),
               ),
               TableRow(
                 children: [
@@ -1046,9 +1127,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     child: CustomTextWidget(
                       text: AppStrings.categoryOfComplaint,
                       fontSize: AppDimensions.di_14,
-                      color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black.withAlpha(95)
-                          : AppColors.whiteColor.withAlpha(95),
+                      color:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -1056,22 +1138,24 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWithoutFadeWidget(
                       text:
-                      _categoryOfComplaintController.text.isEmpty
-                          ? "--"
-                          : _categoryOfComplaintController.text,
+                          _categoryOfComplaintController.text.isEmpty
+                              ? "--"
+                              : _categoryOfComplaintController.text,
                       fontSize: AppDimensions.di_14,
-                      color: themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black.withAlpha(95)
-                          : AppColors.whiteColor.withAlpha(95),
+                      color:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black.withAlpha(95)
+                              : AppColors.whiteColor.withAlpha(95),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
                 ],
-                  decoration: BoxDecoration(
-                    color: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.whiteColor
-                        : AppColors.textBoxDarkModeColor,
-                  )
+                decoration: BoxDecoration(
+                  color:
+                      themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.whiteColor
+                          : AppColors.textBoxDarkModeColor,
+                ),
               ),
             ],
           ),
@@ -1098,32 +1182,35 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                         CustomTextWidget(
                           text: "${AppStrings.feedback} :",
                           fontSize: AppDimensions.di_14,
-                          color: themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                          color:
+                              themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black.withAlpha(95)
+                                  : AppColors.whiteColor.withAlpha(95),
                           fontWeight: AppFontWeight.fontWeight700,
                         ),
 
                         CustomTextWithoutFadeWidget(
                           text:
-                          _writeFeedbackController.text.isEmpty
-                              ? "--"
-                              : _writeFeedbackController.text,
+                              _writeFeedbackController.text.isEmpty
+                                  ? "--"
+                                  : _writeFeedbackController.text,
                           fontSize: AppDimensions.di_14,
-                          color: themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                          color:
+                              themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black.withAlpha(95)
+                                  : AppColors.whiteColor.withAlpha(95),
                           fontWeight: AppFontWeight.fontWeight500,
                         ),
                       ],
                     ),
                   ),
                 ],
-                  decoration: BoxDecoration(
-                    color: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.whiteColor
-                        : AppColors.textBoxDarkModeColor,
-                  )
+                decoration: BoxDecoration(
+                  color:
+                      themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.whiteColor
+                          : AppColors.textBoxDarkModeColor,
+                ),
               ),
             ],
           ),
@@ -1160,32 +1247,54 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               child: CustomButton(
                 text: AppStrings.submit,
                 onPressed: () async {
+                  print(isClickedBy == AppStrings.gallery);
+                  print("isClickedBy: $isClickedBy");
 
-                  if(networkProvider.status == ConnectivityStatus.online){
+                  if (networkProvider.status == ConnectivityStatus.online ||
+                      isClickedBy == AppStrings.gallery) {
                     showCustomSelectionDialog(
                       title: "Submit",
                       titleVisibility: false,
                       content: AppStrings.areYouSure,
                       icon: "assets/icons/language_icon.svg",
                       iconVisibility: false,
-                      buttonLabels: [ localizationProvider.localizedStrings['yes'] ?? "Yes",
-                        localizationProvider.localizedStrings['no'] ?? "No" ],
+                      buttonLabels: [
+                        localizationProvider.localizedStrings['yes'] ?? "Yes",
+                        localizationProvider.localizedStrings['no'] ?? "No",
+                      ],
                       onButtonPressed: [
-                            () {
-                          _saveFeedbackStatus(imagePickerProvider, _stateController.text, _districtController.text, _blockController.text, _roadNameController.text, _staticRoadNameController.text,
-                              _categoryOfComplaintController.text, _writeFeedbackController.text, imagePickerProvider.imageFiles);
+                        () {
+                          showErrorDialog(
+                            context,
+                            'Feedback submitted successfully',
+                            backgroundColor: Colors.green,
+                          );
+                          _saveFeedbackStatus(
+                            imagePickerProvider,
+                            _stateController.text,
+                            _districtController.text,
+                            _blockController.text,
+                            _roadNameController.text,
+                            _staticRoadNameController.text,
+                            _categoryOfComplaintController.text,
+                            _writeFeedbackController.text,
+                            imagePickerProvider.imageFiles,
+                          );
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => HomeScreen()),
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ),
                           );
                         },
-                            () {
+                        () {
                           Navigator.pop(context);
-                        }
-                      ], isButtonActive: [true, false], context: context,
+                        },
+                      ],
+                      isButtonActive: [true, false],
+                      context: context,
                     );
-                  }
-                  else{
+                  } else {
                     showErrorDialog(
                       context,
                       AppStrings.noInternet,
@@ -1226,9 +1335,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   }
 
   void _showSaveConfirmationDialog(
-      BuildContext context,
-      ImagePickerProvider imagePickerProvider,
-      ) {
+    BuildContext context,
+    ImagePickerProvider imagePickerProvider,
+  ) {
     showCustomConfirmationDialog(
       context: context,
       title: 'Are you sure?',
@@ -1237,8 +1346,17 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       backgroundColor: Colors.blue,
       iconColor: Colors.blue,
       onYesPressed: () async {
-        _saveFeedbackStatus(imagePickerProvider, _stateController.text, _districtController.text, _blockController.text, _roadNameController.text, _staticRoadNameController.text,
-            _categoryOfComplaintController.text, _writeFeedbackController.text, imagePickerProvider.imageFiles);
+        _saveFeedbackStatus(
+          imagePickerProvider,
+          _stateController.text,
+          _districtController.text,
+          _blockController.text,
+          _roadNameController.text,
+          _staticRoadNameController.text,
+          _categoryOfComplaintController.text,
+          _writeFeedbackController.text,
+          imagePickerProvider.imageFiles,
+        );
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -1270,123 +1388,124 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       // Ensure permissionProvider is available
       await provider.requestLocationPermission();
       await provider.fetchCurrentLocation();
+      locationStatus = await provider.requestLocationPermission();
     });
   }
 
   void _showProfileImageDialog(
-      BuildContext context,
-      String picPath,
-      screenH,
-      screenW,
-      PermissionProvider permissionProvider,
-      String imgSource,
-      ) {
+    BuildContext context,
+    String picPath,
+    screenH,
+    screenW,
+    PermissionProvider permissionProvider,
+    String imgSource,
+  ) {
     if (picPath.isNotEmpty) {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true, // Allows for custom height
         builder:
             (context) => Container(
-          height: imgSource == 'Camera' ? screenH * 0.75 : screenH * 0.5,
-          width: screenW,
-          padding: EdgeInsets.all(AppDimensions.di_8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(AppDimensions.di_30),
-            ), // Rounded top corners
-          ),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: AppDimensions.di_10,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.di_15,
-                      ),
-                      // Rounded corners for image
-                      child: Image.file(
-                        File(picPath),
-                        width: screenW * 0.8, // Image width responsive
-                        height: screenH * 0.3, // Image height responsive
-                        fit: BoxFit.contain,
+              height: imgSource == 'Camera' ? screenH * 0.75 : screenH * 0.5,
+              width: screenW,
+              padding: EdgeInsets.all(AppDimensions.di_8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(AppDimensions.di_30),
+                ), // Rounded top corners
+              ),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: AppDimensions.di_10,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.di_15,
+                          ),
+                          // Rounded corners for image
+                          child: Image.file(
+                            File(picPath),
+                            width: screenW * 0.8, // Image width responsive
+                            height: screenH * 0.3, // Image height responsive
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        if (imgSource == 'Camera')
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: AppDimensions.di_8,
+                            ),
+                            child:
+                                permissionProvider.isLoading
+                                    ? Align(
+                                      alignment: Alignment.center,
+                                      child: CircularProgressIndicator(),
+                                    )
+                                    : CustomLocationWidget(
+                                      labelText:
+                                          AppStrings.confirmTheRoadLocation,
+                                      isRequired: false,
+                                      latitude: permissionProvider.latitude,
+                                      longitude: permissionProvider.longitude,
+                                      initialAddress:
+                                          permissionProvider.address.toString(),
+                                      isLoading: permissionProvider.isLoading,
+                                      mapHeight: screenH * 0.2,
+                                      mapWidth: screenW,
+                                      onRefresh: () async {
+                                        await permissionProvider
+                                            .fetchCurrentLocation();
+                                      },
+                                      onMapTap: (point) async {
+                                        await permissionProvider.setLocation(
+                                          point.latitude,
+                                          point.longitude,
+                                        );
+                                      },
+                                      onMapReady: () {},
+                                    ),
+                          ),
+                        if (imgSource == 'Camera')
+                          Container(
+                            color: Colors.yellow[100],
+                            padding: EdgeInsets.all(AppDimensions.di_8),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              spacing: AppDimensions.di_4,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.location_pin, color: Colors.red),
+                                Flexible(
+                                  child: Text(permissionProvider.address),
+                                ),
+                              ],
+                            ),
+                          ),
+                        SizedBox(height: AppDimensions.di_16),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    right: 1,
+                    top: 2,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: CircleAvatar(
+                        radius: AppDimensions.di_20,
+                        backgroundColor: Colors.redAccent,
+                        child: const Icon(Icons.close, color: Colors.white),
                       ),
                     ),
-                    if (imgSource == 'Camera')
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: AppDimensions.di_8,
-                        ),
-                        child:
-                        permissionProvider.isLoading
-                            ? Align(
-                          alignment: Alignment.center,
-                          child: CircularProgressIndicator(),
-                        )
-                            : CustomLocationWidget(
-                          labelText:
-                          AppStrings.confirmTheRoadLocation,
-                          isRequired: false,
-                          latitude: permissionProvider.latitude,
-                          longitude: permissionProvider.longitude,
-                          initialAddress:
-                          permissionProvider.address.toString(),
-                          isLoading: permissionProvider.isLoading,
-                          mapHeight: screenH * 0.2,
-                          mapWidth: screenW,
-                          onRefresh: () async {
-                            await permissionProvider
-                                .fetchCurrentLocation();
-                          },
-                          onMapTap: (point) async {
-                            await permissionProvider.setLocation(
-                              point.latitude,
-                              point.longitude,
-                            );
-                          },
-                          onMapReady: () {},
-                        ),
-                      ),
-                    if (imgSource == 'Camera')
-                      Container(
-                        color: Colors.yellow[100],
-                        padding: EdgeInsets.all(AppDimensions.di_8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          spacing: AppDimensions.di_4,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.location_pin, color: Colors.red),
-                            Flexible(
-                              child: Text(permissionProvider.address),
-                            ),
-                          ],
-                        ),
-                      ),
-                    SizedBox(height: AppDimensions.di_16),
-                  ],
-                ),
-              ),
-              Positioned(
-                right: 1,
-                top: 2,
-                child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: CircleAvatar(
-                    radius: AppDimensions.di_20,
-                    backgroundColor: Colors.redAccent,
-                    child: const Icon(Icons.close, color: Colors.white),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
       );
     } else {
       showCustomSnackBar(
@@ -1398,10 +1517,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   }
 
   void showCustomSnackBar(
-      BuildContext context,
-      String message, {
-        Color backgroundColor = Colors.red,
-      }) {
+    BuildContext context,
+    String message, {
+    Color backgroundColor = Colors.red,
+  }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -1411,16 +1530,31 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     );
   }
 
-  Future<void> _saveFeedbackStatus(ImagePickerProvider imagePickerProvider,String state,String district,String block,String roadName,String staticRoadName,String categoryOfComplaint,String feedback, List<ImageItem> imageFiles,
-      ) async {
+  Future<void> _saveFeedbackStatus(
+    ImagePickerProvider imagePickerProvider,
+    String state,
+    String district,
+    String block,
+    String roadName,
+    String staticRoadName,
+    String categoryOfComplaint,
+    String feedback,
+    List<ImageItem> imageFiles,
+  ) async {
+    String insertFeedback = await dbHelper.insertFeedbackWithImages(
+      state: state,
+      district: district,
+      block: block,
+      roadName: roadName,
+      staticRoadName: staticRoadName,
+      categoryOfComplaint: categoryOfComplaint,
+      feedback: feedback,
+      images: imageFiles,
+    );
 
-    String insertFeedback =  await dbHelper.insertFeedbackWithImages(state: state, district: district, block: block, roadName: roadName, staticRoadName: staticRoadName,
-        categoryOfComplaint: categoryOfComplaint, feedback: feedback, images: imageFiles);
-
-    if(insertFeedback == "Success"){
+    if (insertFeedback == "Success") {
       imagePickerProvider.clearImages();
       dbHelper.clearFeedbackTable();
     }
   }
-
 }

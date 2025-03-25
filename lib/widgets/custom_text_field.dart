@@ -81,12 +81,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
       inputFormatters = [
         FilteringTextInputFormatter.allow(RegExp(r'[0-9\a-zA-Z\s\-]')),
       ];
-    } else if (widget.keyboardType == TextInputType.multiline) {
+    } else if (widget.keyboardType == TextInputType.twitter) {
       inputFormatters = [
-        FilteringTextInputFormatter.allow(RegExp(r"^[a-zA-Z0-9\s,.'-\/()]+")),
+        FilteringTextInputFormatter.allow(RegExp(r"^[a-zA-Z0-9\s,.'-\/()?@]+")),
       ];
     }
-    //TextInputType.multiline,
+    //TextInputType.twitter,
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -138,7 +138,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 //counterText: widget.counterText,
               ),
               buildCounter: (context, {required currentLength, required isFocused, maxLength}) {
-                return widget.keyboardType == TextInputType.multiline? Align(
+                return widget.keyboardType == TextInputType.twitter? Align(
                   alignment: Alignment.bottomRight, // Align to the bottom-right
                   child: Text(
                     "$currentLength/$maxLength",
