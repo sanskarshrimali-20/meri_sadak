@@ -191,13 +191,10 @@ class AppStrings {
 
   //alert dialog
 
-static const allowLocationAlertTitle = 'Allow Location';
-static const allowLocationAlertContent = 'Enable Meri Sadak to access your location for accurate reports and better service.';
-
-
-
-
-
-
+  static const allowLocationAlertTitle = 'Allow Location';
+  static const allowLocationAlertContent =
+      'Enable Meri Sadak to access your location for accurate reports and better service.';
+  static const allowCameraAlertTitle = "Allow Camera";
+  static const allowCameraAlertContent =
+      'Enable Meri Sadak to access your camera for capturing and reporting.';
 }
-
