@@ -22,7 +22,7 @@ Future<void> showCustomSelectionDialog({
   // Show dialog
   await showDialog(
     context: context,
-    barrierDismissible: false,
+    barrierDismissible: true,
     builder: (context) {
       return Dialog(
         backgroundColor: Colors.white, // Dialog background color

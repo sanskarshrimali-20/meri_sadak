@@ -10,7 +10,7 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_image_path.dart';
 import '../../providerData/theme_provider.dart';
-import '../../widgets/custom_app_bar.dart';
+import '../../utils/fontsize_provider.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/drawer_widget.dart';
 
@@ -27,6 +27,7 @@ class _SettingScreen extends State<SettingScreen> {
   Widget build(BuildContext context) {
 
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light
@@ -53,8 +54,11 @@ class _SettingScreen extends State<SettingScreen> {
             child: SizedBox(
               child: Column(
                 children: [
+
                   SizedBox(height: AppDimensions.di_15),
+
                   customDrawerWidget(
+                    fontSize: fontSizeProvider.fontSize,
                     title: AppStrings.myProfile,
                     icon: ImageAssetsPath.user,
                     textColor: themeProvider.themeMode == ThemeMode.light
@@ -75,13 +79,16 @@ class _SettingScreen extends State<SettingScreen> {
                       );
                     },
                   ),
+
                   Divider(
                     color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
                   ),
+
                   customDrawerWidget(
+                    fontSize: fontSizeProvider.fontSize,
                     title: AppStrings.appearance,
                     icon: ImageAssetsPath.appearanceIcon,
                     textColor: themeProvider.themeMode == ThemeMode.light
@@ -102,13 +109,16 @@ class _SettingScreen extends State<SettingScreen> {
                       );
                     },
                   ),
+
                   Divider(
                     color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
                   ),
+
                   customDrawerWidget(
+                    fontSize: fontSizeProvider.fontSize,
                     title: AppStrings.privacyAndSecurity,
                     icon: ImageAssetsPath.privacy,
                     textColor: themeProvider.themeMode == ThemeMode.light
@@ -129,13 +139,16 @@ class _SettingScreen extends State<SettingScreen> {
                       );
                     },
                   ),
+
                   Divider(
                     color: Colors.grey.withAlpha(60), // Line color
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
                   ),
+
                   customDrawerWidget(
+                    fontSize: fontSizeProvider.fontSize,
                     title: AppStrings.checkVersionUpdate,
                     icon: ImageAssetsPath.replace,
                     textColor: themeProvider.themeMode == ThemeMode.light

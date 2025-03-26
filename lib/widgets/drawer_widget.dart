@@ -6,6 +6,7 @@ import 'package:meri_sadak/constants/app_image_path.dart';
 
 Widget customDrawerWidget({
   required String title,
+  double fontSize = AppDimensions.di_18,
   required String icon,
   Color iconColor = Colors.black,
   Color textColor = Colors.black,
@@ -31,14 +32,22 @@ Widget customDrawerWidget({
           prefixVisible ? SvgPicture.asset(icon, color: iconColor) : SvgPicture.asset(""),
           SizedBox(width: AppDimensions.di_18),
           // Text in the middle
+    Expanded(
+      // This allows the text to take available space
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        // Enables horizontal scrolling
+        child:
           Text(
             title,
-            style: TextStyle(fontSize: AppDimensions.di_17, color: textColor),
-          ),
-          Spacer(),
+            style: TextStyle(fontSize: fontSize, color: textColor),
+          ),),),
           // Image after text (arrow icon)
           visible
-              ? SvgPicture.asset(ImageAssetsPath.rightArrow, color: suffixIconColor,)
+              ? Padding(
+                padding: const EdgeInsets.only(left: AppDimensions.di_10),
+                child: SvgPicture.asset(ImageAssetsPath.rightArrow, color: suffixIconColor,),
+              )
               : SvgPicture.asset(""),
           logoutVisible
               ? Text("")
