@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/data/model/image_item_model.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
@@ -83,29 +84,38 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                     Center(child: CircularProgressIndicator())
                   else if (feedbackData != null && feedbackData!.isNotEmpty)
                     ...feedbackData!.map((feedback) {
-                      return Container(
+                      return SizedBox(
                         width: DeviceSize.getScreenWidth(context),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomTextWidget(
-                              text: "State: ${feedback['state']}",
-                              fontSize: 18,
+                              text: "Feedback ID: ${feedback['id']}",
+                              fontSize: 16,
                               color: AppColors.black,
+                              fontWeight: AppFontWeight.fontWeight600,
                             ),
+                            SizedBox(height: 15,),
+                            Row(children: [
+                              CustomTextWidget(
+                                text: "${feedback['state']}/ ",
+                                fontSize: 18,
+                                color: AppColors.black,
+                              ),
+                              CustomTextWidget(
+                                text: "${feedback['district']}/ ",
+                                fontSize: 18,
+                                color: AppColors.black,
+                              ),
+                              CustomTextWidget(
+                                text: "${feedback['block']}",
+                                fontSize: 18,
+                                color: AppColors.black,
+                              ),
+                            ],),
+
                             SizedBox(height: 10),
-                            CustomTextWidget(
-                              text: "District: ${feedback['district']}",
-                              fontSize: 18,
-                              color: AppColors.black,
-                            ),
-                            SizedBox(height: 10),
-                            CustomTextWidget(
-                              text: "Block: ${feedback['block']}",
-                              fontSize: 18,
-                              color: AppColors.black,
-                            ),
-                            SizedBox(height: 10),
+
                             CustomTextWidget(
                               text: "Complaint: ${feedback['categoryOfComplaint']}",
                               fontSize: 18,

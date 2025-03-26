@@ -25,6 +25,7 @@ class CustomTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final Color textColor;
   final Color boxBgColor;
+  final Color boxBgEnableColor;
 
   const CustomTextField({
     super.key,
@@ -47,6 +48,7 @@ class CustomTextField extends StatefulWidget {
     this.focusNode,
     this.textColor = AppColors.black,
     this.boxBgColor =  AppColors.black,
+    this.boxBgEnableColor =  AppColors.whiteColor,
   });
 
   @override
@@ -105,7 +107,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               right: AppDimensions.di_5,
             ),
             decoration: BoxDecoration(
-              color:  widget.boxBgColor,
+              color: widget.editable ? widget.boxBgColor : widget.boxBgEnableColor,
               // Use a neutral color or AppColors.greyHundred
               borderRadius: BorderRadius.circular(AppDimensions.di_5),
               border: Border.all(

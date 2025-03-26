@@ -200,5 +200,7 @@ class AppStrings {
 
 
   static const noInternet = "No Internet Connection";
+  static const pleaseSelectEnterRoad = "Please select or enter road name";
+
 
 }

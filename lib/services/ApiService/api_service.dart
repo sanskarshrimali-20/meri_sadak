@@ -118,4 +118,26 @@ class ApiService {
       throw Exception('Error making request: $e');
     }
   }
+
+  Future<http.Response> loadXMLMasterData(String url) async {
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'text/xml',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Request-Method',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // If the request was successful, return the XML content as a string
+      return response;
+    } else {
+      // If the request failed, throw an error
+      throw Exception('Failed to load XML: ${response.statusCode}');
+    }
+  }
+
 }
