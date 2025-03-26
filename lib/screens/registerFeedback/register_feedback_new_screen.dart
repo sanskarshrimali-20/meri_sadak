@@ -238,13 +238,15 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     });
 
     feedbackData = await dbHelper.getFeedbackForm();
-
+    print("feedbackData: ${feedbackData?.state.toString()}");
     if (feedbackData != null) {
-
+      print("feedbackData2: ${feedbackData?.state.toString()}");
       // Set state controller
       _stateController.text = feedbackData?.state ?? '';
       selectedState = feedbackData?.state; // Update selected state
-
+      print(
+        "feedbackData3: ${_stateController.text}   selectedState: $selectedState",
+      );
       // Fetch districts based on selected state
       await fetchDistricts(selectedState!);
 
@@ -289,6 +291,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
   // Save the form data to DB
   void _saveFormData() {
+    print("stateOnMapready3: ${_stateController.text}");
+
     final feedbackFormData = FeedbackFormData(
       state: _stateController.text,
       district: _districtController.text,
@@ -395,7 +399,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     mapWidth: DeviceSize.getScreenWidth(context),
                     // Same width as parent
                     onRefresh: () async {
-                      permissionProvider.isLocationFetched=false;
+                      permissionProvider.isLocationFetched = false;
                       await permissionProvider.fetchCurrentLocation();
                     },
                     onMapTap: (point) async {
@@ -405,46 +409,43 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       );
 
                       if (feedbackData!.state!.isEmpty) {
-                        setState(() async {
-                          // debugPrint("state $state");
+                        // debugPrint("state $state");
 
-                          // Update text controllers with new values
-                          _stateController.text = permissionProvider.state;
-                          selectedState =
-                              permissionProvider.state; // Update selectedState
-                          /*selectedDistricts =
+                        // Update text controllers with new values
+                        _stateController.text = permissionProvider.state;
+                        selectedState =
+                            permissionProvider.state; // Update selectedState
+                        /*selectedDistricts =
                       districts[selectedState] ??
                           []; // Update districts based on new state*/
-                          await fetchDistricts(selectedState!);
-                          _districtController.text =
-                              permissionProvider
-                                  .district; // Set district controller
-                          await fetchBlocks(permissionProvider.district);
-                          /* selectedBlocks =
+                        await fetchDistricts(selectedState!);
+                        _districtController.text =
+                            permissionProvider
+                                .district; // Set district controller
+                        await fetchBlocks(permissionProvider.district);
+                        /* selectedBlocks =
                       blocks[permissionProvider.district] ??
                           []; // Update blocks based on new district*/
-                        });
 
                         // Optionally save form data if needed
                         _saveFormData();
                       }
                     },
-                    onMapReady: () {
+                    onMapReady: () async {
                       if (feedbackData == null ||
                           feedbackData!.state!.isEmpty) {
-                        setState(() async {
-                          _stateController.text = permissionProvider.state;
-                          selectedState = permissionProvider.state;
-                          /*
+                        print("stateOnMapready: ${_stateController.text}");
+                        _stateController.text = permissionProvider.state;
+                        selectedState = permissionProvider.state;
+                        print("stateOnMapready: ${_stateController.text}");
+                        /*
                   selectedDistricts = districts[selectedState] ?? [];
 */
-                          await fetchDistricts(selectedState!);
-                          _districtController.text =
-                              permissionProvider.district;
-                          await fetchBlocks(permissionProvider.district);
-                          /*selectedBlocks =
+                        await fetchDistricts(selectedState!);
+                        _districtController.text = permissionProvider.district;
+                        await fetchBlocks(permissionProvider.district);
+                        /*selectedBlocks =
                       blocks[permissionProvider.district] ?? [];*/
-                        });
                         _saveFormData();
                       }
                     },
@@ -671,8 +672,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         ),
 
         SizedBox(height: AppDimensions.di_5),
-
+        // permissionProvider.isLocationFetched = false;
         CustomDropdownField(
+          permissionProvider: permissionProvider,
           hintText: "Please Select State",
           textController: _stateController,
           items: states,
@@ -1390,6 +1392,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       final provider = Provider.of<PermissionProvider>(context, listen: false);
       // Ensure permissionProvider is available
       await provider.requestLocationPermission();
+      print("provider.isLocationFetched: ${provider.isLocationFetched}");
       if (!provider.isLocationFetched) {
         provider.fetchCurrentLocation();
       }

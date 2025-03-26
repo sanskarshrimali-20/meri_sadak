@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meri_sadak/providerData/permission_provider.dart';
 import '../../constants/app_colors.dart';
 import '../constants/app_dimensions.dart';
 
@@ -18,6 +19,7 @@ class CustomDropdownField extends StatefulWidget {
   final Color textColor;
   final Color boxBgColor;
   final Function(String)? onChanged;
+  final PermissionProvider? permissionProvider;
 
   const CustomDropdownField({
     super.key,
@@ -35,7 +37,7 @@ class CustomDropdownField extends StatefulWidget {
     required this.isRequired,
     this.onChanged,
     this.textColor = AppColors.black,
-    this.boxBgColor = AppColors.black,
+    this.boxBgColor = AppColors.black,  this.permissionProvider,
   });
 
   @override
@@ -143,6 +145,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                 suffix: widget.textController!.text.isNotEmpty
                     ? InkWell(
                   onTap: () {
+                    widget.permissionProvider?.isLocationFetched = false;
                     widget.textController!.clear();
                     setState(() {
                       widget.onChanged?.call('');
