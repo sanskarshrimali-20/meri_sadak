@@ -30,7 +30,7 @@ class CustomDialogButton extends StatelessWidget {
       onTap:  onClick, // Disable the onClick callback if isEnabled is false
       child: Container(
         padding: EdgeInsets.all(AppDimensions.di_1),
-        height: AppDimensions.di_60,
+        height: AppDimensions.di_50,
         width: DeviceSize.getScreenWidth(context) * 0.85,
         decoration: BoxDecoration(
           gradient: LinearGradient(

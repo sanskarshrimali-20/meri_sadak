@@ -92,6 +92,7 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                   style: TextStyle(
                     fontSize: AppDimensions.di_16,
                     fontWeight: FontWeight.bold,
+                    color: widget.refreshIconColor
                   ),
                 ),
                 SizedBox(width: 5), // Space between text and image

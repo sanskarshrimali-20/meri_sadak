@@ -4,6 +4,7 @@ import 'package:meri_sadak/providerData/image_picker_provider.dart';
 import 'package:meri_sadak/providerData/permission_provider.dart';
 import 'package:meri_sadak/providerData/theme_provider.dart';
 import 'package:meri_sadak/screens/splash/splash_screen.dart';
+import 'package:meri_sadak/utils/fontsize_provider.dart';
 import 'package:meri_sadak/utils/localization_provider.dart';
 import 'package:meri_sadak/utils/network_provider.dart';
 import 'package:meri_sadak/viewmodels/forgotChangePassword/forgot_change_password_viewmodel.dart';
@@ -23,15 +24,19 @@ Future<void> main() async {
   final themeProvider = ThemeProvider();
   await themeProvider.loadTheme();
 
-  runApp(MyApp(localizationProvider: localizationProvider, themeProvider:themeProvider));
+  final fontSizeProvider = FontSizeProvider();
+  await fontSizeProvider.loadFontSize();
+
+  runApp(MyApp(localizationProvider: localizationProvider, themeProvider:themeProvider, fontSizeProvider: fontSizeProvider,));
 }
 
 class MyApp extends StatefulWidget {
 
   final LocalizationProvider localizationProvider;
   final ThemeProvider themeProvider;
+  final FontSizeProvider fontSizeProvider;
 
-  const MyApp({Key? key, required this.localizationProvider, required this.themeProvider});
+  const MyApp({Key? key, required this.localizationProvider, required this.themeProvider, required this.fontSizeProvider});
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -54,7 +59,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ImagePickerProvider()),
         ChangeNotifierProvider(create: (_) => widget.themeProvider),
         ChangeNotifierProvider(create: (_) => NetworkProviderController()),
-
+        ChangeNotifierProvider(create: (_) => widget.fontSizeProvider),
       ],
       child: Consumer2<LocalizationProvider, ThemeProvider>(
         builder: (context, languageProvider, themeProvider, child) {

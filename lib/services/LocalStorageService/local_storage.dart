@@ -85,15 +85,23 @@ class LocalSecureStorage {
     return language;
   }
 
-  Future<String?> getTheme({required String key}) async{
-    final isDark = await _storage.read(key: key) ?? 'false';
-    return isDark;
+  Future<void> setFontSize(String t) async {
+    await _storage.write(key: 'fontSize', value: t);
+  }
+
+  Future<String?> getFontSize() async{
+    String? language = await _storage.read(key: 'fontSize');
+    return language;
   }
 
   Future<void> setTheme({required String key,  required String value}) async {
     await _storage.write(key: key, value: value);
   }
 
+  Future<String?> getTheme({required String key}) async{
+    final isDark = await _storage.read(key: key) ?? 'false';
+    return isDark;
+  }
 
   Future<void> setClickedBy(String t) async {
     await _storage.write(key: 'clickedBy', value: t);

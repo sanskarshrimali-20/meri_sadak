@@ -38,12 +38,10 @@ class PermissionProvider extends ChangeNotifier {
   }
 
   Future<void> fetchCurrentLocation() async {
+    if (isLocationFetched) return; // Don't fetch if already fetched
+
     isLoading = true;
     notifyListeners();
-
-    /*  if(isLocationFetched){
-      return;
-    }*/
     try {
       // Check if location services are enabled
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -86,7 +84,7 @@ class PermissionProvider extends ChangeNotifier {
           '${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea} - ${placemarks.first.postalCode}, ${placemarks.first.country}.';
       debugPrint("address---$address");
 
-      // isLocationFetched = true;
+      isLocationFetched = true;
       notifyListeners();
     } catch (e) {
       address = 'Failed to fetch location: ${e.toString()}';
