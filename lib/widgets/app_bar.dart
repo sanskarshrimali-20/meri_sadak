@@ -11,8 +11,9 @@ class MyAppBar {
       leading: IconButton(
         icon: SvgPicture.asset(
           ImageAssetsPath.drawerIcon,
-          width: AppDimensions.di_30,
-          height:  AppDimensions.di_30,
+          width: AppDimensions.di_20,
+          height:  AppDimensions.di_20,
+          color: AppColors.whiteColor,
         ),
         onPressed: () {
           scaffoldKey.currentState?.openDrawer(); // Open the drawer using the GlobalKey

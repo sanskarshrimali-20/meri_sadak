@@ -2,10 +2,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meri_sadak/screens/home/home_screen.dart';
-import 'package:meri_sadak/screens/registerFeedback/submitted_feedback_scree.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
@@ -24,11 +22,8 @@ import '../../services/LocalStorageService/local_storage.dart';
 import '../../utils/device_size.dart';
 import '../../utils/localization_provider.dart';
 import '../../utils/network_provider.dart';
-import '../../utils/toast_util.dart';
-import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_button.dart';
-import '../../widgets/custom_confirmation_dialog.dart';
 import '../../widgets/custom_dropdown_field.dart';
 import '../../widgets/custom_gesture_container.dart';
 import '../../widgets/custom_snackbar.dart';
@@ -55,10 +50,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       TextEditingController();
   final TextEditingController _categoryOfComplaintController =
       TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
+
   String? isClickedBy = AppStrings.noOne;
   bool _showFeedbackForm = true;
-  bool _isLoading = false;
   bool roadNameEnable = false;
   final dbHelper = DatabaseHelper();
   final _storage = LocalSecureStorage(); // Secure storage instance
@@ -78,6 +72,14 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   bool isLoadingB = false;
   bool isLoadingR = false;
 
+  List<String> states = [];
+  Map<String, List<String>> districts = {};
+  Map<String, List<String>> blocks = {};
+  Map<String, List<String>> roadNames = {};
+
+  final int writeYourFeedbackMaxLength = 200;
+  bool? locationStatus;
+
   final List<String> complaints = [
     'Road Selection or Alignment',
     'Slow Progress',
@@ -87,14 +89,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     'Bid/Tendering related issue',
     'Corruption related issue',
   ];
-
-  List<String> states = [];
-  Map<String, List<String>> districts = {};
-  Map<String, List<String>> blocks = {};
-  Map<String, List<String>> roadNames = {};
-
-  final int writeYourFeedbackMaxLength = 200;
-  bool? locationStatus;
 
   Future<void> fetchInitialData() async {
     // Simulate fetching states from an API or database
@@ -109,6 +103,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       _districtController.clear(); // Clear district controller
       _blockController.clear(); // Clear block controller
       _roadNameController.clear(); // Clear road controller
+      roadNameEnable = true;
     });
   }
 
@@ -137,6 +132,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         _districtController.clear(); // Clear district controller
         _blockController.clear(); // Clear block controller
         _roadNameController.clear(); // Clear road controller
+        roadNameEnable = true;
         isLoadingD = false; // Hide loading indicator after fetching data
       });
     } else {
@@ -170,6 +166,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       selectedRoads.clear(); // Clear roads when district changes
       _blockController.clear(); // Clear block controller
       _roadNameController.clear(); // Clear road controller
+      roadNameEnable = true;
       isLoadingB = false; // Hide loading indicator after fetching data
     });
   }
@@ -181,36 +178,29 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     // Simulate fetching roads based on selected block
     await Future.delayed(Duration(seconds: 1)); // Simulating network delay
     roadNames = {
-      'Berasia': ['Berasia road', 'Berasia road Second', 'Enter Manually'],
-      'Raisen': ['Raisen road', 'Raisen road Second', 'Enter Manually'],
-      'Mhow': ['Mhow road', 'Mhow road Second', 'Enter Manually'],
-      'Sanwer': ['Sanwer road', 'Sanwer road Second', 'Enter Manually'],
-      'Malihabad': [
-        'Malihabad road',
-        'Malihabad road Second',
-        'Enter Manually',
-      ],
-      'Mau': ['Mau road', 'Mau road Second', 'Enter Manually'],
-      'Sadar': ['Sadar road', 'Sadar road Second', 'Enter Manually'],
-      'Vijay Nagar': [
-        'Vijay Nagar road Second',
-        'Vijay Nagar road',
-        'Enter Manually',
-      ],
-      'Bandra': ['Bandra road', 'Bandra road Second', 'Enter Manually'],
-      'Andheri': ['Andheri road', 'Andheri road Second', 'Enter Manually'],
-      'Mulshi': ['Mulshi road', 'Mulshi road Second', 'Enter Manually'],
-      'Haveli': ['Haveli road', 'Haveli road Second', 'Enter Manually'],
-      'Daskroi': ['Daskroi road', 'Daskroi road Second', 'Enter Manually'],
-      'Sanand': ['Sanand road', 'Sanand road Second', 'Enter Manually'],
-      'Choryasi': ['Choryasi road', 'Choryasi road Second', 'Enter Manually'],
-      'Ichhpur': ['Ichhpur road', 'Ichhpur road Second', 'Enter Manually'],
+      'Berasia': ['Berasia road', 'Berasia road Second'],
+      'Raisen': ['Raisen road', 'Raisen road Second',],
+      'Mhow': ['Mhow road', 'Mhow road Second', ],
+      'Sanwer': ['Sanwer road', 'Sanwer road Second', ],
+      'Malihabad': ['Malihabad road', 'Malihabad road Second',],
+      'Mau': ['Mau road', 'Mau road Second', ],
+      'Sadar': ['Sadar road', 'Sadar road Second',],
+      'Vijay Nagar': ['Vijay Nagar road Second', 'Vijay Nagar road',],
+      'Bandra': ['Bandra road', 'Bandra road Second', ],
+      'Andheri': ['Andheri road', 'Andheri road Second', ],
+      'Mulshi': ['Mulshi road', 'Mulshi road Second', ],
+      'Haveli': ['Haveli road', 'Haveli road Second', ],
+      'Daskroi': ['Daskroi road', 'Daskroi road Second',],
+      'Sanand': ['Sanand road', 'Sanand road Second', ],
+      'Choryasi': ['Choryasi road', 'Choryasi road Second', ],
+      'Ichhpur': ['Ichhpur road', 'Ichhpur road Second', ],
     };
 
     setState(() {
       selectedRoads = roadNames[block] ?? [];
       _roadNameController
           .clear(); // Clear road name controller when block changes
+      roadNameEnable = true;
       isLoadingR = false; // Hide loading indicator after fetching data
     });
   }
@@ -219,7 +209,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   void initState() {
     super.initState();
     _initializePermissionProvider();
-    fetchInitialData();
+     fetchInitialData();
     _loadFormData(); // Load the saved form data
     _loadClickedType();
   }
@@ -234,7 +224,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   // Fetch saved form data from DB
   Future<void> _loadFormData() async {
     setState(() {
-      _isLoading = true;
     });
 
     feedbackData = await dbHelper.getFeedbackForm();
@@ -267,7 +256,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       // Set road controller
       _roadNameController.text = feedbackData?.roadName ?? '';
 
-      if (feedbackData?.roadName == "Enter Manually") {
+      if (_roadNameController.text.isNotEmpty) {
+        roadNameEnable = false;
+      }
+      else{
         roadNameEnable = true;
       }
 
@@ -494,7 +486,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     "Failed to fetch location, try again",
                     backgroundColor: Colors.red,
                   );
-                } else if (networkProvider.status ==
+                } else if (permissionProvider.address.toLowerCase().contains(
+                    'error') && networkProvider.status ==
                     ConnectivityStatus.offline) {
                   showErrorDialog(
                     context,
@@ -768,10 +761,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               isRequired: false,
               onChanged: (value) async {
                 setState(() {
-                  if ("Enter Manually" != value) {
-                    _saveFormData();
+                  if (_roadNameController.text.isNotEmpty) {
                     roadNameEnable = false;
                     _staticRoadNameController.clear();
+                    _saveFormData();
                   } else {
                     roadNameEnable = true;
                   }
@@ -780,9 +773,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             ),
 
         //enter manually
-        if (_roadNameController.text == 'Enter Manually')
+
           CustomTextField(
             editable: roadNameEnable,
+            boxBgEnableColor: AppColors.app_bg_color,
             textColor:
                 themeProvider.themeMode == ThemeMode.light
                     ? AppColors.black
@@ -853,7 +847,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                 showToast(AppStrings.pleaseSelectState);
               } else if (_districtController.text.isEmpty) {
                 showToast(AppStrings.pleaseSelectDistrict);
-              } else if (_categoryOfComplaintController.text.isEmpty) {
+              } else if(_roadNameController.text.isEmpty && _staticRoadNameController.text.isEmpty){
+                showToast(AppStrings.pleaseSelectEnterRoad);
+              }else if (_categoryOfComplaintController.text.isEmpty) {
                 showToast(AppStrings.pleaseSelectComplaint);
               } else if (_writeFeedbackController.text.isEmpty) {
                 showToast(AppStrings.pleaseWriteFeedback);
@@ -1145,11 +1141,12 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWidget(
                       text:
-                          _roadNameController.text.isEmpty
+                          _roadNameController.text.isEmpty ? _staticRoadNameController.text : _roadNameController.text,
+                         /* _roadNameController.text.isEmpty
                               ? "--"
                               : _roadNameController.text == 'Enter Manually'
                               ? _staticRoadNameController.text
-                              : _roadNameController.text,
+                              : _roadNameController.text,*/
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
