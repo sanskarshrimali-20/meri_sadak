@@ -184,6 +184,8 @@ class AppStrings {
   static const selectLanguagePre = 'Select your preferred language.';
   static const termsAndPrivacy = 'Terms, Conditions & Privacy Policy';
   static const areYouSure = "Are you sure you want to submit your feedback?";
+  static const areYouSureSaveFeedback =
+      "Are you sure you want to save your feedback?";
   static const freeUpSpace = "Free up space by clearing cache.";
   static const skipForNow = "Skip for now";
 
@@ -198,9 +200,6 @@ class AppStrings {
   static const allowCameraAlertContent =
       'Enable Meri Sadak to access your camera for capturing and reporting.';
 
-
   static const noInternet = "No Internet Connection";
   static const pleaseSelectEnterRoad = "Please select or enter road name";
-
-
 }

@@ -23,7 +23,7 @@ class CustomExpansionTile extends StatelessWidget {
     this.initiallyExpanded = false,
     this.backgroundColor = AppColors.black,
     this.textColor = AppColors.black,
-    this.onTap,  // Initialize the onTap callback
+    this.onTap, // Initialize the onTap callback
   });
 
   @override
@@ -41,9 +41,7 @@ class CustomExpansionTile extends StatelessWidget {
           child: ExpansionTile(
             iconColor: textColor,
             initiallyExpanded: initiallyExpanded,
-            shape: RoundedRectangleBorder(
-              side: BorderSide.none,
-            ),
+            shape: RoundedRectangleBorder(side: BorderSide.none),
             title: CustomTextWidget(
               text: title,
               fontSize: AppDimensions.di_16,
@@ -58,18 +56,13 @@ class CustomExpansionTile extends StatelessWidget {
                     subheading == ''
                         ? Container()
                         : CustomTextWidget(
-                      text: subheading,
-                      fontSize: AppDimensions.di_14,
-                      color: textColor,
-                      fontWeight: AppFontWeight.fontWeight400,
-                    ),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    if (imagePath != null)
-                      Image.asset(imagePath!)
-                    else
-                      content,
+                          text: subheading,
+                          fontSize: AppDimensions.di_14,
+                          color: textColor,
+                          fontWeight: AppFontWeight.fontWeight400,
+                        ),
+                    SizedBox(height: 8.0),
+                    if (imagePath != null) Image.asset(imagePath!) else content,
                   ],
                 ),
               ),

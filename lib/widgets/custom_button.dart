@@ -23,11 +23,14 @@ class CustomButton extends StatelessWidget {
     this.textColor = Colors.white,
     this.backgroundColor = AppColors.blueGradientColor1,
     this.backgroundColorOne = AppColors.blueGradientColor2,
-    this.fontSize =  AppDimensions.di_15,
-    this.padding = const EdgeInsets.symmetric(vertical:  AppDimensions.di_12, horizontal:  AppDimensions.di_24),
+    this.fontSize = AppDimensions.di_15,
+    this.padding = const EdgeInsets.symmetric(
+      vertical: AppDimensions.di_12,
+      horizontal: AppDimensions.di_24,
+    ),
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
-    this.buttonWidth =  AppDimensions.di_100,
-    this.buttonHeight =  AppDimensions.di_50
+    this.buttonWidth = AppDimensions.di_100,
+    this.buttonHeight = AppDimensions.di_50,
   });
 
   @override
@@ -37,8 +40,9 @@ class CustomButton extends StatelessWidget {
       height: buttonHeight,
       decoration: BoxDecoration(
         borderRadius: borderRadius,
-        gradient:  LinearGradient(
-          colors: [backgroundColor, backgroundColorOne], // Define your gradient colors here
+        gradient: LinearGradient(
+          colors: [backgroundColor, backgroundColorOne],
+          // Define your gradient colors here
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ), // Apply the gradient here

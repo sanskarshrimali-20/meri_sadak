@@ -32,7 +32,9 @@ import '../../widgets/selection_dialog.dart';
 import '../location/location_widget.dart';
 
 class RegisterFeedbackNewScreen extends StatefulWidget {
-  const RegisterFeedbackNewScreen({super.key});
+  final int? feedbackId;
+
+  const RegisterFeedbackNewScreen({super.key, this.feedbackId});
 
   @override
   State<RegisterFeedbackNewScreen> createState() =>
@@ -179,21 +181,21 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     await Future.delayed(Duration(seconds: 1)); // Simulating network delay
     roadNames = {
       'Berasia': ['Berasia road', 'Berasia road Second'],
-      'Raisen': ['Raisen road', 'Raisen road Second',],
-      'Mhow': ['Mhow road', 'Mhow road Second', ],
-      'Sanwer': ['Sanwer road', 'Sanwer road Second', ],
-      'Malihabad': ['Malihabad road', 'Malihabad road Second',],
-      'Mau': ['Mau road', 'Mau road Second', ],
-      'Sadar': ['Sadar road', 'Sadar road Second',],
-      'Vijay Nagar': ['Vijay Nagar road Second', 'Vijay Nagar road',],
-      'Bandra': ['Bandra road', 'Bandra road Second', ],
-      'Andheri': ['Andheri road', 'Andheri road Second', ],
-      'Mulshi': ['Mulshi road', 'Mulshi road Second', ],
-      'Haveli': ['Haveli road', 'Haveli road Second', ],
-      'Daskroi': ['Daskroi road', 'Daskroi road Second',],
-      'Sanand': ['Sanand road', 'Sanand road Second', ],
-      'Choryasi': ['Choryasi road', 'Choryasi road Second', ],
-      'Ichhpur': ['Ichhpur road', 'Ichhpur road Second', ],
+      'Raisen': ['Raisen road', 'Raisen road Second'],
+      'Mhow': ['Mhow road', 'Mhow road Second'],
+      'Sanwer': ['Sanwer road', 'Sanwer road Second'],
+      'Malihabad': ['Malihabad road', 'Malihabad road Second'],
+      'Mau': ['Mau road', 'Mau road Second'],
+      'Sadar': ['Sadar road', 'Sadar road Second'],
+      'Vijay Nagar': ['Vijay Nagar road Second', 'Vijay Nagar road'],
+      'Bandra': ['Bandra road', 'Bandra road Second'],
+      'Andheri': ['Andheri road', 'Andheri road Second'],
+      'Mulshi': ['Mulshi road', 'Mulshi road Second'],
+      'Haveli': ['Haveli road', 'Haveli road Second'],
+      'Daskroi': ['Daskroi road', 'Daskroi road Second'],
+      'Sanand': ['Sanand road', 'Sanand road Second'],
+      'Choryasi': ['Choryasi road', 'Choryasi road Second'],
+      'Ichhpur': ['Ichhpur road', 'Ichhpur road Second'],
     };
 
     setState(() {
@@ -208,8 +210,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   @override
   void initState() {
     super.initState();
+    print('Feedback ID: ${widget.feedbackId}');
     _initializePermissionProvider();
-     fetchInitialData();
+    fetchInitialData();
     _loadFormData(); // Load the saved form data
     _loadClickedType();
   }
@@ -223,12 +226,60 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
   // Fetch saved form data from DB
   Future<void> _loadFormData() async {
-    setState(() {
-    });
+    setState(() {});
 
     feedbackData = await dbHelper.getFeedbackForm();
-    print("feedbackData: ${feedbackData?.state.toString()}");
-    if (feedbackData != null) {
+    print("feedbackData: ${feedbackData}");
+    if (widget.feedbackId != null) {
+      List<dynamic> getFeedbackData = await dbHelper.getFeedbackWithImages(
+        widget.feedbackId!,
+      );
+      print("getFeedbackData: $getFeedbackData");
+      /*  getFeedbackData: [{id: 3, state: Madhya Pradesh, district: Bhopal, block: Berasia, roadName: Berasia road, staticRoadName: , categoryOfComplaint: Road Selection or Alignment, feedback: Hey, isFinalSubmit: 0, images: [{id: 3, feedbackId: 3, image: /data/user/0/com.merisadak.app.meri_sadak_ui/cache/53bbb20c-526c-4c0c-9706-4dc4d076920b/1000171126.jpg, source: Gallery}]}]*/
+      final locationProvider = Provider.of<PermissionProvider>(
+        context,
+        listen: false,
+      );
+      final imagePickerProvider = Provider.of<ImagePickerProvider>(
+        context,
+        listen: false,
+      );
+      await locationProvider.fetchLocationBasedOnLatLong(
+        getFeedbackData[0]['lat'],
+        getFeedbackData[0]['long'],
+      );
+      print("fetchLocData: ${locationProvider.state}");
+      _stateController.text = getFeedbackData[0]['state'] ?? '';
+      selectedState = getFeedbackData[0]['state'];
+      await fetchDistricts(selectedState!);
+      _districtController.text = getFeedbackData[0]['district'] ?? '';
+      selectedDistrict = getFeedbackData[0]['district'];
+      //set images
+      await imagePickerProvider.setImages(getFeedbackData);
+      await fetchBlocks(selectedDistrict!);
+      // print(getFeedbackData[0]['block']);
+      _blockController.text = getFeedbackData[0]['block'] ?? '';
+      selectedBlock = getFeedbackData[0]['block']; // Update selected block
+      // Fetch roads based on selected block
+      await fetchRoads(selectedBlock!);
+
+      // Set road controller
+      _roadNameController.text = getFeedbackData[0]['roadName'] ?? '';
+      if (_roadNameController.text.isNotEmpty) {
+        roadNameEnable = false;
+      } else {
+        roadNameEnable = true;
+      }
+      // Set static road controller
+      _staticRoadNameController.text =
+          getFeedbackData[0]['staticRoadName'] ?? '';
+
+      // Set other controllers
+      _categoryOfComplaintController.text =
+          getFeedbackData[0]['categoryOfComplaint'] ?? '';
+      _writeFeedbackController.text = getFeedbackData[0]['feedback'] ?? '';
+    }
+    if (feedbackData != null && widget.feedbackId == null) {
       print("feedbackData2: ${feedbackData?.state.toString()}");
       // Set state controller
       _stateController.text = feedbackData?.state ?? '';
@@ -258,8 +309,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
       if (_roadNameController.text.isNotEmpty) {
         roadNameEnable = false;
-      }
-      else{
+      } else {
         roadNameEnable = true;
       }
 
@@ -487,8 +537,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     backgroundColor: Colors.red,
                   );
                 } else if (permissionProvider.address.toLowerCase().contains(
-                    'error') && networkProvider.status ==
-                    ConnectivityStatus.offline) {
+                      'error',
+                    ) &&
+                    networkProvider.status == ConnectivityStatus.offline) {
                   showErrorDialog(
                     context,
                     AppStrings.noInternet,
@@ -773,28 +824,27 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             ),
 
         //enter manually
-
-          CustomTextField(
-            editable: roadNameEnable,
-            boxBgEnableColor: AppColors.app_bg_color,
-            textColor:
-                themeProvider.themeMode == ThemeMode.light
-                    ? AppColors.black
-                    : AppColors.whiteColor,
-            boxBgColor:
-                themeProvider.themeMode == ThemeMode.light
-                    ? AppColors.whiteColor
-                    : AppColors.textBoxDarkModeColor,
-            onChanged: (text) => _saveFormData(),
-            label: AppStrings.enterRoadName,
-            controller: _staticRoadNameController,
-            keyboardType: TextInputType.text,
-            maxLines: 1,
-            fontSize: AppDimensions.di_16,
-            validator: null,
-            isRequired: false,
-            labelText: '',
-          ),
+        CustomTextField(
+          editable: roadNameEnable,
+          boxBgEnableColor: AppColors.app_bg_color,
+          textColor:
+              themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.black
+                  : AppColors.whiteColor,
+          boxBgColor:
+              themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.textBoxDarkModeColor,
+          onChanged: (text) => _saveFormData(),
+          label: AppStrings.enterRoadName,
+          controller: _staticRoadNameController,
+          keyboardType: TextInputType.text,
+          maxLines: 1,
+          fontSize: AppDimensions.di_16,
+          validator: null,
+          isRequired: false,
+          labelText: '',
+        ),
 
         CustomDropdownField(
           onChanged: (text) => _saveFormData(),
@@ -847,9 +897,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                 showToast(AppStrings.pleaseSelectState);
               } else if (_districtController.text.isEmpty) {
                 showToast(AppStrings.pleaseSelectDistrict);
-              } else if(_roadNameController.text.isEmpty && _staticRoadNameController.text.isEmpty){
+              } else if (_roadNameController.text.isEmpty &&
+                  _staticRoadNameController.text.isEmpty) {
                 showToast(AppStrings.pleaseSelectEnterRoad);
-              }else if (_categoryOfComplaintController.text.isEmpty) {
+              } else if (_categoryOfComplaintController.text.isEmpty) {
                 showToast(AppStrings.pleaseSelectComplaint);
               } else if (_writeFeedbackController.text.isEmpty) {
                 showToast(AppStrings.pleaseWriteFeedback);
@@ -1141,8 +1192,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextWidget(
                       text:
-                          _roadNameController.text.isEmpty ? _staticRoadNameController.text : _roadNameController.text,
-                         /* _roadNameController.text.isEmpty
+                          _roadNameController.text.isEmpty
+                              ? _staticRoadNameController.text
+                              : _roadNameController.text,
+                      /* _roadNameController.text.isEmpty
                               ? "--"
                               : _roadNameController.text == 'Enter Manually'
                               ? _staticRoadNameController.text
@@ -1284,6 +1337,24 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             ),
 
             Spacer(),
+            CustomButton(
+              text: 'Save',
+              onPressed:
+                  () => _saveAsDraftFeedbackData(
+                    localizationProvider,
+                    imagePickerProvider,
+                    permissionProvider,
+                  ),
+              textColor: AppColors.whiteColor,
+              backgroundColor: AppColors.blueGradientColor1,
+              fontSize: AppDimensions.di_18,
+              padding: EdgeInsets.symmetric(
+                vertical: AppDimensions.di_6,
+                horizontal: AppDimensions.di_15,
+              ),
+              borderRadius: BorderRadius.circular(AppDimensions.di_100),
+            ),
+            Spacer(),
 
             Align(
               alignment: Alignment.centerRight,
@@ -1313,6 +1384,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                             backgroundColor: Colors.green,
                           );
                           _saveFeedbackStatus(
+                            widget.feedbackId,
                             imagePickerProvider,
                             _stateController.text,
                             _districtController.text,
@@ -1322,6 +1394,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                             _categoryOfComplaintController.text,
                             _writeFeedbackController.text,
                             imagePickerProvider.imageFiles,
+                            permissionProvider.latitude!,
+                            permissionProvider.longitude!,
+                            true,
                           );
                           Navigator.pushReplacement(
                             context,
@@ -1390,7 +1465,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       // Ensure permissionProvider is available
       await provider.requestLocationPermission();
       print("provider.isLocationFetched: ${provider.isLocationFetched}");
-      if (!provider.isLocationFetched) {
+      if (!provider.isLocationFetched && widget.feedbackId == null) {
         provider.fetchCurrentLocation();
       }
       locationStatus = await provider.requestLocationPermission();
@@ -1536,6 +1611,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   }
 
   Future<void> _saveFeedbackStatus(
+    int? feedbackId,
     ImagePickerProvider imagePickerProvider,
     String state,
     String district,
@@ -1545,21 +1621,94 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     String categoryOfComplaint,
     String feedback,
     List<ImageItem> imageFiles,
+    double lat,
+    double long,
+    bool isFinalSubmit,
   ) async {
-    String insertFeedback = await dbHelper.insertFeedbackWithImages(
-      state: state,
-      district: district,
-      block: block,
-      roadName: roadName,
-      staticRoadName: staticRoadName,
-      categoryOfComplaint: categoryOfComplaint,
-      feedback: feedback,
-      images: imageFiles,
-    );
+    String insertFeedback =
+        feedbackId == null
+            ? await dbHelper.insertFeedbackWithImages(
+              state: state,
+              district: district,
+              block: block,
+              roadName: roadName,
+              staticRoadName: staticRoadName,
+              categoryOfComplaint: categoryOfComplaint,
+              feedback: feedback,
+              images: imageFiles,
+              lat: lat,
+              long: long,
+              isFinalSubmit: isFinalSubmit,
+            )
+            : await dbHelper.updateFeedbackWithImages(
+              feedbackId: feedbackId,
+              state: state,
+              district: district,
+              block: block,
+              roadName: roadName,
+              staticRoadName: staticRoadName,
+              categoryOfComplaint: categoryOfComplaint,
+              feedback: feedback,
+              images: imageFiles,
+              lat: lat,
+              long: long,
+              isFinalSubmit: isFinalSubmit,
+            );
 
     if (insertFeedback == "Success") {
       imagePickerProvider.clearImages();
       dbHelper.clearFeedbackTable();
     }
+  }
+
+  _saveAsDraftFeedbackData(
+    LocalizationProvider localizationProvider,
+    ImagePickerProvider imagePickerProvider,
+    PermissionProvider permissionProvider,
+  ) {
+    showCustomSelectionDialog(
+      title: "Save",
+      titleVisibility: false,
+      content: AppStrings.areYouSureSaveFeedback,
+      icon: "assets/icons/language_icon.svg",
+      iconVisibility: false,
+      buttonLabels: [
+        localizationProvider.localizedStrings['yes'] ?? "Yes",
+        localizationProvider.localizedStrings['no'] ?? "No",
+      ],
+      onButtonPressed: [
+        () {
+          showErrorDialog(
+            context,
+            'Feedback saved successfully',
+            backgroundColor: Colors.green,
+          );
+          _saveFeedbackStatus(
+            widget.feedbackId,
+            imagePickerProvider,
+            _stateController.text,
+            _districtController.text,
+            _blockController.text,
+            _roadNameController.text,
+            _staticRoadNameController.text,
+            _categoryOfComplaintController.text,
+            _writeFeedbackController.text,
+            imagePickerProvider.imageFiles,
+            permissionProvider.latitude!,
+            permissionProvider.longitude!,
+            false,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        },
+        () {
+          Navigator.pop(context);
+        },
+      ],
+      isButtonActive: [true, false],
+      context: context,
+    );
   }
 }
