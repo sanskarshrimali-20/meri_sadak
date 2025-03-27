@@ -56,9 +56,11 @@ class _AllFeedbackScreen extends State<AllFeedbackScreen> {
           itemCount: feedbackList.length,
           itemBuilder: (context, index) {
             final feedback = feedbackList[index];
+            print("Feedback isFinalSubmit: ${feedback['isFinalSubmit']}");
             return CustomExpansionTile(
               title: "Feedback ID: ${feedback['id']}",
-              subheading: "",
+              subheading:
+                  "Status: ${feedback['isFinalSubmit'] == 1 ? 'Submitted' : 'To be Submitted'}",
               content: Text(feedback['feedback'] ?? 'No Feedback'),
               initiallyExpanded: false,
               // You can set this dynamically if needed
