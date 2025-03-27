@@ -37,7 +37,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'meri_sadak.db');
     return await openDatabase(
       path,
-      version:10,
+      version:14,
       onCreate: (db, version) async {
         await db.execute('PRAGMA foreign_keys = ON;');
 
@@ -87,8 +87,6 @@ class DatabaseHelper {
           synced TEXT DEFAULT 'false'
         )
        ''');
-
-        await db.execute('PRAGMA foreign_keys = ON;');
 
         await db.execute('''
         CREATE TABLE localization(
@@ -141,6 +139,39 @@ class DatabaseHelper {
              FOREIGN KEY(feedbackId) REFERENCES feedback(id) ON DELETE CASCADE
       )
       ''');
+
+        await db.execute('''
+        CREATE TABLE states (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            code TEXT,
+            name TEXT,
+            shortCode TEXT,
+            hindi TEXT,
+            odi TEXT
+      )
+      ''');
+
+        await db.execute('''
+        CREATE TABLE districts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            stateCode TEXT,
+            districtCode TEXT,
+            name TEXT,
+            hindi TEXT,
+            odi TEXT
+      )
+      ''');
+
+        await db.execute('''
+        CREATE TABLE blocks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            blockCode TEXT,
+            districtCode TEXT,
+            name TEXT,
+            hindi TEXT,
+            odi TEXT
+      )
+      ''');
       },
     );
   }
@@ -156,7 +187,6 @@ class DatabaseHelper {
             ConflictAlgorithm.replace, // Ensures only one record exists
       );
       return "Success";
-      debugPrint("User profile inserted successfully");
     } catch (e, stackTrace) {
       if (kDebugMode) {
         log("Exception $e while attempting to insert user profile");
@@ -225,78 +255,6 @@ class DatabaseHelper {
         print(stackTrace);
       }
       return "Error";
-    }
-  }
-
-  Future<void> insertUserDetails(Map<String, dynamic> userProfile) async {
-    try {
-      final db = await database;
-      // Use INSERT OR REPLACE to overwrite any existing record
-      await db.insert(
-        'user_details',
-        userProfile,
-        conflictAlgorithm:
-            ConflictAlgorithm.replace, // Ensures only one record exists
-      );
-      debugPrint("User profile inserted successfully");
-    } catch (e, stackTrace) {
-      if (kDebugMode) {
-        log("Exception $e while attempting to insert user profile");
-        print(stackTrace);
-      }
-    }
-  }
-
-  Future<Map<String, dynamic>?> getUserDetailsById(String userId) async {
-    try {
-      final db = await database;
-
-      // Query the table to fetch the user with the specific ID
-      final List<Map<String, dynamic>> result = await db.query(
-        'user_details',
-        where: 'phoneNo = ?',
-        // Assuming 'id' is the column for user identification
-        whereArgs: [userId],
-        // The value to filter by (userId)
-        limit: 1, // Fetch only one record
-      );
-
-      if (result.isNotEmpty) {
-        return result.first; // Return the user profile with the matching ID
-      } else {
-        debugPrint("No user profile found for id: $userId");
-        return null; // Return null if no record exists
-      }
-    } catch (e, stackTrace) {
-      if (kDebugMode) {
-        log("Exception $e while attempting to get user profile by id");
-        print(stackTrace);
-      }
-      return null; // Return null on error
-    }
-  }
-
-  Future<Map<String, dynamic>?> getUserDetails() async {
-    try {
-      final db = await database;
-      // Query the table and fetch the first record
-      final List<Map<String, dynamic>> result = await db.query(
-        'user_details',
-        limit: 1, // Fetch only one record
-      );
-
-      if (result.isNotEmpty) {
-        return result.first; // Return the single record
-      } else {
-        debugPrint("No user profile found");
-        return null; // Return null if no record exists
-      }
-    } catch (e, stackTrace) {
-      if (kDebugMode) {
-        log("Exception $e while attempting to get user profile");
-        print(stackTrace);
-      }
-      return null; // Return null on error
     }
   }
 
@@ -497,6 +455,111 @@ class DatabaseHelper {
         print(stackTrace);
       }
       return []; // Return null on error
+    }
+  }
+
+  Future<void> insertStates(Map<String, String> states) async {
+    try {
+      final db = await database;
+
+      await db.insert('states', states,
+        conflictAlgorithm:
+        ConflictAlgorithm.replace, );
+    }
+    catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to get user profile");
+        print(stackTrace);
+      }
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getStates() async {
+    try {
+      final db = await database;
+
+      final states = await db.query('states');
+      return states;
+    }
+    catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to get user profile");
+        print(stackTrace);
+      }
+      return [];
+    }
+  }
+
+  Future<void> insertDistricts(Map<String, String> districts) async {
+    try {
+      final db = await database;
+
+      await db.insert('districts', districts,
+        conflictAlgorithm:
+        ConflictAlgorithm.replace, );
+    }
+    catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to get user profile");
+        print(stackTrace);
+      }
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getDistricts(String stateCode) async {
+    try {
+      final db = await database;
+
+      final districts = await db.query(
+        'districts',
+        where: 'stateCode = ?',
+        whereArgs: [stateCode],
+      );
+      return districts;
+    }
+    catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to get user profile");
+        print(stackTrace);
+      }
+      return [];
+    }
+  }
+
+  Future<void> insertBlocks(Map<String, String> blocks) async {
+    try {
+      final db = await database;
+
+      await db.insert('blocks', blocks,
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    }
+    catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to get user profile");
+        print(stackTrace);
+      }
+    }
+  }
+
+
+  Future<List<Map<String, dynamic>>> getBlocks(String districtCode) async {
+    try {
+      final db = await database;
+
+      final districts = await db.query(
+        'blocks',
+        where: 'districtCode = ?',
+        whereArgs: [districtCode],
+      );
+      return districts;
+    }
+    catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to get user profile");
+        print(stackTrace);
+      }
+      return [];
     }
   }
 

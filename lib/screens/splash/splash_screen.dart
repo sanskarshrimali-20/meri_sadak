@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 import '../../viewmodels/login/login_view_model.dart';
+import '../../viewmodels/xmlData/xml_master_data.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -36,14 +37,35 @@ class _SplashScreen extends State<SplashScreen>
     // Start the animation
     _controller.forward().then((_) async {
 
-      /*Navigator.pushReplacement(
+      final xmlMasterDataViewModel = Provider.of<XmlMasterDataViewModel>(context, listen: false);
+
+      List<Map<String, dynamic>> states= await xmlMasterDataViewModel.getStatesFromDB();
+      List<Map<String, dynamic>> districts= await xmlMasterDataViewModel.getStatesFromDB();
+      List<Map<String, dynamic>> blocks= await xmlMasterDataViewModel.getBlocksFromDB("101");
+
+      if(states.isEmpty){
+        await xmlMasterDataViewModel.getStates();
+        debugPrint("statesempty");
+     }
+
+      if(districts.isEmpty){
+        await xmlMasterDataViewModel.getDistricts();
+        debugPrint("districtssempty");
+      }
+
+
+        await xmlMasterDataViewModel.getBlocks(101);
+        debugPrint("blockssempty");
+     // }
+
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomeScreen(), // Pass the profile data
         ),
-      );*/
+      );
 
-      final isLoggedIn = await _checkLoginStatus();
+     /* final isLoggedIn = await _checkLoginStatus();
 
         if(isLoggedIn){
           Navigator.pushReplacement(
@@ -60,7 +82,7 @@ class _SplashScreen extends State<SplashScreen>
               builder: (context) => LoginScreen(), // Pass the profile data
             ),
           );
-        }
+        }*/
       // Check login status
     });
   }

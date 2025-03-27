@@ -7,7 +7,9 @@ import 'package:meri_sadak/screens/aboutPmgsy/about_pmgsy.dart';
 import 'package:meri_sadak/screens/allFeedback/all_feedback_screen.dart';
 import 'package:meri_sadak/screens/registerFeedback/register_feedback_new_screen.dart';
 import 'package:meri_sadak/screens/roadList/road_list_screen.dart';
+import 'package:meri_sadak/viewmodels/xmlData/xml_master_data.dart';
 import 'package:meri_sadak/widgets/custom_dropdown_field.dart';
+import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
@@ -37,9 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _districtController = TextEditingController();
   final TextEditingController _blockController = TextEditingController();
 
+  List<Map<String, dynamic>> blockList = [];
+
   @override
   void initState() {
     _checkPermissions();
+    _fetchData(context);
     super.initState();
   }
 
@@ -130,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
 
+                CustomTextWidget(text: blockList.length.toString(), fontSize: 18, color: AppColors.black)
                 /* Align(
                     alignment: Alignment.center,
                     child: CustomButton(
@@ -296,5 +302,34 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Request camera permission
     await permissionProvider.requestCameraPermissionNew(context);
+  }
+
+  Future<void> _fetchData(BuildContext context) async {
+
+    final xmlMasterDataViewModel = Provider.of<XmlMasterDataViewModel>(context, listen: false);
+
+    // Schedule the fetching of data after the current build phase
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // await xmlMasterDataViewModel.getStates();
+      // await xmlMasterDataViewModel.getDistricts();
+      // await xmlMasterDataViewModel.getBlocks(99);
+
+      List<Map<String, dynamic>> states = await xmlMasterDataViewModel.getStatesFromDB();
+
+      debugPrint("states${states}");
+
+      List<Map<String, dynamic>> districts = await xmlMasterDataViewModel.getDistrictsFromDB("1");
+
+      debugPrint("districts${districts}");
+
+      List<Map<String, dynamic>> blocks = await xmlMasterDataViewModel.getBlocksFromDB("101");
+
+      debugPrint("blocks${blocks}");
+
+      setState(() {
+        blockList = blocks;
+      });
+
+    });
   }
 }

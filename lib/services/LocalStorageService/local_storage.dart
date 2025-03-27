@@ -39,34 +39,6 @@ class LocalSecureStorage {
         key: 'accessToken', value: accessToken); // Save accessToken
   }
 
-  Future<String?> getAccessToken() async {
-    try {
-      Map<String, dynamic>? userDetails =
-          await DatabaseHelper().getUserDetails();
-
-      if (!userDetails!.containsKey("accessToken")) {
-        if (kDebugMode) {
-          log("Did not retreive a valid user from DB");
-        }
-        return "";
-      }
-
-      String authToken = userDetails['accessToken'];
-
-      if (kDebugMode) {
-        log("Fetchget access token success");
-      }
-      return authToken;
-    } catch (e) {
-      if (kDebugMode) {
-        log("Error got");
-        debugPrint(e.toString());
-        print(e);
-      }
-      return "";
-    }
-  }
-
   Future<void> clearAllStoredData() async {
     await _storage.deleteAll(); // Clear all stored data securely
   }

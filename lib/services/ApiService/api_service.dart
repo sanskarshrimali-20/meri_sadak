@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import '../../constants/base_url_config.dart';
 
 class ApiService {
 
+  late HttpClient httpClient;
   final headers = {
     'Content-Type': 'application/json',
     'No-Auth': 'True',
@@ -119,24 +122,12 @@ class ApiService {
     }
   }
 
-  Future<http.Response> loadXMLMasterData(String url) async {
+  Future<String> loadXMLMasterData(String url) async {
 
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'text/xml',
-        'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Access-Control-Allow-Origin, Access-Control-Request-Method',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      // If the request was successful, return the XML content as a string
-      return response;
-    } else {
-      // If the request failed, throw an error
-      throw Exception('Failed to load XML: ${response.statusCode}');
+    try {
+      return await rootBundle.loadString(url);
+    } catch (e) {
+      throw Exception('Failed to load XML: $e');
     }
   }
 
