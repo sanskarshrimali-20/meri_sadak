@@ -289,7 +289,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Function to check permissions and show dialogs if necessary
   Future<void> _checkPermissions() async {
-    final permissionProvider = Provider.of<PermissionProvider>(context, listen: false);
+    final permissionProvider = Provider.of<PermissionProvider>(
+      context,
+      listen: false,
+    );
 
     // Request location permission
     await permissionProvider.requestLocationPermissionNew(context);

@@ -10,13 +10,17 @@ class ImagePickerProvider extends ChangeNotifier {
   List<ImageItem> get imageFiles => _imageFiles;
 
   final dbHelper = DatabaseHelper();
+
   // Load images from DB
   Future<void> loadImages() async {
-    final imagesFromDb = await dbHelper.getAllImages(); // Replace with your DB fetch logic
+    final imagesFromDb =
+        await dbHelper.getAllImages(); // Replace with your DB fetch logic
     print("Loaded images: $imagesFromDb"); // Debugging: Print fetched images
-    _imageFiles.clear();  // Clear any existing images
+    _imageFiles.clear(); // Clear any existing images
     _imageFiles.addAll(imagesFromDb); // Add images from DB to list
-    print("Image files after load: $_imageFiles"); // Debugging: Print after loading images
+    print(
+      "Image files after load: $_imageFiles",
+    ); // Debugging: Print after loading images
 
     notifyListeners(); // Notify listeners (UI) about the change
   }
@@ -58,6 +62,30 @@ class ImagePickerProvider extends ChangeNotifier {
   Future<void> clearImages() async {
     await dbHelper.clearImages();
     _imageFiles.clear();
+    notifyListeners();
+  }
+
+  // This method will set images from the fetched data
+  Future<void> setImages(List<dynamic> feedbackData) async {
+    // Assuming feedbackData contains a list of maps with 'images'
+    List<ImageItem> fetchedImages = [];
+
+    for (var feedback in feedbackData) {
+      if (feedback['images'] != null) {
+        for (var imageData in feedback['images']) {
+          // Create an ImageItem from each image and add it to the list
+          fetchedImages.add(
+            ImageItem(
+              imagePath: imageData['image'],
+              source: imageData['source'],
+            ),
+          );
+        }
+      }
+    }
+
+    // Update the imageFiles and notify listeners
+    _imageFiles = fetchedImages;
     notifyListeners();
   }
 }

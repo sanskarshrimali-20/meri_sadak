@@ -37,7 +37,8 @@ class CustomDropdownField extends StatefulWidget {
     required this.isRequired,
     this.onChanged,
     this.textColor = AppColors.black,
-    this.boxBgColor = AppColors.black,  this.permissionProvider,
+    this.boxBgColor = AppColors.black,
+    this.permissionProvider,
   });
 
   @override
@@ -73,9 +74,9 @@ class _CustomDropdownField extends State<CustomDropdownField> {
       children: [
         widget.isRequired == true
             ? Text(
-          "*",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-        )
+              "*",
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+            )
             : SizedBox.shrink(),
         Padding(
           padding: const EdgeInsets.only(bottom: AppDimensions.di_12),
@@ -98,20 +99,21 @@ class _CustomDropdownField extends State<CustomDropdownField> {
               focusNode: _focusNode,
               onChanged: (val) {
                 setState(() {
-                  _filteredList = _subFilteredList
-                      .where(
-                        (element) => element
-                        .toLowerCase()
-                        .contains(val.toLowerCase()),
-                  )
-                      .toList();
+                  _filteredList =
+                      _subFilteredList
+                          .where(
+                            (element) => element.toLowerCase().contains(
+                              val.toLowerCase(),
+                            ),
+                          )
+                          .toList();
                   // Show dropdown when text is entered
                   _isTapped = val.isNotEmpty;
                 });
               },
-              validator: (val) =>
-              val!.isEmpty ? 'Field can\'t be empty' : null,
-              style: widget.style ??
+              validator: (val) => val!.isEmpty ? 'Field can\'t be empty' : null,
+              style:
+                  widget.style ??
                   TextStyle(
                     color: widget.textColor,
                     fontSize: AppDimensions.di_16,
@@ -142,19 +144,21 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                   MediaQuery.of(context).size,
                 ),
                 // Show the clear icon only when the text field is not empty
-                suffix: widget.textController!.text.isNotEmpty
-                    ? InkWell(
-                  onTap: () {
-                    widget.permissionProvider?.isLocationFetched = false;
-                    widget.textController!.clear();
-                    setState(() {
-                      widget.onChanged?.call('');
-                      _filteredList = widget.items!;
-                    });
-                  },
-                  child: const Icon(Icons.clear, color: Colors.grey),
-                )
-                    : null,
+                suffix:
+                    widget.textController!.text.isNotEmpty
+                        ? InkWell(
+                          onTap: () {
+                            widget.permissionProvider?.isLocationFetched =
+                                false;
+                            widget.textController!.clear();
+                            setState(() {
+                              widget.onChanged?.call('');
+                              _filteredList = widget.items!;
+                            });
+                          },
+                          child: const Icon(Icons.clear, color: Colors.grey),
+                        )
+                        : null,
               ),
             ),
           ),
@@ -162,40 +166,43 @@ class _CustomDropdownField extends State<CustomDropdownField> {
         // Dropdown Items
         _isTapped && _filteredList.isNotEmpty
             ? Container(
-          height: widget.dropdownHeight ?? AppDimensions.di_150,
-          color: widget.dropdownBgColor ?? Colors.grey.shade200,
-          padding: const EdgeInsets.only(
-            left: AppDimensions.di_12,
-            right: AppDimensions.di_8,
-          ),
-          child: ListView.builder(
-            itemCount: _filteredList.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  setState(() {
-                    _isTapped = false; // Close dropdown when item is selected
-                    widget.textController!.text = _filteredList[index]; // Set the selected item
-                    widget.onChanged?.call(widget.textController!.text);
-                  });
+              height: widget.dropdownHeight ?? AppDimensions.di_150,
+              color: widget.dropdownBgColor ?? Colors.grey.shade200,
+              padding: const EdgeInsets.only(
+                left: AppDimensions.di_12,
+                right: AppDimensions.di_8,
+              ),
+              child: ListView.builder(
+                itemCount: _filteredList.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isTapped =
+                            false; // Close dropdown when item is selected
+                        widget.textController!.text =
+                            _filteredList[index]; // Set the selected item
+                        widget.onChanged?.call(widget.textController!.text);
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: AppDimensions.di_8,
+                      ),
+                      child: Text(
+                        _filteredList[index],
+                        style:
+                            widget.dropdownTextStyle ??
+                            TextStyle(
+                              color: Colors.grey.shade800,
+                              fontSize: AppDimensions.di_16,
+                            ),
+                      ),
+                    ),
+                  );
                 },
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: AppDimensions.di_8,
-                  ),
-                  child: Text(
-                    _filteredList[index],
-                    style: widget.dropdownTextStyle ??
-                        TextStyle(
-                          color: Colors.grey.shade800,
-                          fontSize: AppDimensions.di_16,
-                        ),
-                  ),
-                ),
-              );
-            },
-          ),
-        )
+              ),
+            )
             : SizedBox.shrink(),
       ],
     );

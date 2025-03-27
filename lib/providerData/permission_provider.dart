@@ -97,19 +97,83 @@ class PermissionProvider extends ChangeNotifier {
   Future<void> setLocation(double lat, double lng) async {
     latitude = lat;
     longitude = lng;
+    isLoading = true;
     notifyListeners();
-
     // Fetch address from coordinates
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       location = '$lat, $lng';
+      state = placemarks.first.administrativeArea ?? '';
+      district = placemarks.first.locality ?? '';
+      block = placemarks.first.subLocality ?? ''; // This ma
       address =
           '${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea} - ${placemarks.first.postalCode}, ${placemarks.first.country}.';
+      notifyListeners();
     } catch (e) {
-      address = 'Failed to fetch address.';
+      address = 'Failed to fetch location: ${e.toString()}';
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
+  }
 
+  Future<void> fetchLocationBasedOnLatLong(posLat, posLong) async {
+    // if (isLocationFetched) return; // Don't fetch if already fetched
+
+    isLoading = true;
     notifyListeners();
+    try {
+      // Check if location services are enabled
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await Geolocator.requestPermission();
+      }
+
+      // Check permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission == LocationPermission.deniedForever) {
+        isLoading = false;
+        notifyListeners();
+        throw Exception(
+          'Location permissions are permanently denied, we cannot request permissions.',
+        );
+      }
+
+      // Get the current position
+      // final position = await Geolocator.getCurrentPosition(
+      //   locationSettings: LocationSettings(accuracy: LocationAccuracy.best),
+      // );
+
+      // latitude = position.latitude;
+      // longitude = position.longitude;
+      latitude = posLat;
+      longitude = posLong;
+
+      // Get the address from coordinates
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        latitude!,
+        longitude!,
+      );
+      location = '${posLat}, ${posLong}';
+      debugPrint("location---$location");
+      state = placemarks.first.administrativeArea ?? '';
+      district = placemarks.first.locality ?? '';
+      block = placemarks.first.subLocality ?? ''; // This ma
+      address =
+          '${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea} - ${placemarks.first.postalCode}, ${placemarks.first.country}.';
+      debugPrint("address---$address");
+
+      // isLocationFetched = true;
+      notifyListeners();
+    } catch (e) {
+      address = 'Failed to fetch location: ${e.toString()}';
+    } finally {
+      // isLoading = false;
+      notifyListeners();
+    }
   }
 
   // Method to handle location permission
@@ -156,7 +220,7 @@ class PermissionProvider extends ChangeNotifier {
         print("Location permission granted.");
       } else {
         // Show custom permission dialog if not granted
-      /*  showCustomSelectionDialog(
+        /*  showCustomSelectionDialog(
           title: AppStrings.allowLocationAlertTitle,
           titleVisibility: true,
           content: AppStrings.allowLocationAlertContent,
@@ -181,7 +245,7 @@ class PermissionProvider extends ChangeNotifier {
       }
     } else if (status.isPermanentlyDenied) {
       // Show the custom permission dialog to guide users to settings if permanently denied
-     /* showCustomSelectionDialog(
+      /* showCustomSelectionDialog(
         title: 'Permission Required',
         titleVisibility: true,
         content: 'The location permission is permanently denied. You need to enable it in the app settings.',
@@ -219,7 +283,7 @@ class PermissionProvider extends ChangeNotifier {
         print("Camera permission granted.");
       } else {
         //_showPermissionDialog(context);
-    /*    showCustomSelectionDialog(
+        /*    showCustomSelectionDialog(
           title: AppStrings.allowCameraAlertTitle,
           titleVisibility: true,
           content: AppStrings.allowCameraAlertContent,
@@ -243,8 +307,8 @@ class PermissionProvider extends ChangeNotifier {
         );*/
       }
     } else if (status.isPermanentlyDenied) {
-     // _showPermissionDialog(context);
-    /*  showCustomSelectionDialog(
+      // _showPermissionDialog(context);
+      /*  showCustomSelectionDialog(
         title: AppStrings.allowCameraAlertTitle,
         titleVisibility: true,
         content: AppStrings.allowCameraAlertContent,
@@ -272,15 +336,22 @@ class PermissionProvider extends ChangeNotifier {
   Future<void> openSettingsAppForPermission(BuildContext context) async {
     final locationStatus = await Permission.location.status;
     final cameraStatus = await Permission.camera.status;
-    if (locationStatus.isPermanentlyDenied || cameraStatus.isPermanentlyDenied) {
+    if (locationStatus.isPermanentlyDenied ||
+        cameraStatus.isPermanentlyDenied) {
       openAppSettings();
-    }
-    else if(locationStatus.isDenied || cameraStatus.isDenied){
-      showErrorDialog(context, "Please allow permission", backgroundColor: Colors.red);
-    }
-    else{
+    } else if (locationStatus.isDenied || cameraStatus.isDenied) {
+      showErrorDialog(
+        context,
+        "Please allow permission",
+        backgroundColor: Colors.red,
+      );
+    } else {
       openAppSettings();
-      showErrorDialog(context, "Already Permission given", backgroundColor:  Colors.green);
+      showErrorDialog(
+        context,
+        "Already Permission given",
+        backgroundColor: Colors.green,
+      );
     }
   }
 }

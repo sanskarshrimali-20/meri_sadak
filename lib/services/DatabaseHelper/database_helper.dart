@@ -37,7 +37,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'meri_sadak.db');
     return await openDatabase(
       path,
-      version:10,
+      version: 11,
       onCreate: (db, version) async {
         await db.execute('PRAGMA foreign_keys = ON;');
 
@@ -128,7 +128,10 @@ class DatabaseHelper {
             roadName TEXT,
             staticRoadName TEXT,
             categoryOfComplaint TEXT,
-            feedback TEXT
+            feedback TEXT,
+            lat REAL,
+            long REAL,
+            isFinalSubmit INTEGER DEFAULT 0
         )
         ''');
 
@@ -411,14 +414,68 @@ class DatabaseHelper {
     required String staticRoadName,
     required String categoryOfComplaint,
     required String feedback,
-    required List<ImageItem> images, // List of image data (image path and source)
+    required double lat,
+    required double long,
+    required List<ImageItem> images,
+    required bool isFinalSubmit, // List of image data (image path and source)
   }) async {
-
-    try{
+    try {
       final db = await database;
 
       // Insert into feedback table
-      int feedbackId = await db.insert(
+      int feedbackId = await db.insert('allFeedback', {
+        'state': state,
+        'district': district,
+        'block': block,
+        'roadName': roadName,
+        'staticRoadName': staticRoadName,
+        'categoryOfComplaint': categoryOfComplaint,
+        'feedback': feedback,
+        'lat': lat,
+        'long': long,
+        'isFinalSubmit': isFinalSubmit ? 1 : 0,
+        // Store 1 for true, 0 for false
+      });
+
+      // Insert images associated with this feedbackId
+      for (var imageData in images) {
+        await db.insert('feedbackImages', {
+          'feedbackId': feedbackId, // Associate image with feedback entry
+          'image': imageData.imagePath,
+          'source': imageData.source,
+        });
+      }
+
+      return "Success";
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to get user profile");
+        print(stackTrace);
+      }
+      return "Error"; // Return null on error
+    }
+  }
+
+  Future<String> updateFeedbackWithImages({
+    required int
+    feedbackId, // Pass the feedbackId to identify the feedback to update
+    required String state,
+    required String district,
+    required String block,
+    required String roadName,
+    required String staticRoadName,
+    required String categoryOfComplaint,
+    required String feedback,
+    required double lat,
+    required double long,
+    required List<ImageItem> images,
+    required bool isFinalSubmit, // List of image data (image path and source)
+  }) async {
+    try {
+      final db = await database;
+
+      // Update the feedback table
+      int rowsAffected = await db.update(
         'allFeedback',
         {
           'state': state,
@@ -427,34 +484,49 @@ class DatabaseHelper {
           'roadName': roadName,
           'staticRoadName': staticRoadName,
           'categoryOfComplaint': categoryOfComplaint,
-          'feedback': feedback
+          'feedback': feedback,
+          'lat': lat,
+          'long': long,
+          'isFinalSubmit': isFinalSubmit ? 1 : 0,
         },
+        where: 'id = ?', // Use the feedbackId to target the specific row
+        whereArgs: [feedbackId],
       );
 
-      // Insert images associated with this feedbackId
+      if (rowsAffected == 0) {
+        return "No feedback found to update"; // If no rows were affected, return a message
+      }
+
+      // Delete existing images associated with this feedbackId
+      await db.delete(
+        'feedbackImages',
+        where: 'feedbackId = ?',
+        whereArgs: [feedbackId],
+      );
+
+      // Insert new images associated with this updated feedbackId
       for (var imageData in images) {
-        await db.insert(
-          'feedbackImages',
-          {
-            'feedbackId': feedbackId, // Associate image with feedback entry
-            'image': imageData.imagePath,
-            'source': imageData.source,
-          },
-        );
+        await db.insert('feedbackImages', {
+          'feedbackId': feedbackId,
+          // Associate image with updated feedback entry
+          'image': imageData.imagePath,
+          'source': imageData.source,
+        });
       }
 
       return "Success";
-    }catch (e, stackTrace) {
+    } catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to get user profile");
+        log("Exception $e while attempting to update feedback");
         print(stackTrace);
       }
-      return "Error"; // Return null on error
+      return "Error"; // Return error message if something goes wrong
     }
-
   }
 
-  Future<List<Map<String, dynamic>>> getFeedbackWithImages(int feedbackId) async {
+  Future<List<Map<String, dynamic>>> getFeedbackWithImages(
+    int feedbackId,
+  ) async {
     final db = await database;
 
     // Query feedback data
@@ -476,11 +548,10 @@ class DatabaseHelper {
     return [
       {
         ...feedback.first, // Combine feedback data
-        'images': images   // Add associated images as a list
-      }
+        'images': images, // Add associated images as a list
+      },
     ];
   }
-
 
   Future<List<Map<String, dynamic>>> getAllFeedbacks() async {
     // Query to get all feedbacks
@@ -488,10 +559,11 @@ class DatabaseHelper {
       final db = await database;
 
       final List<Map<String, dynamic>> feedbacks = await db.query(
-          'allFeedback');
+        'allFeedback',
+      );
+      print("result:$feedbacks");
       return feedbacks;
-    }
-    catch (e, stackTrace) {
+    } catch (e, stackTrace) {
       if (kDebugMode) {
         log("Exception $e while attempting to get user profile");
         print(stackTrace);
@@ -499,6 +571,4 @@ class DatabaseHelper {
       return []; // Return null on error
     }
   }
-
-
 }
