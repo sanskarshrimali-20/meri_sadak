@@ -130,6 +130,7 @@ class DatabaseHelper {
             feedback TEXT,
             lat REAL,
             long REAL,
+            dateTime TEXT,
             isFinalSubmit INTEGER DEFAULT 0
         )
         ''');
@@ -375,6 +376,7 @@ class DatabaseHelper {
     required String feedback,
     required double lat,
     required double long,
+    required String dateTime,
     required List<ImageItem> images,
     required bool isFinalSubmit, // List of image data (image path and source)
   }) async {
@@ -392,6 +394,7 @@ class DatabaseHelper {
         'feedback': feedback,
         'lat': lat,
         'long': long,
+        'dateTime': dateTime,
         'isFinalSubmit': isFinalSubmit ? 1 : 0,
         // Store 1 for true, 0 for false
       });
@@ -427,6 +430,7 @@ class DatabaseHelper {
     required String feedback,
     required double lat,
     required double long,
+    required String dateTime,
     required List<ImageItem> images,
     required bool isFinalSubmit, // List of image data (image path and source)
   }) async {
@@ -446,6 +450,7 @@ class DatabaseHelper {
           'feedback': feedback,
           'lat': lat,
           'long': long,
+          'dateTime': dateTime,
           'isFinalSubmit': isFinalSubmit ? 1 : 0,
         },
         where: 'id = ?', // Use the feedbackId to target the specific row
@@ -512,24 +517,27 @@ class DatabaseHelper {
     ];
   }
 
-  Future<List<Map<String, dynamic>>> getAllFeedbacks() async {
-    // Query to get all feedbacks
+  Future<List<Map<String, dynamic>>> getFeedbacksByFinalSubmitStatus(bool isFinalSubmit) async {
     try {
       final db = await database;
-
+      final int statusValue = isFinalSubmit ? 1 : 0; // Convert bool to int
       final List<Map<String, dynamic>> feedbacks = await db.query(
         'allFeedback',
+        where: 'isFinalSubmit = ?',
+        whereArgs: [statusValue],
       );
-      print("result:$feedbacks");
+      print("Feedbacks with isFinalSubmit = $isFinalSubmit: $feedbacks");
       return feedbacks;
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to get user profile");
+        log("Exception $e while fetching feedbacks with isFinalSubmit = $isFinalSubmit");
         print(stackTrace);
       }
-      return []; // Return null on error
+      return []; // Return an empty list on error
     }
   }
+
+
 
   Future<void> insertStates(Map<String, String> states) async {
     try {
