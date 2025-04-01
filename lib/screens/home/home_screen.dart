@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/screens/aboutPmgsy/about_pmgsy.dart';
+import 'package:meri_sadak/screens/allFeedback/all_feedabck_second_screen.dart';
 import 'package:meri_sadak/screens/allFeedback/all_feedback_screen.dart';
 import 'package:meri_sadak/screens/registerFeedback/register_feedback_new_screen.dart';
 import 'package:meri_sadak/screens/roadList/road_list_screen.dart';
@@ -64,13 +66,13 @@ class _HomeScreenState extends State<HomeScreen> {
             themeProvider.themeMode == ThemeMode.light
                 ? AppColors.app_bg_color
                 : AppColors.darkModeColor,
-        appBar: MyAppBar.buildAppBar(
-          AppStrings.appName,
-          AppStrings.citizenFeedbackSystem,
-          true,
-          context,
-          _scaffoldKey,
-        ),
+        // appBar: MyAppBar.buildAppBar(
+        //   AppStrings.appName,
+        //   AppStrings.citizenFeedbackSystem,
+        //   true,
+        //   context,
+        //   _scaffoldKey,
+        // ),
         drawer: Padding(
           padding: const EdgeInsets.only(
             bottom: AppDimensions.di_50,
@@ -80,204 +82,256 @@ class _HomeScreenState extends State<HomeScreen> {
           child: CustomDrawer(),
         ),
         body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(AppDimensions.di_16),
-            child: Column(
-              children: [
-                SizedBox(height: 30),
-                Align(
-                  alignment: Alignment.center,
-                  child: CustomButton(
-                    text: "New Register Feedback",
-                    onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RegisterFeedbackNewScreen(),
-                        ),
-                      );
-                    },
-                    textColor: AppColors.whiteColor,
-                    backgroundColor: AppColors.color_E77728,
-                    fontSize: AppDimensions.di_18,
-                    padding: EdgeInsets.symmetric(
-                      vertical: AppDimensions.di_6,
-                      horizontal: AppDimensions.di_15,
+          child: Column(
+            children: [
+              SizedBox(
+                width: DeviceSize.getScreenWidth(context),
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      ImageAssetsPath.homeBgHeader,
+                      fit: BoxFit.cover,
+                      width: DeviceSize.getScreenWidth(context),
                     ),
-                    borderRadius: BorderRadius.circular(AppDimensions.di_100),
-                    buttonWidth: AppDimensions.di_300,
-                  ),
-                ),
 
-                SizedBox(height: 20),
-
-                Align(
-                  alignment: Alignment.center,
-                  child: CustomButton(
-                    text: "All Feedback",
-                    onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AllFeedbackScreen(),
-                        ),
-                      );
-                    },
-                    textColor: AppColors.whiteColor,
-                    backgroundColor: AppColors.color_E77728,
-                    fontSize: AppDimensions.di_18,
-                    padding: EdgeInsets.symmetric(
-                      vertical: AppDimensions.di_6,
-                      horizontal: AppDimensions.di_15,
-                    ),
-                    borderRadius: BorderRadius.circular(AppDimensions.di_100),
-                    buttonWidth: AppDimensions.di_300,
-                  ),
-                ),
-
-                CustomTextWidget(text: blockList.length.toString(), fontSize: 18, color: AppColors.black)
-                /* Align(
-                    alignment: Alignment.center,
-                    child: CustomButton(
-                      text: "Old Register Feedback",
-                      onPressed: () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterFeedbackScreen(),
+                    Container(
+                      padding: EdgeInsets.only(top: 40, left: 20, right: 20),
+                      child: Row(children: [
+                        GestureDetector(
+                          onTap: (){
+                            _scaffoldKey.currentState?.openDrawer();  // Correct way to open the drawer
+                          },
+                          child: SvgPicture.asset(
+                            ImageAssetsPath.drawerIcon, color: AppColors.whiteColor, width: AppDimensions.di_20, height: AppDimensions.di_20,
                           ),
-                        );
-                      },
-                      textColor: AppColors.whiteColor,
-                      backgroundColor: AppColors.color_E77728,
-                      fontSize: AppDimensions.di_18,
-                      padding: EdgeInsets.symmetric(
-                        vertical: AppDimensions.di_6,
-                        horizontal: AppDimensions.di_15,
-                      ),
-                      borderRadius: BorderRadius.circular(AppDimensions.di_100),
-                      buttonWidth: AppDimensions.di_300,
-                    ),
-                  ),*/
+                        ),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: (){
 
-                /* GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutPMGSY()));
-                  },
-                  child:Image.asset(
-                    ImageAssetsPath.pmgsyIg, // Path to your image in the assets folder
-                    fit: BoxFit.cover, // The image will cover the entire container
-                  ) ,
+                          },
+                          child: SvgPicture.asset(
+                            ImageAssetsPath.notificationIcon,
+                          ),
+                        ),
+                      ],),
+                    ),
+
+                    Container(
+                        padding: EdgeInsets.only(top: DeviceSize.getScreenHeight(context) * 0.2),
+                        child: Column(
+                        children: [
+
+                            CustomTextWidget(text: AppStrings.yourFeedback, fontSize: AppDimensions.di_30, color: AppColors.whiteColor,
+                              fontWeight: AppFontWeight.fontWeight700, textAlign: TextAlign.center,),
+
+                            CustomTextWidget(text: AppStrings.togetherBuild, fontSize: AppDimensions.di_18, color: AppColors.whiteColor,
+                              fontWeight: AppFontWeight.fontWeight400, textAlign: TextAlign.center,),
+
+                        ],
+                      ),
+                    )
+
+                  ],
                 ),
-                SizedBox(height: AppDimensions.di_20,),
-                Container(
-                  padding: EdgeInsets.all(AppDimensions.di_16),
-                  decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(AppDimensions.di_20), // Rounded corners
+              ),
+              SizedBox(height: 30),
+              Align(
+                alignment: Alignment.center,
+                child: CustomButton(
+                  text: "New Register Feedback",
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegisterFeedbackNewScreen(),
+                      ),
+                    );
+                  },
+                  textColor: AppColors.whiteColor,
+                  backgroundColor: AppColors.color_E77728,
+                  fontSize: AppDimensions.di_18,
+                  padding: EdgeInsets.symmetric(
+                    vertical: AppDimensions.di_6,
+                    horizontal: AppDimensions.di_15,
+                  ),
+                  borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                  buttonWidth: AppDimensions.di_300,
+                ),
+              ),
+
+              SizedBox(height: 20),
+
+              Align(
+                alignment: Alignment.center,
+                child: CustomButton(
+                  text: "All Feedback",
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AllFeedbackSecondScreen(),
+                      ),
+                    );
+                  },
+                  textColor: AppColors.whiteColor,
+                  backgroundColor: AppColors.color_E77728,
+                  fontSize: AppDimensions.di_18,
+                  padding: EdgeInsets.symmetric(
+                    vertical: AppDimensions.di_6,
+                    horizontal: AppDimensions.di_15,
+                  ),
+                  borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                  buttonWidth: AppDimensions.di_300,
+                ),
+              ),
+/*
+              CustomTextWidget(
+                text: blockList.length.toString(),
+                fontSize: 18,
+                color: AppColors.black,
+              ),*/
+              /* Align(
+                  alignment: Alignment.center,
+                  child: CustomButton(
+                    text: "Old Register Feedback",
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterFeedbackScreen(),
+                        ),
+                      );
+                    },
+                    textColor: AppColors.whiteColor,
+                    backgroundColor: AppColors.color_E77728,
+                    fontSize: AppDimensions.di_18,
+                    padding: EdgeInsets.symmetric(
+                      vertical: AppDimensions.di_6,
+                      horizontal: AppDimensions.di_15,
                     ),
+                    borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                    buttonWidth: AppDimensions.di_300,
                   ),
-                  child: Column(
-                    children: [
+                ),*/
 
-                      CustomDropdownField(
-                        hintText: AppStrings.selectState,
-                        textController: _stateController,
-                        items: [],
-                        dropdownHeight: AppDimensions.di_300,
-                        isRequired: false,
-                      ),
-
-                      CustomDropdownField(
-                        hintText: AppStrings.selectDistrict,
-                        textController: _districtController,
-                        items: [],
-                        dropdownHeight: AppDimensions.di_300,
-                        isRequired: false,
-                      ),
-
-                      CustomDropdownField(
-                        hintText: AppStrings.selectBlock,
-                        textController: _blockController,
-                        items: [],
-                        dropdownHeight: AppDimensions.di_300,
-                        isRequired: false,
-                      ),
-
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: CustomButton(
-                          text: AppStrings.submit,
-                          onPressed: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => RegisterFeedbackNewScreen()),
-                            );
-                          },
-                          textColor: AppColors.whiteColor,
-                          backgroundColor: AppColors.color_E77728,
-                          fontSize: AppDimensions.di_18,
-                          padding:
-                          EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
-                          borderRadius: BorderRadius.circular(AppDimensions.di_100),
-                        ),
-                      ),
-
-                      SizedBox(height: 20,),
-
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: CustomButton(
-                          text: AppStrings.next,
-                          onPressed: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => RegisterFeedbackScreen()),
-                            );
-                          },
-                          textColor: AppColors.whiteColor,
-                          backgroundColor: AppColors.color_E77728,
-                          fontSize: AppDimensions.di_18,
-                          padding:
-                          EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
-                          borderRadius: BorderRadius.circular(AppDimensions.di_100),
-                        ),
-                      ),
-
-                      SizedBox(height: AppDimensions.di_20,),
-
-                      CustomHomeTabs(
-                        label: AppStrings.sanctionedRoads,
-                        onTap: (label, value) async {
-                          openRoadListScreen(label, value);
-                        },
-                        image: ImageAssetsPath.sanctionIg,
-                      ),
-                      SizedBox(height: AppDimensions.di_15),
-                      CustomHomeTabs(
-                        label: AppStrings.completedRoads,
-                        onTap: (label, value) async {
-                          openRoadListScreen(label, value);
-                        },
-                        image: ImageAssetsPath.completedIg,
-                      ),
-
-                      SizedBox(height: AppDimensions.di_15),
-                      CustomHomeTabs(
-                        label: AppStrings.ongoingRoads,
-                        onTap: (label, value) async {
-                          openRoadListScreen(label, value);
-                        },
-                        image: ImageAssetsPath.ongoingIg,
-                      ),
-                    ],
+              /* GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutPMGSY()));
+                },
+                child:Image.asset(
+                  ImageAssetsPath.pmgsyIg, // Path to your image in the assets folder
+                  fit: BoxFit.cover, // The image will cover the entire container
+                ) ,
+              ),
+              SizedBox(height: AppDimensions.di_20,),
+              Container(
+                padding: EdgeInsets.all(AppDimensions.di_16),
+                decoration: BoxDecoration(
+                  color: AppColors.whiteColor,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(AppDimensions.di_20), // Rounded corners
                   ),
-                )*/
-              ],
-            ),
+                ),
+                child: Column(
+                  children: [
+
+                    CustomDropdownField(
+                      hintText: AppStrings.selectState,
+                      textController: _stateController,
+                      items: [],
+                      dropdownHeight: AppDimensions.di_300,
+                      isRequired: false,
+                    ),
+
+                    CustomDropdownField(
+                      hintText: AppStrings.selectDistrict,
+                      textController: _districtController,
+                      items: [],
+                      dropdownHeight: AppDimensions.di_300,
+                      isRequired: false,
+                    ),
+
+                    CustomDropdownField(
+                      hintText: AppStrings.selectBlock,
+                      textController: _blockController,
+                      items: [],
+                      dropdownHeight: AppDimensions.di_300,
+                      isRequired: false,
+                    ),
+
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: CustomButton(
+                        text: AppStrings.submit,
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegisterFeedbackNewScreen()),
+                          );
+                        },
+                        textColor: AppColors.whiteColor,
+                        backgroundColor: AppColors.color_E77728,
+                        fontSize: AppDimensions.di_18,
+                        padding:
+                        EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
+                        borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                      ),
+                    ),
+
+                    SizedBox(height: 20,),
+
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: CustomButton(
+                        text: AppStrings.next,
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegisterFeedbackScreen()),
+                          );
+                        },
+                        textColor: AppColors.whiteColor,
+                        backgroundColor: AppColors.color_E77728,
+                        fontSize: AppDimensions.di_18,
+                        padding:
+                        EdgeInsets.symmetric(vertical: AppDimensions.di_6, horizontal: AppDimensions.di_15),
+                        borderRadius: BorderRadius.circular(AppDimensions.di_100),
+                      ),
+                    ),
+
+                    SizedBox(height: AppDimensions.di_20,),
+
+                    CustomHomeTabs(
+                      label: AppStrings.sanctionedRoads,
+                      onTap: (label, value) async {
+                        openRoadListScreen(label, value);
+                      },
+                      image: ImageAssetsPath.sanctionIg,
+                    ),
+                    SizedBox(height: AppDimensions.di_15),
+                    CustomHomeTabs(
+                      label: AppStrings.completedRoads,
+                      onTap: (label, value) async {
+                        openRoadListScreen(label, value);
+                      },
+                      image: ImageAssetsPath.completedIg,
+                    ),
+
+                    SizedBox(height: AppDimensions.di_15),
+                    CustomHomeTabs(
+                      label: AppStrings.ongoingRoads,
+                      onTap: (label, value) async {
+                        openRoadListScreen(label, value);
+                      },
+                      image: ImageAssetsPath.ongoingIg,
+                    ),
+                  ],
+                ),
+              )*/
+            ],
           ),
         ),
       ),
@@ -308,31 +362,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _fetchData(BuildContext context) async {
-
-    final xmlMasterDataViewModel = Provider.of<XmlMasterDataViewModel>(context, listen: false);
+    final xmlMasterDataViewModel = Provider.of<XmlMasterDataViewModel>(
+      context,
+      listen: false,
+    );
 
     // Schedule the fetching of data after the current build phase
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // await xmlMasterDataViewModel.getStates();
-      // await xmlMasterDataViewModel.getDistricts();
-      // await xmlMasterDataViewModel.getBlocks(99);
 
-      List<Map<String, dynamic>> states = await xmlMasterDataViewModel.getStatesFromDB();
+      List<Map<String, dynamic>> states =
+          await xmlMasterDataViewModel.getStatesFromDB();
 
-      debugPrint("states${states}");
+      List<Map<String, dynamic>> districts = await xmlMasterDataViewModel
+          .getDistrictsFromDB("1");
 
-      List<Map<String, dynamic>> districts = await xmlMasterDataViewModel.getDistrictsFromDB("1");
-
-      debugPrint("districts${districts}");
-
-      List<Map<String, dynamic>> blocks = await xmlMasterDataViewModel.getBlocksFromDB("101");
+      List<Map<String, dynamic>> blocks = await xmlMasterDataViewModel
+          .getBlocksFromDB("101");
 
       debugPrint("blocks${blocks}");
 
       setState(() {
         blockList = blocks;
       });
-
     });
   }
 }

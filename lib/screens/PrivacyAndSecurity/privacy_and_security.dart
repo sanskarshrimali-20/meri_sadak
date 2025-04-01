@@ -34,7 +34,7 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
           : AppColors.bgDarkModeColor,
       body: CustomBodyWithGradient(
         title: AppStrings.privacyAndSecurity,
-        childHeight: DeviceSize.getScreenHeight(context) * 0.4,
+        childHeight: DeviceSize.getScreenHeight(context) * 0.3,
         child: Padding(
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
@@ -123,7 +123,7 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
                     endIndent: AppDimensions.di_10, // Space from the right
                   ),
 
-                  customDrawerWidget(
+                  /*customDrawerWidget(
                     title: AppStrings.managePermissions,
                     icon: ImageAssetsPath.contacts,
                     onClick: () {
@@ -136,7 +136,7 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
                     thickness: AppDimensions.di_1, // Line thickness
                     indent: AppDimensions.di_10, // Space from the left
                     endIndent: AppDimensions.di_10, // Space from the right
-                  ),
+                  ),*/
 
                   customDrawerWidget(
                     title: AppStrings.legalAndPolicies,

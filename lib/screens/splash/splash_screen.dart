@@ -33,7 +33,6 @@ class _SplashScreen extends State<SplashScreen>
       duration: const Duration(seconds: 2),
     );
 
-
     // Start the animation
     _controller.forward().then((_) async {
 
@@ -53,10 +52,10 @@ class _SplashScreen extends State<SplashScreen>
         debugPrint("districtssempty");
       }
 
-
+      if(blocks.isEmpty){
         await xmlMasterDataViewModel.getBlocks(101);
         debugPrint("blockssempty");
-     // }
+      }
 
       Navigator.pushReplacement(
         context,

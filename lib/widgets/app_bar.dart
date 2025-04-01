@@ -6,13 +6,13 @@ import 'package:meri_sadak/constants/app_image_path.dart';
 
 class MyAppBar {
   static AppBar buildAppBar(
-      String titleName, String subtitle, bool automaticallyImplyLeadingCheck,BuildContext context, GlobalKey<ScaffoldState> scaffoldKey) {
+      String titleName, String subtitle, bool automaticallyImplyLeadingCheck, BuildContext context, GlobalKey<ScaffoldState> scaffoldKey) {
     return AppBar(
       leading: IconButton(
         icon: SvgPicture.asset(
           ImageAssetsPath.drawerIcon,
           width: AppDimensions.di_20,
-          height:  AppDimensions.di_20,
+          height: AppDimensions.di_20,
           color: AppColors.whiteColor,
         ),
         onPressed: () {
@@ -27,42 +27,34 @@ class MyAppBar {
           Text(
             titleName,
             style: TextStyle(
-                fontSize:  AppDimensions.di_21,
+                fontSize: AppDimensions.di_21,
                 fontWeight: FontWeight.w500,
                 color: Colors.white,
                 fontFamily: 'Montserrat',
                 letterSpacing: 1.5),
           ),
-          if (subtitle != null)
-            Text(
-              subtitle ?? '',
-              style: TextStyle(
-                fontSize:  AppDimensions.di_14,
-                fontWeight: FontWeight.w400,
-                color: Colors.white70,
-                fontFamily: 'Montserrat',
-                letterSpacing: 1.2,
-              ),
+          Text(
+            subtitle ?? '',
+            style: TextStyle(
+              fontSize: AppDimensions.di_14,
+              fontWeight: FontWeight.w400,
+              color: Colors.white70,
+              fontFamily: 'Montserrat',
+              letterSpacing: 1.2,
             ),
+          ),
         ],
       ),
       centerTitle: true,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              // AppColors.appColor
-              //     .withAlpha((0.9 * 255).toInt()),
-              // const Color(0xFF211D5E),
-              AppColors.blueGradientColor1, // Gradient Start Color
-              AppColors.blueGradientColor1  // Gradient End Color
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+          image: DecorationImage(
+            image: AssetImage(ImageAssetsPath.headerBg), // Provide the path to your image
+            fit: BoxFit.cover, // Ensures the image covers the AppBar space
+            alignment: Alignment.center, // Adjusts the alignment of the image (if needed)
           ),
         ),
       ),
     );
   }
 }
-

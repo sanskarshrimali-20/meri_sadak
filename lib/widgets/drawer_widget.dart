@@ -4,9 +4,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 
+import '../constants/app_font_weight.dart';
+
 Widget customDrawerWidget({
   required String title,
   double fontSize = AppDimensions.di_18,
+  FontWeight fontWeight = AppFontWeight.fontWeight500,
   required String icon,
   Color iconColor = Colors.black,
   Color textColor = Colors.black,
@@ -40,7 +43,7 @@ Widget customDrawerWidget({
         child:
           Text(
             title,
-            style: TextStyle(fontSize: fontSize, color: textColor),
+            style: TextStyle(fontSize: fontSize, color: textColor, fontWeight: fontWeight),
           ),),),
           // Image after text (arrow icon)
           visible
