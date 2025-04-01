@@ -12,7 +12,6 @@ import '../../constants/app_font_weight.dart';
 import '../../constants/app_image_path.dart';
 import '../../constants/app_strings.dart';
 import '../../constants/app_widget_svg.dart';
-import '../../data/model/feedback_from_model.dart';
 import '../../data/model/image_item_model.dart';
 import '../../providerData/image_picker_provider.dart';
 import '../../providerData/permission_provider.dart';
@@ -23,6 +22,7 @@ import '../../utils/device_size.dart';
 import '../../utils/localization_provider.dart';
 import '../../utils/network_provider.dart';
 import '../../widgets/custom_body_with_gradient.dart';
+import '../../data/model/feedback_from_model.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_dropdown_field.dart';
 import '../../widgets/custom_gesture_container.dart';
@@ -212,7 +212,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     super.initState();
     print('Feedback ID: ${widget.feedbackId}');
     _initializePermissionProvider();
-
   }
 
   Future<void> _loadClickedType() async {
@@ -317,7 +316,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       _categoryOfComplaintController.text =
           feedbackData?.categoryOfComplaint ?? '';
       _writeFeedbackController.text = feedbackData?.feedback ?? '';
-      debugPrint(" _writeFeedbackController.text ${ _writeFeedbackController.text}");
+      debugPrint(
+        " _writeFeedbackController.text ${_writeFeedbackController.text}",
+      );
     }
     // After all async tasks are completed, update the state synchronously
     setState(() {
@@ -665,6 +666,11 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                 itemCount: imagePickerProvider.imageFiles.length,
                 itemBuilder: (context, index) {
                   final imageItem = imagePickerProvider.imageFiles[index];
+                  // final imgIndex
+                  print("imagedata---${imageItem.id}");
+                  print("imagedata---${imageItem.imagePath}");
+                  print("imagedataIndx---${index}");
+
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppDimensions.di_8,
@@ -696,7 +702,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                                 ),
                               ),
                               GestureDetector(
-                                onTap:
+                             onTap:
                                     () =>
                                         imagePickerProvider.deleteImage(index),
                                 child: SvgPicture.asset(
@@ -1329,8 +1335,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
         Row(
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
+            Expanded(
               child: CustomButton(
                 text: AppStrings.edit,
                 onPressed: () async {
@@ -1348,92 +1353,16 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                 borderRadius: BorderRadius.circular(AppDimensions.di_100),
               ),
             ),
-
-            Spacer(),
-            CustomButton(
-              text: 'Save',
-              onPressed:
-                  () => _saveAsDraftFeedbackData(
-                    localizationProvider,
-                    imagePickerProvider,
-                    permissionProvider,
-                  ),
-              textColor: AppColors.whiteColor,
-              backgroundColor: AppColors.blueGradientColor1,
-              fontSize: AppDimensions.di_18,
-              padding: EdgeInsets.symmetric(
-                vertical: AppDimensions.di_6,
-                horizontal: AppDimensions.di_15,
-              ),
-              borderRadius: BorderRadius.circular(AppDimensions.di_100),
-            ),
-            Spacer(),
-
-            Align(
-              alignment: Alignment.centerRight,
+            SizedBox(width: 12),
+            Expanded(
               child: CustomButton(
-                text: AppStrings.submit,
-                onPressed: () async {
-                  print(isClickedBy == AppStrings.gallery);
-                  print("isClickedBy: $isClickedBy");
-
-                  if (networkProvider.status == ConnectivityStatus.online ||
-                      isClickedBy == AppStrings.gallery) {
-                    showCustomSelectionDialog(
-                      title: "Submit",
-                      titleVisibility: false,
-                      content: AppStrings.areYouSure,
-                      icon: "assets/icons/language_icon.svg",
-                      iconVisibility: false,
-                      buttonLabels: [
-                        localizationProvider.localizedStrings['yes'] ?? "Yes",
-                        localizationProvider.localizedStrings['no'] ?? "No",
-                      ],
-                      onButtonPressed: [
-                        () {
-                          showErrorDialog(
-                            context,
-                            'Feedback submitted successfully',
-                            backgroundColor: Colors.green,
-                          );
-                          _saveFeedbackStatus(
-                            widget.feedbackId,
-                            imagePickerProvider,
-                            permissionProvider,
-                            _stateController.text,
-                            _districtController.text,
-                            _blockController.text,
-                            _roadNameController.text,
-                            _staticRoadNameController.text,
-                            _categoryOfComplaintController.text,
-                            _writeFeedbackController.text,
-                            imagePickerProvider.imageFiles,
-                            permissionProvider.latitude!,
-                            permissionProvider.longitude!,
-                            true,
-                          );
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ),
-                          );
-                        },
-                        () {
-                          Navigator.pop(context);
-                        },
-                      ],
-                      isButtonActive: [true, false],
-                      context: context,
-                    );
-                  } else {
-                    showErrorDialog(
-                      context,
-                      AppStrings.noInternet,
-                      backgroundColor: Colors.red,
-                    );
-                  }
-                },
+                text: 'Save',
+                onPressed:
+                    () => _saveAsDraftFeedbackData(
+                      localizationProvider,
+                      imagePickerProvider,
+                      permissionProvider,
+                    ),
                 textColor: AppColors.whiteColor,
                 backgroundColor: AppColors.blueGradientColor1,
                 fontSize: AppDimensions.di_18,
@@ -1445,6 +1374,80 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               ),
             ),
           ],
+        ),
+        SizedBox(height: 20),
+        SizedBox(
+          width: DeviceSize.getScreenWidth(context),
+          child: CustomButton(
+            text: AppStrings.submit,
+            onPressed: () async {
+              print(isClickedBy == AppStrings.gallery);
+              print("isClickedBy: $isClickedBy");
+
+              if (networkProvider.status == ConnectivityStatus.online ||
+                  isClickedBy == AppStrings.gallery) {
+                showCustomSelectionDialog(
+                  title: "Submit",
+                  titleVisibility: false,
+                  content: AppStrings.areYouSure,
+                  icon: "assets/icons/language_icon.svg",
+                  iconVisibility: false,
+                  buttonLabels: [
+                    localizationProvider.localizedStrings['yes'] ?? "Yes",
+                    localizationProvider.localizedStrings['no'] ?? "No",
+                  ],
+                  onButtonPressed: [
+                    () {
+                      showErrorDialog(
+                        context,
+                        'Feedback submitted successfully',
+                        backgroundColor: Colors.green,
+                      );
+                      _saveFeedbackStatus(
+                        widget.feedbackId,
+                        imagePickerProvider,
+                        permissionProvider,
+                        _stateController.text,
+                        _districtController.text,
+                        _blockController.text,
+                        _roadNameController.text,
+                        _staticRoadNameController.text,
+                        _categoryOfComplaintController.text,
+                        _writeFeedbackController.text,
+                        imagePickerProvider.imageFiles,
+                        permissionProvider.latitude!,
+                        permissionProvider.longitude!,
+                        true,
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    },
+                    () {
+                      Navigator.pop(context);
+                    },
+                  ],
+                  isButtonActive: [true, false],
+                  context: context,
+                );
+              } else {
+                showErrorDialog(
+                  context,
+                  AppStrings.noInternet,
+                  backgroundColor: Colors.red,
+                );
+              }
+            },
+            textColor: AppColors.whiteColor,
+            backgroundColor: AppColors.blueGradientColor1,
+            fontSize: AppDimensions.di_18,
+            padding: EdgeInsets.symmetric(
+              vertical: AppDimensions.di_6,
+              horizontal: AppDimensions.di_15,
+            ),
+            borderRadius: BorderRadius.circular(AppDimensions.di_100),
+          ),
         ),
       ],
     );
@@ -1485,9 +1488,9 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       }
       locationStatus = await provider.requestLocationPermission();
     });
-   await fetchInitialData();
-   await _loadFormData(); // Load the saved form data
-   await _loadClickedType();
+    await fetchInitialData();
+    await _loadFormData(); // Load the saved form data
+    await _loadClickedType();
   }
 
   void _showProfileImageDialog(

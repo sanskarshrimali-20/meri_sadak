@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../data/model/image_item_model.dart';
@@ -18,11 +19,10 @@ class ImagePickerProvider extends ChangeNotifier {
     print("Loaded images: $imagesFromDb"); // Debugging: Print fetched images
     _imageFiles.clear(); // Clear any existing images
     _imageFiles.addAll(imagesFromDb); // Add images from DB to list
+    notifyListeners(); // Notify listeners (UI) about the change
     print(
       "Image files after load: $_imageFiles",
     ); // Debugging: Print after loading images
-
-    notifyListeners(); // Notify listeners (UI) about the change
   }
 
   // Pick an image from camera or gallery
@@ -52,10 +52,17 @@ class ImagePickerProvider extends ChangeNotifier {
   // Delete image from DB and list
   Future<void> deleteImage(int index) async {
     final image = _imageFiles[index];
+    if (kDebugMode) {
+      print("deleteImage: $index");
+      print(
+        "my_imageFiles: ${_imageFiles[index].id} :: my_imageFiles: ${_imageFiles[index].imagePath}",
+      );
+      print("deleteImageIdd: ${image.id}");
+    }
     await dbHelper.deleteImage(image.id!);
     _imageFiles.removeAt(index);
-    loadImages();
     notifyListeners();
+    await loadImages();
   }
 
   // Clear all images from DB
@@ -78,6 +85,7 @@ class ImagePickerProvider extends ChangeNotifier {
             ImageItem(
               imagePath: imageData['image'],
               source: imageData['source'],
+              id: imageData['id'],
             ),
           );
         }
