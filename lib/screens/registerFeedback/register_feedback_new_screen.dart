@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meri_sadak/screens/home/home_screen.dart';
+import 'package:meri_sadak/utils/date_time_utils.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
@@ -1657,6 +1658,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               images: imageFiles,
               lat: lat,
               long: long,
+              dateTime: DateTimeUtil.getFormattedDateTime(),
               isFinalSubmit: isFinalSubmit,
             )
             : await dbHelper.updateFeedbackWithImages(
@@ -1671,6 +1673,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               images: imageFiles,
               lat: lat,
               long: long,
+              dateTime: DateTimeUtil.getFormattedDateTime(),
               isFinalSubmit: isFinalSubmit,
             );
 

@@ -5,16 +5,11 @@ import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
-import '../../constants/app_image_path.dart';
 import '../../constants/app_strings.dart';
-import '../../providerData/permission_provider.dart';
 import '../../providerData/theme_provider.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
-import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
-import '../../widgets/custom_carousel_slider.dart';
 import '../../widgets/custom_expansion_tile.dart';
-import '../location/location_widget.dart';
 
 class AllFeedbackScreen extends StatefulWidget {
   const AllFeedbackScreen({super.key});
@@ -24,9 +19,9 @@ class AllFeedbackScreen extends StatefulWidget {
 }
 
 class _AllFeedbackScreen extends State<AllFeedbackScreen> {
-  final dbHelper = DatabaseHelper();
-  List<Map<String, dynamic>> feedbackList = []; // List to hold feedback data
 
+  final dbHelper = DatabaseHelper();
+  List<Map<String, dynamic>> submitFeedbackList = []; // List to hold feedback data
   @override
   void initState() {
     super.initState();
@@ -34,11 +29,11 @@ class _AllFeedbackScreen extends State<AllFeedbackScreen> {
   }
 
   Future<void> fetchAllFeedback() async {
-    final feedbacks =
-        await dbHelper
-            .getAllFeedbacks(); // Assuming you have this method in your provider
+    final submitFeedbacks =
+    await dbHelper
+        .getFeedbacksByFinalSubmitStatus(true); // Assuming you have this method in your provider
     setState(() {
-      feedbackList = feedbacks; // Update the state with fetched feedback
+      submitFeedbackList = submitFeedbacks; // Update the state with fetched feedback
     });
   }
 
@@ -55,7 +50,7 @@ class _AllFeedbackScreen extends State<AllFeedbackScreen> {
         title: AppStrings.feedbackStatus,
         childHeight: DeviceSize.getScreenHeight(context),
         child:
-            feedbackList.isEmpty
+        submitFeedbackList.isEmpty
                 ? Center(
                   child: CustomTextWidget(
                     text: AppStrings.noDataAvailable,
@@ -64,9 +59,9 @@ class _AllFeedbackScreen extends State<AllFeedbackScreen> {
                   ),
                 )
                 : ListView.builder(
-                  itemCount: feedbackList.length,
+                  itemCount: submitFeedbackList.length,
                   itemBuilder: (context, index) {
-                    final feedback = feedbackList[index];
+                    final feedback = submitFeedbackList[index];
                     print(
                       "Feedback isFinalSubmit: ${feedback['isFinalSubmit']}",
                     );

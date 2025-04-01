@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/data/model/image_item_model.dart';
+import 'package:meri_sadak/utils/date_time_utils.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_button.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
@@ -119,10 +120,10 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                       Radius.circular(AppDimensions.di_40), // Rounded corners
                                     ),
                                   ),
-                                  width: 100,
+                                  width: feedback["isFinalSubmit"] == 1 ? 100 : 140,
                                   height: 30,
                                   child: Center(
-                                    child: Text("submitted", style: TextStyle(color: AppColors.whiteColor),),
+                                    child: Text(feedback["isFinalSubmit"] == 1 ? "Submitted" : "To be submitted", style: TextStyle(color: AppColors.whiteColor),),
                                   ),
                                 ),
                               ],
@@ -131,7 +132,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
 
                             CustomTextWidget(
                               text:
-                              "Submitted: 21-Feb-2025",
+                              "Submitted: ${DateTimeUtil.formatDateTime(feedback["dateTime"])}",
                               // "submitted: ${feedback['categoryOfComplaint']}",
                               fontSize: 16,
                               fontWeight: AppFontWeight.fontWeight600,
@@ -147,16 +148,18 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                               color: AppColors.black,
                               fontWeight: AppFontWeight.fontWeight600,
                             ),
+
                             SizedBox(height: 10),
 
                             CustomTextWidget(
-                              text:
-                              "Road: ${{feedback["staticRoadName"]}.isEmpty ? feedback["roadName"] : feedback["staticRoadName"]}",
+                              text: "Road: ${feedback["roadName"]?.isEmpty ?? true ? feedback["staticRoadName"] : feedback["roadName"]}",
                               fontSize: 16,
                               color: AppColors.black,
                               fontWeight: AppFontWeight.fontWeight600,
                             ),
+
                             SizedBox(height: 10),
+
                             CustomTextWidget(
                               text:
                               "Feedback: ${feedback["feedback"]}",
@@ -357,23 +360,41 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                           SizedBox(height: 15,),
 
                             if (feedback['isFinalSubmit'] == 0)
-                              CustomButton(
-                                text: 'Edit',
-                                onPressed: () {
-                                  print("feedbackData: $feedbackData");
-                                  //////feedbackData: [{id: 3, state: Madhya Pradesh, district: Bhopal, block: Berasia, roadName: Berasia road, staticRoadName: , categoryOfComplaint: Road Selection or Alignment, feedback: Hey, isFinalSubmit: 0, images: [Instance of 'ImageItem']}]
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) =>
-                                              RegisterFeedbackNewScreen(
-                                                feedbackId: feedback['id'],
-                                              ),
-                                    ),
-                                  );
-                                },
+                              GestureDetector(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: <Color>[
+                                        AppColors.blueGradientColor1, // Gradient Start Color
+                                        AppColors.blueGradientColor2, // Gradient End Color
+                                      ]
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(AppDimensions.di_40), // Rounded corners
+                                  ),
+                                ),
+                                width: 100,
+                                height: 50,
+                                child: Center(
+                                  child: Text("Edit", style: TextStyle(color: AppColors.whiteColor, fontSize: AppDimensions.di_16,
+                                      fontWeight: AppFontWeight.fontWeight600),),
+                                ),
                               ),
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) =>
+                                        RegisterFeedbackNewScreen(
+                                          feedbackId: feedback['id'],
+                                        ),
+                                  ),
+                                );
+                              },
+                            ),
                           ],
                         ),
                       );
