@@ -176,7 +176,8 @@ class _SettingScreen extends State<SettingScreen> {
         ),
       ),
     );
-  }}
+  }
+}
 
 
 /*

@@ -21,7 +21,7 @@ class CustomExpansionTile extends StatelessWidget {
     required this.content,
     this.imagePath,
     this.initiallyExpanded = false,
-    this.backgroundColor = AppColors.black,
+    this.backgroundColor = AppColors.whiteColor,
     this.textColor = AppColors.black,
     this.onTap, // Initialize the onTap callback
   });

@@ -40,9 +40,10 @@ class _AboutPMGSYState extends State<AboutPMGSY> {
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light
           ? AppColors.bgColorGainsBoro
-          : AppColors.bgDarkModeColor,      body: CustomBodyWithGradient(
+          : AppColors.bgDarkModeColor,
+      body: CustomBodyWithGradient(
         title: AppStrings.aboutTitle,
-        childHeight: DeviceSize.getScreenHeight(context),
+        childHeight: DeviceSize.getScreenHeight(context) * 0.85,
         child: ListView(
           children: [
             // Carousel Slider

@@ -58,16 +58,11 @@ class _AppVersionState extends State<AppVersion> {
               ),
               // Container(), // Content can be empty or add custom widgets here
               initiallyExpanded: true,
+              backgroundColor: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,
             ),
 
-            /*   CustomExpansionTile(
-              title: AppStrings.appVersionUpdate,
-              subheading: '',
-              //AppStrings.aboutMeriSadakSubHeading,
-              content: Container(),
-              // Content can be empty or add custom widgets here
-              initiallyExpanded: false,
-            ),*/
             Card(
               elevation: 2.0,
               child: Container(

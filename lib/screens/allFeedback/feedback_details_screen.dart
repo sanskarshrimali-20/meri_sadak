@@ -9,10 +9,12 @@ import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
+import '../../constants/app_image_path.dart';
 import '../../constants/app_strings.dart';
 import '../../providerData/theme_provider.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
 import '../../widgets/custom_body_with_gradient.dart';
+import '../../widgets/drawer_widget.dart';
 import '../registerFeedback/register_feedback_new_screen.dart';
 
 class FeedbackDetailsScreen extends StatefulWidget {
@@ -72,8 +74,8 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
               ? AppColors.bgColorGainsBoro
               : AppColors.bgDarkModeColor,
       body: CustomBodyWithGradient(
-        title: AppStrings.feedbackStatus,
-        childHeight: DeviceSize.getScreenHeight(context),
+        title: AppStrings.feedbackDetails,
+        childHeight: DeviceSize.getScreenHeight(context) * 0.85,
         child: Padding(
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
@@ -88,54 +90,239 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (isLoading)
+                  /*if (isLoading)
                     Center(child: CircularProgressIndicator())
                   else if (feedbackData != null && feedbackData!.isNotEmpty)
                     ...feedbackData!.map((feedback) {
-                      return SizedBox(
+                      return */
+                        SizedBox(
                         width: DeviceSize.getScreenWidth(context),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomTextWidget(
-                              text: "Feedback ID: ${feedback['id']}",
-                              fontSize: 16,
-                              color: AppColors.black,
-                              fontWeight: AppFontWeight.fontWeight600,
-                            ),
-                            SizedBox(height: 15),
                             Row(
-                              children: [
-                                CustomTextWidget(
-                                  text: "${feedback['state']}/ ",
-                                  fontSize: 18,
-                                  color: AppColors.black,
-                                ),
-                                CustomTextWidget(
-                                  text: "${feedback['district']}/ ",
-                                  fontSize: 18,
-                                  color: AppColors.black,
-                                ),
-                                CustomTextWidget(
-                                  text: "${feedback['block']}",
-                                  fontSize: 18,
-                                  color: AppColors.black,
+                              children: [/*${feedback['id']}*/
+                                CustomTextWidget(text: "Feedback ID: 1", fontSize: AppDimensions.di_16, color: AppColors.black,
+                                  fontWeight: AppFontWeight.fontWeight600,),
+                                Spacer(),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: <Color>[
+                                          AppColors.blueGradientColor1, // Gradient Start Color
+                                          AppColors.blueGradientColor2, // Gradient End Color
+                                        ]
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(AppDimensions.di_40), // Rounded corners
+                                    ),
+                                  ),
+                                  width: 100,
+                                  height: 30,
+                                  child: Center(
+                                    child: Text("submitted", style: TextStyle(color: AppColors.whiteColor),),
+                                  ),
                                 ),
                               ],
+                            ),
+                            SizedBox(height: 15),
+
+                            CustomTextWidget(
+                              text:
+                              "Submitted: 21-Feb-2025",
+                              // "submitted: ${feedback['categoryOfComplaint']}",
+                              fontSize: 16,
+                              fontWeight: AppFontWeight.fontWeight600,
+                              color: AppColors.primaryColor,
                             ),
 
                             SizedBox(height: 10),
 
                             CustomTextWidget(
                               text:
-                                  "Complaint: ${feedback['categoryOfComplaint']}",
-                              fontSize: 18,
+                                  // "Complaint: ${feedback['categoryOfComplaint']}",
+                              "Complaint: Slow Progress",
+                              fontSize: 16,
                               color: AppColors.black,
+                              fontWeight: AppFontWeight.fontWeight600,
                             ),
                             SizedBox(height: 10),
-                            SizedBox(
-                              height:
-                                  DeviceSize.getScreenHeight(context) * 0.15,
+
+                            CustomTextWidget(
+                              text:
+                              // "Road: ${feedback['categoryOfComplaint']}",
+                              "Road: Panchwati Road",
+                              fontSize: 16,
+                              color: AppColors.black,
+                              fontWeight: AppFontWeight.fontWeight600,
+                            ),
+                            SizedBox(height: 10),
+                            CustomTextWidget(
+                              text:
+                              "Feedback: Progress is too slow",
+                              fontSize: 16,
+                              color: AppColors.black,
+                              fontWeight: AppFontWeight.fontWeight600,
+                            ),
+
+                            SizedBox(height: 15),
+
+                            CustomTextWidget(
+                              text:AppStrings.piuDetails,
+                              fontSize: 18,
+                              fontWeight: AppFontWeight.fontWeight600,
+                              color: AppColors.primaryColor,
+                            ),
+
+                            customDrawerWidget(
+                              title: "Sanskar",
+                                fontSize: AppDimensions.di_16,
+                                fontWeight: AppFontWeight.fontWeight600,
+                                icon: ImageAssetsPath.user,
+                              textColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              iconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor, onClick: () {  },
+                              visible: false
+                            ),
+
+                            customDrawerWidget(
+                              title: "sanskars@cdac.in",
+                                fontSize: AppDimensions.di_16,
+                                fontWeight: AppFontWeight.fontWeight600,
+                              icon: ImageAssetsPath.mail,
+                              textColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              iconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor, onClick: () {  },
+                                visible: false
+                            ),
+
+                            customDrawerWidget(
+                              title: "9876543210",
+                              icon: ImageAssetsPath.phone,
+                                fontSize: AppDimensions.di_16,
+                                fontWeight: AppFontWeight.fontWeight600,
+                              textColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              iconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor, onClick: () {  },
+                                visible: false
+                            ),
+
+                            customDrawerWidget(
+                              title: "Bhopal",
+                                fontSize: AppDimensions.di_16,
+                                fontWeight: AppFontWeight.fontWeight600,
+                              icon: ImageAssetsPath.locationPin,
+                              textColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              iconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor, onClick: () {  },
+                                visible: false
+                            ),
+
+                            customDrawerWidget(
+                              title: "MP",
+                                fontSize: AppDimensions.di_16,
+                                fontWeight: AppFontWeight.fontWeight600,
+                              icon: ImageAssetsPath.locationPin,
+                              textColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              iconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor, onClick: () {  },
+                                visible: false
+                            ),
+
+                            SizedBox(height: 15,),
+
+                            CustomTextWidget(
+                              text:AppStrings.sqcDetails,
+                              fontSize: 18,
+                              fontWeight: AppFontWeight.fontWeight600,
+                              color: AppColors.primaryColor,
+                            ),
+
+                            customDrawerWidget(
+                              title: "S.d pendse",
+                                fontSize: AppDimensions.di_16,
+                                fontWeight: AppFontWeight.fontWeight600,
+                              icon: ImageAssetsPath.user,
+                              textColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              iconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor, onClick: () {  },
+                                visible: false
+                            ),
+
+                            customDrawerWidget(
+                              title: "mp-sqc@nic.in",
+                                fontSize: AppDimensions.di_16,
+                                fontWeight: AppFontWeight.fontWeight600,
+                              icon: ImageAssetsPath.mail,
+                              textColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              iconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor, onClick: () {  },
+                                visible: false
+                            ),
+
+                            customDrawerWidget(
+                              title: "9876543210",
+                              icon: ImageAssetsPath.phone,
+                                fontSize: AppDimensions.di_16,
+                                fontWeight: AppFontWeight.fontWeight600,
+                              textColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              iconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
+                              suffixIconColor: themeProvider.themeMode == ThemeMode.light
+                                  ? AppColors.black
+                                  : AppColors.whiteColor, onClick: () {  },
+                                visible: false
+                            ),
+
+/*                            SizedBox(
+                              height: DeviceSize.getScreenHeight(context) * 0.15,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: (feedback['images'] as List).length,
@@ -165,8 +352,9 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                   );
                                 },
                               ),
-                            ),
-                            if (feedback['isFinalSubmit'] == 0)
+                            ),*/
+                          SizedBox(height: 15,),
+                            if (/*feedback['isFinalSubmit']*/0 == 0)
                               CustomButton(
                                 text: 'Edit',
                                 onPressed: () {
@@ -178,7 +366,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                       builder:
                                           (context) =>
                                               RegisterFeedbackNewScreen(
-                                                feedbackId: feedback['id'],
+                                                feedbackId: 1/*feedback['id']*/,
                                               ),
                                     ),
                                   );
@@ -186,10 +374,10 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                               ),
                           ],
                         ),
-                      );
-                    }).toList()
+                      )
+                    /*}).toList()
                   else
-                    Center(child: Text('No feedback available')),
+                    Center(child: Text('No feedback available')),*/
                 ],
               ),
             ),

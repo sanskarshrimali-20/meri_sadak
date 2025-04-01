@@ -34,7 +34,7 @@ class _AboutMeriSadakState extends State<AboutMeriSadak> {
           : AppColors.bgDarkModeColor,
       body: CustomBodyWithGradient(
         title: AppStrings.aboutMeriSadakHeading,
-        childHeight: DeviceSize.getScreenHeight(context),
+        childHeight: DeviceSize.getScreenHeight(context) * 0.85,
         child: ListView(
           children: [
             // Carousel Slider
