@@ -30,21 +30,7 @@ class AllFeedbackSecondScreen extends StatefulWidget {
 class _AllFeedbackSecondScreen extends State<AllFeedbackSecondScreen> with SingleTickerProviderStateMixin {
 
   final dbHelper = DatabaseHelper();
-  List<Map<String, dynamic>> feedbackList = [
-    {
-      "id": 1,
-      "name": "John Doe",
-      "feedback": "Great service, very satisfied with the product.",
-      "rating": 5,
-      "date": "2025-04-01",
-    },
-    {
-      "id": 2,
-      "name": "Jane Smith",
-      "feedback": "Good quality, but the delivery was a bit slow.",
-      "rating": 4,
-      "date": "2025-03-28",
-    },]; // List to hold feedback data
+  List<Map<String, dynamic>> feedbackList = []; // List to hold feedback data
   late TabController _tabController;
 
   @override
@@ -59,8 +45,7 @@ class _AllFeedbackSecondScreen extends State<AllFeedbackSecondScreen> with Singl
     await dbHelper
         .getAllFeedbacks(); // Assuming you have this method in your provider
     setState(() {
-     /* feedbackList = feedbacks; // Update the state with fetched feedback
-      debugPrint("feedabcklist data$feedbackList");*/
+      feedbackList = feedbacks; // Update the state with fetched feedback
     });
   }
 
@@ -68,7 +53,6 @@ class _AllFeedbackSecondScreen extends State<AllFeedbackSecondScreen> with Singl
   Widget build(BuildContext context) {
 
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final fontSizeProvider = Provider.of<FontSizeProvider>(context);
 
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light

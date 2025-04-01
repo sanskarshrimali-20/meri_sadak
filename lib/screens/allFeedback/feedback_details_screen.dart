@@ -90,19 +90,19 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /*if (isLoading)
+                  if (isLoading)
                     Center(child: CircularProgressIndicator())
                   else if (feedbackData != null && feedbackData!.isNotEmpty)
                     ...feedbackData!.map((feedback) {
-                      return */
+                      return
                         SizedBox(
                         width: DeviceSize.getScreenWidth(context),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              children: [/*${feedback['id']}*/
-                                CustomTextWidget(text: "Feedback ID: 1", fontSize: AppDimensions.di_16, color: AppColors.black,
+                              children: [
+                                CustomTextWidget(text: "Feedback ID: ${feedback['id']}", fontSize: AppDimensions.di_16, color: AppColors.black,
                                   fontWeight: AppFontWeight.fontWeight600,),
                                 Spacer(),
                                 Container(
@@ -142,8 +142,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
 
                             CustomTextWidget(
                               text:
-                                  // "Complaint: ${feedback['categoryOfComplaint']}",
-                              "Complaint: Slow Progress",
+                              "Complaint: ${feedback["categoryOfComplaint"]}",
                               fontSize: 16,
                               color: AppColors.black,
                               fontWeight: AppFontWeight.fontWeight600,
@@ -152,8 +151,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
 
                             CustomTextWidget(
                               text:
-                              // "Road: ${feedback['categoryOfComplaint']}",
-                              "Road: Panchwati Road",
+                              "Road: ${{feedback["staticRoadName"]}.isEmpty ? feedback["roadName"] : feedback["staticRoadName"]}",
                               fontSize: 16,
                               color: AppColors.black,
                               fontWeight: AppFontWeight.fontWeight600,
@@ -161,7 +159,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                             SizedBox(height: 10),
                             CustomTextWidget(
                               text:
-                              "Feedback: Progress is too slow",
+                              "Feedback: ${feedback["feedback"]}",
                               fontSize: 16,
                               color: AppColors.black,
                               fontWeight: AppFontWeight.fontWeight600,
@@ -228,7 +226,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                             ),
 
                             customDrawerWidget(
-                              title: "Bhopal",
+                                title: feedback["district"],
                                 fontSize: AppDimensions.di_16,
                                 fontWeight: AppFontWeight.fontWeight600,
                               icon: ImageAssetsPath.locationPin,
@@ -245,7 +243,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                             ),
 
                             customDrawerWidget(
-                              title: "MP",
+                              title: feedback["state"],
                                 fontSize: AppDimensions.di_16,
                                 fontWeight: AppFontWeight.fontWeight600,
                               icon: ImageAssetsPath.locationPin,
@@ -321,7 +319,9 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                 visible: false
                             ),
 
-/*                            SizedBox(
+                            SizedBox(height: 15,),
+
+                            SizedBox(
                               height: DeviceSize.getScreenHeight(context) * 0.15,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
@@ -352,9 +352,11 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                   );
                                 },
                               ),
-                            ),*/
+                            ),
+
                           SizedBox(height: 15,),
-                            if (/*feedback['isFinalSubmit']*/0 == 0)
+
+                            if (feedback['isFinalSubmit'] == 0)
                               CustomButton(
                                 text: 'Edit',
                                 onPressed: () {
@@ -366,7 +368,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                       builder:
                                           (context) =>
                                               RegisterFeedbackNewScreen(
-                                                feedbackId: 1/*feedback['id']*/,
+                                                feedbackId: feedback['id'],
                                               ),
                                     ),
                                   );
@@ -374,10 +376,10 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                               ),
                           ],
                         ),
-                      )
-                    /*}).toList()
+                      );
+                    })
                   else
-                    Center(child: Text('No feedback available')),*/
+                    Center(child: Text('No feedback available')),
                 ],
               ),
             ),
