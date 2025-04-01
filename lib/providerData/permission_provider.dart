@@ -118,7 +118,7 @@ class PermissionProvider extends ChangeNotifier {
   }
 
   Future<void> fetchLocationBasedOnLatLong(posLat, posLong) async {
-    // if (isLocationFetched) return; // Don't fetch if already fetched
+    //if (isLocationFetched) return; // Don't fetch if already fetched
 
     isLoading = true;
     notifyListeners();
@@ -142,13 +142,6 @@ class PermissionProvider extends ChangeNotifier {
         );
       }
 
-      // Get the current position
-      // final position = await Geolocator.getCurrentPosition(
-      //   locationSettings: LocationSettings(accuracy: LocationAccuracy.best),
-      // );
-
-      // latitude = position.latitude;
-      // longitude = position.longitude;
       latitude = posLat;
       longitude = posLong;
 
@@ -166,12 +159,12 @@ class PermissionProvider extends ChangeNotifier {
           '${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea} - ${placemarks.first.postalCode}, ${placemarks.first.country}.';
       debugPrint("address---$address");
 
-      // isLocationFetched = true;
+      isLocationFetched = true;
       notifyListeners();
     } catch (e) {
       address = 'Failed to fetch location: ${e.toString()}';
     } finally {
-      // isLoading = false;
+      isLoading = false;
       notifyListeners();
     }
   }

@@ -212,9 +212,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     super.initState();
     print('Feedback ID: ${widget.feedbackId}');
     _initializePermissionProvider();
-    fetchInitialData();
-    _loadFormData(); // Load the saved form data
-    _loadClickedType();
+
   }
 
   Future<void> _loadClickedType() async {
@@ -244,6 +242,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         context,
         listen: false,
       );
+      print("getFeedbackDataLatLong: ${getFeedbackData[0]['lat']}");
       await locationProvider.fetchLocationBasedOnLatLong(
         getFeedbackData[0]['lat'],
         getFeedbackData[0]['long'],
@@ -312,16 +311,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       } else {
         roadNameEnable = true;
       }
-
-      debugPrint("_staticRoadNameController ${feedbackData?.staticRoadName}");
-
       // Set static road controller
       _staticRoadNameController.text = feedbackData?.staticRoadName ?? '';
-
       // Set other controllers
       _categoryOfComplaintController.text =
           feedbackData?.categoryOfComplaint ?? '';
       _writeFeedbackController.text = feedbackData?.feedback ?? '';
+      debugPrint(" _writeFeedbackController.text ${ _writeFeedbackController.text}");
     }
     // After all async tasks are completed, update the state synchronously
     setState(() {
@@ -474,8 +470,25 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       }
                     },
                     onMapReady: () async {
+                      print("onMapReady:---->");
+                      // List<dynamic> getFeedbackData = await dbHelper
+                      //     .getFeedbackWithImages(widget.feedbackId!);
+                      // print("getFeedbackData: $getFeedbackData");
+                      /* if (widget.feedbackId != null) {
+                        _stateController.text = permissionProvider.state;
+                        selectedState = permissionProvider.state;
+                        await fetchDistricts(selectedState!);
+                        _districtController.text = permissionProvider.district;
+                        await fetchBlocks(permissionProvider.district);
+                        // _saveFormData();
+
+                        */ /*  getFeedbackData: [{id: 3, state: Madhya Pradesh, district: Bhopal, block: Berasia, roadName: Berasia road, staticRoadName: , categoryOfComplaint: Road Selection or Alignment, feedback: Hey, isFinalSubmit: 0, images: [{id: 3, feedbackId: 3, image: /data/user/0/com.merisadak.app.meri_sadak_ui/cache/53bbb20c-526c-4c0c-9706-4dc4d076920b/1000171126.jpg, source: Gallery}]}]*/ /*
+                        // _stateController.text = getFeedbackData[0]['state'] ?? '';
+                      }*/
+
                       if (feedbackData == null ||
-                          feedbackData!.state!.isEmpty) {
+                          feedbackData!.state!.isEmpty &&
+                              widget.feedbackId == null) {
                         print("stateOnMapready: ${_stateController.text}");
                         _stateController.text = permissionProvider.state;
                         selectedState = permissionProvider.state;
@@ -1386,6 +1399,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           _saveFeedbackStatus(
                             widget.feedbackId,
                             imagePickerProvider,
+                            permissionProvider,
                             _stateController.text,
                             _districtController.text,
                             _blockController.text,
@@ -1465,11 +1479,15 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       // Ensure permissionProvider is available
       await provider.requestLocationPermission();
       print("provider.isLocationFetched: ${provider.isLocationFetched}");
-      if (!provider.isLocationFetched && widget.feedbackId == null) {
+      print("feedbackData--->$feedbackData");
+      if (feedbackData == null || !provider.isLocationFetched) {
         provider.fetchCurrentLocation();
       }
       locationStatus = await provider.requestLocationPermission();
     });
+   await fetchInitialData();
+   await _loadFormData(); // Load the saved form data
+   await _loadClickedType();
   }
 
   void _showProfileImageDialog(
@@ -1613,6 +1631,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   Future<void> _saveFeedbackStatus(
     int? feedbackId,
     ImagePickerProvider imagePickerProvider,
+    PermissionProvider permissionProvider,
     String state,
     String district,
     String block,
@@ -1655,7 +1674,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               isFinalSubmit: isFinalSubmit,
             );
 
-    if (insertFeedback == "Success") {
+    if (insertFeedback == "Success" && feedbackId == null) {
+      permissionProvider.isLocationFetched = false;
       imagePickerProvider.clearImages();
       dbHelper.clearFeedbackTable();
     }
@@ -1686,6 +1706,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           _saveFeedbackStatus(
             widget.feedbackId,
             imagePickerProvider,
+            permissionProvider,
             _stateController.text,
             _districtController.text,
             _blockController.text,

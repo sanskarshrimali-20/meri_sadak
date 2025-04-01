@@ -202,15 +202,13 @@ class AppStrings {
 
   static const noInternet = "No Internet Connection";
   static const pleaseSelectEnterRoad = "Please select or enter road name";
+  static const noDataAvailable = "No Data Available!";
   static const yourFeedback = "Your feedback matters !";
   static const togetherBuild = "Together, we build safer and better roads";
   static const submitted = "Submitted";
   static const saved = "Saved";
   static const feedbackDetails = "Feedback Details";
-
   static const piuDetails = "PIU Details";
   static const sqcDetails = "SQC Details";
-
-
 
 }

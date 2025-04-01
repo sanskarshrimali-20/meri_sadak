@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:meri_sadak/constants/app_dimensions.dart';
 import 'package:meri_sadak/screens/allFeedback/feedback_details_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
+import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_image_path.dart';
@@ -52,38 +54,50 @@ class _AllFeedbackScreen extends State<AllFeedbackScreen> {
       body: CustomBodyWithGradient(
         title: AppStrings.feedbackStatus,
         childHeight: DeviceSize.getScreenHeight(context),
-        child: ListView.builder(
-          itemCount: feedbackList.length,
-          itemBuilder: (context, index) {
-            final feedback = feedbackList[index];
-            print("Feedback isFinalSubmit: ${feedback['isFinalSubmit']}");
-            return CustomExpansionTile(
-              title: "Feedback ID: ${feedback['id']}",
-              subheading:
-                  "Status: ${feedback['isFinalSubmit'] == 1 ? 'Submitted' : 'To be Submitted'}",
-              content: Text(feedback['feedback'] ?? 'No Feedback'),
-              initiallyExpanded: false,
-              // You can set this dynamically if needed
-              backgroundColor:
-                  themeProvider.themeMode == ThemeMode.light
-                      ? AppColors.whiteColor
-                      : AppColors.boxDarkModeColor,
-              textColor:
-                  themeProvider.themeMode == ThemeMode.light
-                      ? AppColors.black
-                      : AppColors.whiteColor,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => FeedbackDetailsScreen(id: feedback['id']),
+        child:
+            feedbackList.isEmpty
+                ? Center(
+                  child: CustomTextWidget(
+                    text: AppStrings.noDataAvailable,
+                    fontSize: AppDimensions.di_14,
+                    color: AppColors.blackMagicColor,
                   ),
-                );
-              },
-            );
-          },
-        ),
+                )
+                : ListView.builder(
+                  itemCount: feedbackList.length,
+                  itemBuilder: (context, index) {
+                    final feedback = feedbackList[index];
+                    print(
+                      "Feedback isFinalSubmit: ${feedback['isFinalSubmit']}",
+                    );
+                    return CustomExpansionTile(
+                      title: "Feedback ID: ${feedback['id']}",
+                      subheading:
+                          "Status: ${feedback['isFinalSubmit'] == 1 ? 'Submitted' : 'To be Submitted'}",
+                      content: Text(feedback['feedback'] ?? 'No Feedback'),
+                      initiallyExpanded: false,
+                      // You can set this dynamically if needed
+                      backgroundColor:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.whiteColor
+                              : AppColors.boxDarkModeColor,
+                      textColor:
+                          themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black
+                              : AppColors.whiteColor,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    FeedbackDetailsScreen(id: feedback['id']),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
       ),
     );
   }
