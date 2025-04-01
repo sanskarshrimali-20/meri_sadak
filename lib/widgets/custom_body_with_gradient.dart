@@ -31,6 +31,7 @@ class CustomBodyWithGradient extends StatelessWidget {
           child: Image.asset(
             ImageAssetsPath.headerBg, // Your image asset
             fit: BoxFit.cover, // Makes the image cover the AppBar
+            width: DeviceSize.getScreenWidth(context),
           ),
         ),
         // Custom AppBar with Leading and Title
@@ -63,6 +64,7 @@ class CustomBodyWithGradient extends StatelessWidget {
         ),
         // Content of the screen (received as the child widget)
         Positioned(
+          width: DeviceSize.getScreenWidth(context),
           // Use kToolbarHeight to ensure content starts below the AppBar
           // top: topSpacing + kToolbarHeight + childHeight + AppDimensions.di_16,
           child: Padding(

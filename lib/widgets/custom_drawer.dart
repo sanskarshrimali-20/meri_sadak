@@ -338,7 +338,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Future<void> _initializeUserDetails() async {
 
     String? user = await _localStorage.getLoginUser();
-    final profile = await dbHelper.getSignupDetails(user!);
+    final profile = await dbHelper.getSignupDetails(user??"");
 
     setState(() {
      name =  profile?['fullName'] ?? 'No Name';

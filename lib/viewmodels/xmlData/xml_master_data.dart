@@ -188,9 +188,15 @@ class XmlMasterDataViewModel extends ChangeNotifier {
   }
 
   Future<List<Map<String, dynamic>>> getBlocksFromDB(String districtCode) async {
-
+    // Fetch blocks from the database using the districtCode
     final blocks = await dbHelper.getBlocks(districtCode);
-    return blocks;
+
+    // Check if blocks are available, if not, return an empty list
+    if (blocks.isEmpty) {
+      return [];
+    } else {
+      return blocks;
+    }
   }
 
   void _setLoading(bool value) {

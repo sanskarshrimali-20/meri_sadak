@@ -56,6 +56,8 @@ class ImageAssetsPath {
   static const mail = "$folderPath/mail.svg";
   static const phone = "$folderPath/phone.svg";
   static const allowLocationPin = "$folderPath/allow_location_pin.svg";
+  static const homeBgHeader = "$folderPath/home_bg_header.png";
+  static const notificationIcon = "$folderPath/notification_icon.svg";
 
 
 

@@ -364,7 +364,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         builder: (context, imagePickerProvider, child) {
           return CustomBodyWithGradient(
             title: AppStrings.registerFeedback,
-            childHeight: DeviceSize.getScreenHeight(context),
+            childHeight: DeviceSize.getScreenHeight(context) * 0.85,
             child: Padding(
               padding: EdgeInsets.all(AppDimensions.di_5),
               child: Container(
