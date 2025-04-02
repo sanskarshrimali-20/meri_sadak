@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/home/home_screen.dart';
 import 'package:meri_sadak/screens/login/login_screen.dart';
-import 'package:meri_sadak/screens/otpVerify/otp_screen.dart';
 import 'package:meri_sadak/viewmodels/signup/sign_up_viewmodel.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
@@ -17,18 +16,17 @@ import '../../utils/device_size.dart';
 import '../../utils/network_provider.dart';
 import '../../viewmodels/forgotChangePassword/forgot_change_password_viewmodel.dart';
 import '../../widgets/custom_login_signup_container.dart';
-import '../../widgets/custom_login_signup_textfield.dart';
 import '../../widgets/custom_password_widget.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/login_signup_bg_active.dart';
 
 class PasswordCreateScreen extends StatefulWidget {
 
-  String type;
-  Map<String, dynamic> userSignUpDetails;
-  String userCred;
+  final String type;
+  final Map<String, dynamic> userSignUpDetails;
+  final String userCred;
 
-  PasswordCreateScreen({super.key, required this.type, this.userSignUpDetails = const {'fullName': '', 'phoneNo': '', 'email': ''},
+  const PasswordCreateScreen({super.key, required this.type, this.userSignUpDetails = const {'fullName': '', 'phoneNo': '', 'email': ''},
     this.userCred = ""
   });
 
@@ -355,8 +353,6 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
       else{
         widget.userSignUpDetails["password"] = _passwordController.text;
       }
-
-      debugPrint("userdetails${widget.userSignUpDetails}");
 
       final signUpViewModel = Provider.of<SignUpViewModel>(context, listen: false);
 

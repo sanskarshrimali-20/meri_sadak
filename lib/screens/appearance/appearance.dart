@@ -4,7 +4,6 @@ import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/utils/fontsize_provider.dart';
-import 'package:meri_sadak/widgets/custom_dialog_button.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:meri_sadak/widgets/selection_dialog.dart';
 import 'package:provider/provider.dart';

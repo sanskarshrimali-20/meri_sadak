@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,6 +17,7 @@ import '../../providerData/image_picker_provider.dart';
 import '../../providerData/permission_provider.dart';
 import '../../providerData/theme_provider.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
+import '../../services/EncryptionService/encryption_service.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 import '../../utils/device_size.dart';
 import '../../utils/localization_provider.dart';
@@ -43,6 +43,9 @@ class RegisterFeedbackNewScreen extends StatefulWidget {
 }
 
 class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
+
+  final EncryptionService _encryptionService = EncryptionService();
+
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _districtController = TextEditingController();
   final TextEditingController _blockController = TextEditingController();
@@ -128,7 +131,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       setState(() {
         selectedDistricts =
             districts[state]!; // Update districts based on state
-        debugPrint("setDistricts: $selectedDistricts");
 
         selectedBlocks.clear(); // Clear blocks when state changes
         selectedRoads.clear(); // Clear roads when state changes
@@ -142,7 +144,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       setState(() {
         selectedDistricts = []; // If no districts found, set an empty list
       });
-      debugPrint("No districts found for state: $state");
       isLoadingD = false; // Hide loading indicator after fetching data
     }
   }
@@ -211,29 +212,22 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   @override
   void initState() {
     super.initState();
-    print('Feedback ID: ${widget.feedbackId}');
     _initializePermissionProvider();
   }
 
   Future<void> _loadClickedType() async {
     isClickedBy = await _storage.getClickedBy();
-    debugPrint("clickBy--$isClickedBy");
   }
-
-  // Fetch saved form data from DB
 
   // Fetch saved form data from DB
   Future<void> _loadFormData() async {
     setState(() {});
 
     feedbackData = await dbHelper.getFeedbackForm();
-    print("feedbackData: ${feedbackData}");
     if (widget.feedbackId != null) {
       List<dynamic> getFeedbackData = await dbHelper.getFeedbackWithImages(
         widget.feedbackId!,
       );
-      print("getFeedbackData: $getFeedbackData");
-      /*  getFeedbackData: [{id: 3, state: Madhya Pradesh, district: Bhopal, block: Berasia, roadName: Berasia road, staticRoadName: , categoryOfComplaint: Road Selection or Alignment, feedback: Hey, isFinalSubmit: 0, images: [{id: 3, feedbackId: 3, image: /data/user/0/com.merisadak.app.meri_sadak_ui/cache/53bbb20c-526c-4c0c-9706-4dc4d076920b/1000171126.jpg, source: Gallery}]}]*/
       final locationProvider = Provider.of<PermissionProvider>(
         context,
         listen: false,
@@ -242,28 +236,25 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
         context,
         listen: false,
       );
-      print("getFeedbackDataLatLong: ${getFeedbackData[0]['lat']}");
       await locationProvider.fetchLocationBasedOnLatLong(
         getFeedbackData[0]['lat'],
         getFeedbackData[0]['long'],
       );
-      print("fetchLocData: ${locationProvider.state}");
-      _stateController.text = getFeedbackData[0]['state'] ?? '';
+      _stateController.text = decryptString(getFeedbackData[0]['state']);
       selectedState = getFeedbackData[0]['state'];
       await fetchDistricts(selectedState!);
-      _districtController.text = getFeedbackData[0]['district'] ?? '';
+      _districtController.text = decryptString(getFeedbackData[0]['district']);
       selectedDistrict = getFeedbackData[0]['district'];
       //set images
       await imagePickerProvider.setImages(getFeedbackData);
       await fetchBlocks(selectedDistrict!);
-      // print(getFeedbackData[0]['block']);
-      _blockController.text = getFeedbackData[0]['block'] ?? '';
+      _blockController.text = decryptText(getFeedbackData[0]['block']);
       selectedBlock = getFeedbackData[0]['block']; // Update selected block
       // Fetch roads based on selected block
       await fetchRoads(selectedBlock!);
 
       // Set road controller
-      _roadNameController.text = getFeedbackData[0]['roadName'] ?? '';
+      _roadNameController.text = decryptText(getFeedbackData[0]['roadName']);
       if (_roadNameController.text.isNotEmpty) {
         roadNameEnable = false;
       } else {
@@ -271,21 +262,18 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       }
       // Set static road controller
       _staticRoadNameController.text =
-          getFeedbackData[0]['staticRoadName'] ?? '';
+          decryptText(getFeedbackData[0]['staticRoadName']);
 
       // Set other controllers
       _categoryOfComplaintController.text =
-          getFeedbackData[0]['categoryOfComplaint'] ?? '';
-      _writeFeedbackController.text = getFeedbackData[0]['feedback'] ?? '';
+          decryptString(getFeedbackData[0]['categoryOfComplaint']);
+      _writeFeedbackController.text = decryptString(getFeedbackData[0]['feedback']);
     }
     if (feedbackData != null && widget.feedbackId == null) {
-      print("feedbackData2: ${feedbackData?.state.toString()}");
       // Set state controller
       _stateController.text = feedbackData?.state ?? '';
       selectedState = feedbackData?.state; // Update selected state
-      print(
-        "feedbackData3: ${_stateController.text}   selectedState: $selectedState",
-      );
+
       // Fetch districts based on selected state
       await fetchDistricts(selectedState!);
 
@@ -317,9 +305,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       _categoryOfComplaintController.text =
           feedbackData?.categoryOfComplaint ?? '';
       _writeFeedbackController.text = feedbackData?.feedback ?? '';
-      debugPrint(
-        " _writeFeedbackController.text ${_writeFeedbackController.text}",
-      );
+
     }
     // After all async tasks are completed, update the state synchronously
     setState(() {
@@ -331,7 +317,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
   // Save the form data to DB
   void _saveFormData() {
-    print("stateOnMapready3: ${_stateController.text}");
 
     final feedbackFormData = FeedbackFormData(
       state: _stateController.text,
@@ -449,7 +434,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       );
 
                       if (feedbackData!.state!.isEmpty) {
-                        // debugPrint("state $state");
 
                         // Update text controllers with new values
                         _stateController.text = permissionProvider.state;
@@ -472,37 +456,16 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       }
                     },
                     onMapReady: () async {
-                      print("onMapReady:---->");
-                      // List<dynamic> getFeedbackData = await dbHelper
-                      //     .getFeedbackWithImages(widget.feedbackId!);
-                      // print("getFeedbackData: $getFeedbackData");
-                      /* if (widget.feedbackId != null) {
-                        _stateController.text = permissionProvider.state;
-                        selectedState = permissionProvider.state;
-                        await fetchDistricts(selectedState!);
-                        _districtController.text = permissionProvider.district;
-                        await fetchBlocks(permissionProvider.district);
-                        // _saveFormData();
-
-                        */ /*  getFeedbackData: [{id: 3, state: Madhya Pradesh, district: Bhopal, block: Berasia, roadName: Berasia road, staticRoadName: , categoryOfComplaint: Road Selection or Alignment, feedback: Hey, isFinalSubmit: 0, images: [{id: 3, feedbackId: 3, image: /data/user/0/com.merisadak.app.meri_sadak_ui/cache/53bbb20c-526c-4c0c-9706-4dc4d076920b/1000171126.jpg, source: Gallery}]}]*/ /*
-                        // _stateController.text = getFeedbackData[0]['state'] ?? '';
-                      }*/
-
                       if (feedbackData == null ||
                           feedbackData!.state!.isEmpty &&
                               widget.feedbackId == null) {
-                        print("stateOnMapready: ${_stateController.text}");
                         _stateController.text = permissionProvider.state;
                         selectedState = permissionProvider.state;
-                        print("stateOnMapready: ${_stateController.text}");
-                        /*
-                  selectedDistricts = districts[selectedState] ?? [];
-*/
+
                         await fetchDistricts(selectedState!);
                         _districtController.text = permissionProvider.district;
                         await fetchBlocks(permissionProvider.district);
-                        /*selectedBlocks =
-                      blocks[permissionProvider.district] ?? [];*/
+
                         _saveFormData();
                       }
                     },
@@ -536,12 +499,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               text: AppStrings.openCameraText,
               icon: cameraSvg,
               onTap: () async {
-                // Logging the current state of location, address, and network status
-                if (kDebugMode) {
-                  print(locationStatus);
-                  print(permissionProvider.address.toString());
-                  print("networkProvider.status: ${networkProvider.status}");
-                }
+
                 // Error checks
                 if (permissionProvider.address.toLowerCase().contains(
                   'error',
@@ -758,7 +716,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             } else {
               await fetchInitialData();
             }
-            debugPrint("Selected State: $value");
             _saveFormData(); // Save form data after selection if needed
           },
         ),
@@ -787,7 +744,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               isRequired: false,
               onChanged: (value) async {
                 await fetchBlocks(value); // Fetch blocks asynchronously
-                debugPrint("Selected District: $value");
                 _saveFormData(); // Save form data after selection if needed
               },
             ),
@@ -816,7 +772,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               isRequired: false,
               onChanged: (value) async {
                 await fetchRoads(value); // Fetch roads asynchronously
-                debugPrint("Selected Block: $value");
                 _saveFormData(); // Save form data after selection if needed
               },
             ),
@@ -1389,8 +1344,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           child: CustomButton(
             text: AppStrings.submit,
             onPressed: () async {
-              print(isClickedBy == AppStrings.gallery);
-              print("isClickedBy: $isClickedBy");
 
               if (networkProvider.status == ConnectivityStatus.online ||
                   isClickedBy == AppStrings.gallery) {
@@ -1415,13 +1368,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                         widget.feedbackId,
                         imagePickerProvider,
                         permissionProvider,
-                        _stateController.text,
-                        _districtController.text,
-                        _blockController.text,
-                        _roadNameController.text,
-                        _staticRoadNameController.text,
-                        _categoryOfComplaintController.text,
-                        _writeFeedbackController.text,
+                        encryptString(_stateController.text),
+                        encryptString(_districtController.text),
+                        encryptText(_blockController.text),
+                        encryptText(_roadNameController.text),
+                        encryptText(_staticRoadNameController.text),
+                        encryptString(_categoryOfComplaintController.text),
+                        encryptString(_writeFeedbackController.text),
                         imagePickerProvider.imageFiles,
                         permissionProvider.latitude!,
                         permissionProvider.longitude!,
@@ -1489,8 +1442,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       final provider = Provider.of<PermissionProvider>(context, listen: false);
       // Ensure permissionProvider is available
       await provider.requestLocationPermission();
-      print("provider.isLocationFetched: ${provider.isLocationFetched}");
-      print("feedbackData--->$feedbackData");
+
       if (feedbackData == null || !provider.isLocationFetched) {
         provider.fetchCurrentLocation();
       }
@@ -1668,7 +1620,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               images: imageFiles,
               lat: lat,
               long: long,
-              dateTime: DateTimeUtil.getFormattedDateTime(),
+              dateTime: encryptString(DateTimeUtil.getFormattedDateTime()),
               isFinalSubmit: isFinalSubmit,
             )
             : await dbHelper.updateFeedbackWithImages(
@@ -1683,7 +1635,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               images: imageFiles,
               lat: lat,
               long: long,
-              dateTime: DateTimeUtil.getFormattedDateTime(),
+              dateTime: encryptString(DateTimeUtil.getFormattedDateTime()),
               isFinalSubmit: isFinalSubmit,
             );
 
@@ -1715,13 +1667,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             widget.feedbackId,
             imagePickerProvider,
             permissionProvider,
-            _stateController.text,
-            _districtController.text,
-            _blockController.text,
-            _roadNameController.text,
-            _staticRoadNameController.text,
-            _categoryOfComplaintController.text,
-            _writeFeedbackController.text,
+            encryptString(_stateController.text),
+            encryptString(_districtController.text),
+            encryptText(_blockController.text),
+            encryptText(_roadNameController.text),
+            encryptText(_staticRoadNameController.text),
+            encryptString(_categoryOfComplaintController.text),
+            encryptString(_writeFeedbackController.text),
             imagePickerProvider.imageFiles,
             permissionProvider.latitude!,
             permissionProvider.longitude!,
@@ -1744,5 +1696,31 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       isButtonActive: [true, false],
       context: context,
     );
+  }
+
+  // Helper function for encryption
+  String encryptString(String? value) {
+    return _encryptionService.encrypt(value?.trim() ?? '');
+  }
+
+  // Helper function for encryption
+  String decryptString(String? value) {
+    return _encryptionService.decrypt(value?.trim() ?? '');
+  }
+
+  String encryptText(String text) {
+    if (text.isEmpty) {
+      // Handle empty string - return an empty string or a default value
+      return '';
+    }
+    return encryptString(text); // Assuming encryptString is your encryption method
+  }
+
+  String decryptText(String text) {
+    if (text.isEmpty) {
+      // Handle empty string - return an empty string or a default value
+      return '';
+    }
+    return decryptString(text); // Assuming decryptString is your decryption method
   }
 }

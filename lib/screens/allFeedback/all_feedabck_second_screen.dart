@@ -42,7 +42,6 @@ class _AllFeedbackSecondScreen extends State<AllFeedbackSecondScreen> with Singl
     await dbHelper
         .getFeedbacksByFinalSubmitStatus(false); // Assuming you have this method in your provider
     setState(() {
-      debugPrint("submitFeedbacks list$submitFeedbacks");
       submitFeedbackList = submitFeedbacks; // Update the state with fetched feedback
       savedFeedbackList = savedFeedbacks;
     });

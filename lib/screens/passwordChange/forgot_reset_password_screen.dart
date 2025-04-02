@@ -14,15 +14,15 @@ import '../../utils/device_size.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_login_signup_container.dart';
 import '../../widgets/custom_login_signup_textfield.dart';
-import '../../widgets/custom_password_widget.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_widget.dart';
 import '../../widgets/login_signup_bg_active.dart';
 
 class ForgotResetPasswordScreen extends StatefulWidget {
-  String type;
 
-  ForgotResetPasswordScreen({super.key, required this.type});
+ final String type;
+
+ const ForgotResetPasswordScreen({super.key, required this.type});
 
   @override
   State<ForgotResetPasswordScreen> createState() =>
@@ -39,8 +39,8 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
       true; // Track if we're showing phone number or email
   String? emailPhoneError;
 
-  bool changesuffixiocn = false;
-  bool suffixiconvisible = false;
+  bool changeSuffixIcon = false;
+  bool suffixIconVisible = false;
   bool continueEnable = false;
   final dbHelper = DatabaseHelper();
 
@@ -145,8 +145,8 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                 labelText: '',
                                 errorText: emailPhoneError,
                                 isRequired: true,
-                                showSuffixIcon: suffixiconvisible,
-                                changeSuffixIcon: changesuffixiocn,
+                                showSuffixIcon: suffixIconVisible,
+                                changeSuffixIcon: changeSuffixIcon,
                                 onChanged: validateEmailPhone,
                                 /* validator: (value) {
                                   // Validator logic for phone number/email
@@ -176,18 +176,18 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                       onPressed: () async {
                                         setState(() {
                                           if(_usernameController.text.isEmpty){
-                                            suffixiconvisible = false;
-                                            changesuffixiocn = false;
+                                            suffixIconVisible = false;
+                                            changeSuffixIcon = false;
                                             continueEnable = false;
                                           }
                                           else if(_usernameController.text.length >= 10){
-                                            suffixiconvisible = true;
-                                            changesuffixiocn = true;
+                                            suffixIconVisible = true;
+                                            changeSuffixIcon = true;
                                             continueEnable = true;
                                           }
                                           else{
-                                            suffixiconvisible = true;
-                                            changesuffixiocn = false;
+                                            suffixIconVisible = true;
+                                            changeSuffixIcon = false;
                                             continueEnable = false;
                                           }
                                         });
@@ -214,8 +214,8 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                     FocusScope.of(context).unfocus();
                                     // Toggle the field type
                                     setState(() {
-                                      suffixiconvisible = false;
-                                      changesuffixiocn = false;
+                                      suffixIconVisible = false;
+                                      changeSuffixIcon = false;
                                       continueEnable = false;
 
                                       isPhoneNumberField =
@@ -415,8 +415,8 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
 
       if (_phoneNoController.text.isEmpty)
       {
-        suffixiconvisible = false;
-        changesuffixiocn = false;
+        suffixIconVisible = false;
+        changeSuffixIcon = false;
         continueEnable = false;
       }
       else{

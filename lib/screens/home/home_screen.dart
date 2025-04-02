@@ -4,13 +4,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/constants/app_strings.dart';
-import 'package:meri_sadak/screens/aboutPmgsy/about_pmgsy.dart';
 import 'package:meri_sadak/screens/allFeedback/all_feedabck_second_screen.dart';
-import 'package:meri_sadak/screens/allFeedback/all_feedback_screen.dart';
 import 'package:meri_sadak/screens/registerFeedback/register_feedback_new_screen.dart';
 import 'package:meri_sadak/screens/roadList/road_list_screen.dart';
-import 'package:meri_sadak/viewmodels/xmlData/xml_master_data.dart';
-import 'package:meri_sadak/widgets/custom_dropdown_field.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
@@ -18,18 +14,13 @@ import '../../constants/app_dimensions.dart';
 import '../../providerData/permission_provider.dart';
 import '../../providerData/theme_provider.dart';
 import '../../utils/device_size.dart';
-import '../../widgets/app_bar.dart';
-import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drawer.dart';
-import '../../widgets/custom_home_tabs.dart';
-import '../../widgets/selection_dialog.dart';
-import '../registerFeedback/register_feedback_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map<String, dynamic>? userProfile;
 
-  HomeScreen({super.key, this.userProfile});
+  const HomeScreen({super.key, this.userProfile});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -37,16 +28,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final TextEditingController _stateController = TextEditingController();
+ /* final TextEditingController _stateController = TextEditingController();
   final TextEditingController _districtController = TextEditingController();
-  final TextEditingController _blockController = TextEditingController();
+  final TextEditingController _blockController = TextEditingController();*/
 
   List<Map<String, dynamic>> blockList = [];
 
   @override
   void initState() {
     _checkPermissions();
-    _fetchData(context);
     super.initState();
   }
 
@@ -361,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await permissionProvider.requestCameraPermissionNew(context);
   }
 
-  Future<void> _fetchData(BuildContext context) async {
+/*  Future<void> _fetchData(BuildContext context) async {
     final xmlMasterDataViewModel = Provider.of<XmlMasterDataViewModel>(
       context,
       listen: false,
@@ -379,11 +369,9 @@ class _HomeScreenState extends State<HomeScreen> {
       List<Map<String, dynamic>> blocks = await xmlMasterDataViewModel
           .getBlocksFromDB("101");
 
-      debugPrint("blocks${blocks}");
-
       setState(() {
         blockList = blocks;
       });
     });
-  }
+  }*/
 }

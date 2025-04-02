@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_colors.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
 import 'package:meri_sadak/constants/app_font_weight.dart';
@@ -16,7 +15,6 @@ import 'package:meri_sadak/viewmodels/login/login_view_model.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_container.dart';
 import 'package:meri_sadak/widgets/custom_login_signup_textfield.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
-import 'package:meri_sadak/widgets/login_signup_bg_unactive.dart';
 import 'package:provider/provider.dart';
 import '../../providerData/theme_provider.dart';
 import '../../services/LocalStorageService/local_storage.dart';
@@ -450,7 +448,7 @@ class _LoginScreen extends State<LoginScreen> {
   void validateEmailPhone(String value) {
     // Validator logic for phone number/email
     setState(() {
-      if (value == null || value.trim().isEmpty) {
+      if (value.trim().isEmpty) {
         emailPhoneError =
             isPhoneNumberField
                 ? 'Phone Number is required'
@@ -468,7 +466,7 @@ class _LoginScreen extends State<LoginScreen> {
 
   void validatePassword(String value) {
     setState(() {
-      if (value == null || value.trim().isEmpty) {
+      if (value.trim().isEmpty) {
         passwordError = "Password is required";
       } else if (!_validatePassword(value)) {
         // Show error if password is weak
