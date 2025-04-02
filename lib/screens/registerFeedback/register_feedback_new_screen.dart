@@ -345,6 +345,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
     dbHelper.saveFeedbackForm(feedbackFormData);
   }
+  bool _isKeyboardVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -352,6 +353,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     final localizationProvider = Provider.of<LocalizationProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
     final networkProvider = Provider.of<NetworkProviderController>(context);
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    _isKeyboardVisible = keyboardHeight > 0;
 
     return Scaffold(
       backgroundColor:
@@ -378,6 +381,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                 padding: EdgeInsets.all(AppDimensions.di_15),
                 child: SingleChildScrollView(
                   child: SizedBox(
+                   height:  _isKeyboardVisible ? DeviceSize.getScreenHeight(context) * 1.85 : null,
                     child: Column(
                       children: [
                         _showFeedbackForm
@@ -545,7 +549,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                 // Error checks
                 if (permissionProvider.address.toLowerCase().contains(
                   'error',
-                )) {
+                ) || permissionProvider.isLoading) {
                   showErrorDialog(
                     context,
                     "Failed to fetch location, try again",
