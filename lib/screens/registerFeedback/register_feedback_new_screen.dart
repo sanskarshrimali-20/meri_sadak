@@ -460,9 +460,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       }
                     },
                     onMapReady: () async {
-                      if (feedbackData == null ||
-                          feedbackData!.state!.isEmpty &&
-                              widget.feedbackId == null) {
+                      print("feedbackdata: fid: ${widget.feedbackId} and isLocationFetched: ${!permissionProvider.isLocationFetched}");
+
+                      // print("onMapReadyData: $feedbackData and ${feedbackData!.state} and ${widget.feedbackId}");
+                      // if (feedbackData == null &&
+                      //     feedbackData!.state!.isEmpty &&
+                      //         widget.feedbackId == null) {
+                        if(widget.feedbackId == null){
                         _stateController.text = permissionProvider.state;
                         selectedState = permissionProvider.state;
 
@@ -476,7 +480,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                   ),
         ),
 
-        const SizedBox(height: AppDimensions.di_20),
+      //  const SizedBox(height: AppDimensions.di_20),
 
         Align(
           alignment: Alignment.centerLeft,
@@ -934,7 +938,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
     return Column(
       children: [
         // if (isClickedBy == AppStrings.camera)
-        if (permissionProvider.address.isNotEmpty)
+        if (permissionProvider.address.isNotEmpty && !permissionProvider.address.toLowerCase().contains('error'))
           Align(
             alignment: Alignment.centerLeft,
             child: CustomTextWidget(
@@ -949,10 +953,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           ),
 
         // if (isClickedBy == AppStrings.camera)
-        if (permissionProvider.address.isNotEmpty) SizedBox(height: 5),
+        if (permissionProvider.address.isNotEmpty && !permissionProvider.address.toLowerCase().contains('error')) SizedBox(height: 5),
 
         // if (isClickedBy == AppStrings.camera)
-        if (permissionProvider.address.isNotEmpty)
+        if (permissionProvider.address.isNotEmpty && !permissionProvider.address.toLowerCase().contains('error'))
           CustomContainerText(
             label: permissionProvider.address.toString(),
             fontSize: AppDimensions.di_14,
@@ -1446,8 +1450,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       final provider = Provider.of<PermissionProvider>(context, listen: false);
       // Ensure permissionProvider is available
       await provider.requestLocationPermission();
-
-      if (feedbackData == null || !provider.isLocationFetched) {
+      print("feedbackdata: $feedbackData   and fid: ${widget.feedbackId} and isLocationFetched: ${!provider.isLocationFetched}");
+      if (widget.feedbackId == null && !provider.isLocationFetched) {
         provider.fetchCurrentLocation();
       }
       locationStatus = await provider.requestLocationPermission();

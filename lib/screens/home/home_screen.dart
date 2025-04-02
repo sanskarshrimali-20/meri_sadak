@@ -108,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                     Container(
+                        alignment: Alignment.center,
                         padding: EdgeInsets.only(top: DeviceSize.getScreenHeight(context) * 0.2),
                         child: Column(
                         children: [
