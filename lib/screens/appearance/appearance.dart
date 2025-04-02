@@ -118,6 +118,7 @@ class _AppearanceScreen extends State<AppearanceScreen> {
                             text: localizationProvider.localizedStrings['theme_color'] ??
                                 "Dark and Light Mode",
                             fontSize: fontSizeProvider.fontSize,
+                            fontWeight: AppFontWeight.fontWeight500,
                             color: themeProvider.themeMode == ThemeMode.light
                                 ? AppColors.black
                                 : AppColors.whiteColor,

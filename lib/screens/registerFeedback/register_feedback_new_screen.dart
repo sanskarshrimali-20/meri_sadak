@@ -667,10 +667,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                 itemCount: imagePickerProvider.imageFiles.length,
                 itemBuilder: (context, index) {
                   final imageItem = imagePickerProvider.imageFiles[index];
-                  // final imgIndex
-                  print("imagedata---${imageItem.id}");
-                  print("imagedata---${imageItem.imagePath}");
-                  print("imagedataIndx---${index}");
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(
@@ -703,7 +699,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                                 ),
                               ),
                               GestureDetector(
-                             onTap:
+                                onTap:
                                     () =>
                                         imagePickerProvider.deleteImage(index),
                                 child: SvgPicture.asset(
@@ -720,7 +716,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               ),
             ),
 
-        SizedBox(height: AppDimensions.di_5),
+        SizedBox(height: AppDimensions.di_10),
 
         Align(
           alignment: Alignment.centerLeft,
@@ -735,13 +731,17 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           ),
         ),
 
-        SizedBox(height: AppDimensions.di_5),
+        SizedBox(height: AppDimensions.di_8),
         // permissionProvider.isLocationFetched = false;
         CustomDropdownField(
           permissionProvider: permissionProvider,
           hintText: "Please Select State",
           textController: _stateController,
           items: states,
+          dropdownBgColor:
+              themeProvider.themeMode == ThemeMode.light
+                  ? Colors.grey.shade200
+                  : AppColors.textBoxDarkModeColor,
           textColor:
               themeProvider.themeMode == ThemeMode.light
                   ? AppColors.black
@@ -770,6 +770,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               hintText: "Please Select District",
               textController: _districtController,
               items: selectedDistricts.isEmpty ? [''] : selectedDistricts,
+          dropdownBgColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? Colors.grey.shade200
+              : AppColors.textBoxDarkModeColor,
               textColor:
                   themeProvider.themeMode == ThemeMode.light
                       ? AppColors.black
@@ -795,6 +799,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               hintText: "Please Select Block",
               textController: _blockController,
               items: selectedBlocks.isEmpty ? [''] : selectedBlocks,
+          dropdownBgColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? Colors.grey.shade200
+              : AppColors.textBoxDarkModeColor,
               textColor:
                   themeProvider.themeMode == ThemeMode.light
                       ? AppColors.black
@@ -820,6 +828,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               hintText: "Please Select Road Name",
               textController: _roadNameController,
               items: selectedRoads.isEmpty ? [''] : selectedRoads,
+          dropdownBgColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? Colors.grey.shade200
+              : AppColors.textBoxDarkModeColor,
               dropdownHeight: 150,
               textColor:
                   themeProvider.themeMode == ThemeMode.light
@@ -848,9 +860,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           editable: roadNameEnable,
           boxBgEnableColor: AppColors.app_bg_color,
           textColor:
-              themeProvider.themeMode == ThemeMode.light
+              roadNameEnable
+                  ? themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.black
+                      : AppColors.whiteColor
+                  : themeProvider.themeMode == ThemeMode.light
                   ? AppColors.black
-                  : AppColors.whiteColor,
+                  : AppColors.black,
           boxBgColor:
               themeProvider.themeMode == ThemeMode.light
                   ? AppColors.whiteColor
@@ -871,6 +887,10 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           hintText: AppStrings.selectCategoryOfComplaint,
           textController: _categoryOfComplaintController,
           items: complaints,
+          dropdownBgColor:
+          themeProvider.themeMode == ThemeMode.light
+              ? Colors.grey.shade200
+              : AppColors.textBoxDarkModeColor,
           textColor:
               themeProvider.themeMode == ThemeMode.light
                   ? AppColors.black
@@ -954,7 +974,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
   ) {
     return Column(
       children: [
-        if (isClickedBy == AppStrings.camera)
+        // if (isClickedBy == AppStrings.camera)
+        if (permissionProvider.address.isNotEmpty)
           Align(
             alignment: Alignment.centerLeft,
             child: CustomTextWidget(
@@ -967,28 +988,19 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               fontWeight: AppFontWeight.fontWeight600,
             ),
           ),
-        if (isClickedBy == AppStrings.camera) SizedBox(height: 5),
 
-        /*CustomTextField(
-          labelText: AppStrings.feedback,
-          label: permissionProvider.address.toString(),
-          controller: _locationController,
-          keyboardType: TextInputType.name,
-          maxLines: 2,
-          //maxLength: 30,
-          validator: null,
-          editable: false,
-          isRequired: false,
-          fontSize: AppDimensions.di_15,
-        ),*/
-        if (isClickedBy == AppStrings.camera)
+        // if (isClickedBy == AppStrings.camera)
+        if (permissionProvider.address.isNotEmpty) SizedBox(height: 5),
+
+        // if (isClickedBy == AppStrings.camera)
+        if (permissionProvider.address.isNotEmpty)
           CustomContainerText(
             label: permissionProvider.address.toString(),
             fontSize: AppDimensions.di_14,
             textColor:
                 themeProvider.themeMode == ThemeMode.light
-                    ? AppColors.black.withAlpha(95)
-                    : AppColors.whiteColor.withAlpha(95),
+                    ? AppColors.black.withAlpha(200)
+                    : AppColors.whiteColor.withAlpha(200),
             boxBgColor:
                 themeProvider.themeMode == ThemeMode.light
                     ? AppColors.whiteColor
@@ -1092,8 +1104,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                              ? AppColors.black
+                              : AppColors.whiteColor,
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -1107,8 +1119,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                              ? AppColors.black.withAlpha(200)
+                              : AppColors.whiteColor.withAlpha(200),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
@@ -1129,8 +1141,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                              ? AppColors.black
+                              : AppColors.whiteColor,
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -1144,8 +1156,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                              ? AppColors.black.withAlpha(200)
+                              : AppColors.whiteColor.withAlpha(200),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
@@ -1166,8 +1178,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                              ? AppColors.black
+                              : AppColors.whiteColor,
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -1181,8 +1193,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                              ? AppColors.black.withAlpha(200)
+                              : AppColors.whiteColor.withAlpha(200),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
@@ -1203,8 +1215,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                              ? AppColors.black
+                              : AppColors.whiteColor,
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -1215,16 +1227,11 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           _roadNameController.text.isEmpty
                               ? _staticRoadNameController.text
                               : _roadNameController.text,
-                      /* _roadNameController.text.isEmpty
-                              ? "--"
-                              : _roadNameController.text == 'Enter Manually'
-                              ? _staticRoadNameController.text
-                              : _roadNameController.text,*/
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                              ? AppColors.black.withAlpha(200)
+                              : AppColors.whiteColor.withAlpha(200),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
@@ -1245,8 +1252,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                              ? AppColors.black
+                              : AppColors.whiteColor,
                       fontWeight: AppFontWeight.fontWeight700,
                     ),
                   ),
@@ -1260,8 +1267,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       fontSize: AppDimensions.di_14,
                       color:
                           themeProvider.themeMode == ThemeMode.light
-                              ? AppColors.black.withAlpha(95)
-                              : AppColors.whiteColor.withAlpha(95),
+                              ? AppColors.black.withAlpha(200)
+                              : AppColors.whiteColor.withAlpha(200),
                       fontWeight: AppFontWeight.fontWeight500,
                     ),
                   ),
@@ -1300,8 +1307,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           fontSize: AppDimensions.di_14,
                           color:
                               themeProvider.themeMode == ThemeMode.light
-                                  ? AppColors.black.withAlpha(95)
-                                  : AppColors.whiteColor.withAlpha(95),
+                                  ? AppColors.black
+                                  : AppColors.whiteColor,
                           fontWeight: AppFontWeight.fontWeight700,
                         ),
 
@@ -1313,8 +1320,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           fontSize: AppDimensions.di_14,
                           color:
                               themeProvider.themeMode == ThemeMode.light
-                                  ? AppColors.black.withAlpha(95)
-                                  : AppColors.whiteColor.withAlpha(95),
+                                  ? AppColors.black.withAlpha(200)
+                                  : AppColors.whiteColor.withAlpha(200),
                           fontWeight: AppFontWeight.fontWeight500,
                         ),
                       ],
@@ -1357,7 +1364,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
             SizedBox(width: 12),
             Expanded(
               child: CustomButton(
-                text: 'Save',
+                text: AppStrings.save,
                 onPressed:
                     () => _saveAsDraftFeedbackData(
                       localizationProvider,
@@ -1388,7 +1395,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
               if (networkProvider.status == ConnectivityStatus.online ||
                   isClickedBy == AppStrings.gallery) {
                 showCustomSelectionDialog(
-                  title: "Submit",
+                  title: AppStrings.submit,
                   titleVisibility: false,
                   content: AppStrings.areYouSure,
                   icon: "assets/icons/language_icon.svg",
@@ -1704,11 +1711,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       ],
       onButtonPressed: [
         () {
-          showErrorDialog(
-            context,
-            'Feedback saved successfully',
-            backgroundColor: Colors.green,
-          );
           _saveFeedbackStatus(
             widget.feedbackId,
             imagePickerProvider,
@@ -1728,6 +1730,11 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+          showErrorDialog(
+            context,
+            'Feedback saved successfully',
+            backgroundColor: Colors.green,
           );
         },
         () {
