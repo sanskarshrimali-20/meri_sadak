@@ -100,7 +100,7 @@ class AppStrings {
   static const selectLanguage = "Select Language";
   static const resetPassword = "Reset Password";
   static const createPassword = "Create Password";
-  static const enterRoadDetails = "Enter road details";
+  static const enterRoadDetails = "Enter road information";
   static const address = "Address";
 
   static const aboutTitle = 'About PMGSY';
@@ -162,7 +162,7 @@ class AppStrings {
   static const preview = "Preview";
   static const roadLocation = "Road location";
   static const roadImages = "Road Images";
-  static const roadDetails = "Road Details";
+  static const roadDetails = "Road Information";
   static const edit = "Edit";
   static const enterRoadName = " Enter Road Name";
   static const location = "Location";
@@ -207,8 +207,9 @@ class AppStrings {
   static const togetherBuild = "Together, we build safer and better roads";
   static const submitted = "Submitted";
   static const saved = "Saved";
-  static const feedbackDetails = "Feedback Details";
-  static const piuDetails = "PIU Details";
-  static const sqcDetails = "SQC Details";
+  static const save = "Save";
+  static const feedbackDetails = "Feedback Information";
+  static const piuDetails = "PIU Information";
+  static const sqcDetails = "SQC Information";
 
 }

@@ -70,10 +70,9 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor:
-          themeProvider.themeMode == ThemeMode.light
-              ? AppColors.bgColorGainsBoro
-              : AppColors.bgDarkModeColor,
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.bgColorGainsBoro
+          : AppColors.bgDarkModeColor,
       body: CustomBodyWithGradient(
         title: AppStrings.feedbackDetails,
         childHeight: DeviceSize.getScreenHeight(context) * 0.85,
@@ -81,7 +80,9 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.whiteColor,
+              color: themeProvider.themeMode == ThemeMode.light
+                  ? AppColors.whiteColor
+                  : AppColors.boxDarkModeColor,
               borderRadius: BorderRadius.all(
                 Radius.circular(AppDimensions.di_20), // Rounded corners
               ),
@@ -103,7 +104,10 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                           children: [
                             Row(
                               children: [
-                                CustomTextWidget(text: "Feedback ID: ${feedback['id']}", fontSize: AppDimensions.di_16, color: AppColors.black,
+                                CustomTextWidget(text: "Feedback ID: ${feedback['id']}", fontSize: AppDimensions.di_16,
+                                  color: themeProvider.themeMode == ThemeMode.light
+                                    ? AppColors.black
+                                    : AppColors.whiteColor,
                                   fontWeight: AppFontWeight.fontWeight600,),
                                 Spacer(),
                                 Container(
@@ -130,6 +134,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                             ),
                             SizedBox(height: 15),
 
+
                             CustomTextWidget(
                               text:
                               "Submitted: ${DateTimeUtil.formatDateTime(feedback["dateTime"])}",
@@ -141,41 +146,94 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
 
                             SizedBox(height: 10),
 
-                            CustomTextWidget(
-                              text:
-                              "Complaint: ${feedback["categoryOfComplaint"]}",
-                              fontSize: 16,
-                              color: AppColors.black,
-                              fontWeight: AppFontWeight.fontWeight600,
+                            RichText(
+                              text: TextSpan(
+                                style: TextStyle(fontSize: 17),
+                                children: [
+                                  TextSpan(
+                                    text: 'Complaint: ',
+                                    style: TextStyle(
+                                      fontWeight: AppFontWeight.fontWeight500,
+                                      color:  themeProvider.themeMode == ThemeMode.light
+                                          ? AppColors.black
+                                          : AppColors.whiteColor, ),
+                                  ),
+                                  TextSpan(
+                                    text: feedback['categoryOfComplaint'],
+                                    style: TextStyle( fontWeight: AppFontWeight.fontWeight400,
+                                      color:  themeProvider.themeMode == ThemeMode.light
+                                          ? AppColors.black.withOpacity(0.8)
+                                          : AppColors.whiteColor.withOpacity(0.8),),
+                                  ),
+                                ],
+                              ),
                             ),
 
                             SizedBox(height: 10),
 
-                            CustomTextWidget(
-                              text: "Road: ${feedback["roadName"]?.isEmpty ?? true ? feedback["staticRoadName"] : feedback["roadName"]}",
-                              fontSize: 16,
-                              color: AppColors.black,
-                              fontWeight: AppFontWeight.fontWeight600,
+                            RichText(
+                              text: TextSpan(
+                                style: TextStyle(fontSize: 17),
+                                children: [
+                                  TextSpan(
+                                    text: 'Road: ',
+                                    style: TextStyle(
+                                      fontWeight: AppFontWeight.fontWeight500,
+                                      color:  themeProvider.themeMode == ThemeMode.light
+                                          ? AppColors.black
+                                          : AppColors.whiteColor, ),
+                                  ),
+                                  TextSpan(
+                                    text: feedback["roadName"]?.isEmpty ?? true ? feedback["staticRoadName"] : feedback["roadName"],
+                                    style: TextStyle( fontWeight: AppFontWeight.fontWeight400,
+                                      color:  themeProvider.themeMode == ThemeMode.light
+                                          ? AppColors.black.withOpacity(0.8)
+                                          : AppColors.whiteColor.withOpacity(0.8),                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
 
                             SizedBox(height: 10),
 
-                            CustomTextWidget(
-                              text:
-                              "Feedback: ${feedback["feedback"]}",
-                              fontSize: 16,
-                              color: AppColors.black,
-                              fontWeight: AppFontWeight.fontWeight600,
+                            RichText(
+                              text: TextSpan(
+                                style: TextStyle(fontSize: 17),
+                                children: [
+                                  TextSpan(
+                                    text: 'Feedback: ',
+                                    style: TextStyle(
+                                      fontWeight: AppFontWeight.fontWeight500,
+                                      color:  themeProvider.themeMode == ThemeMode.light
+                                          ? AppColors.black
+                                          : AppColors.whiteColor,),
+                                  ),
+                                  TextSpan(
+                                    text: feedback["feedback"],
+                                    style: TextStyle( fontWeight: AppFontWeight.fontWeight400,
+                                      color:  themeProvider.themeMode == ThemeMode.light
+                                          ? AppColors.black.withOpacity(0.8)
+                                          : AppColors.whiteColor.withOpacity(0.8),),
+                                  ),
+                                ],
+                              ),
                             ),
 
                             SizedBox(height: 15),
 
-                            CustomTextWidget(
-                              text:AppStrings.piuDetails,
-                              fontSize: 18,
-                              fontWeight: AppFontWeight.fontWeight600,
-                              color: AppColors.primaryColor,
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.color_E77728
+                              ),
+                              child:  CustomTextWidget(
+                                text:"  ${AppStrings.piuDetails}  ",
+                                fontSize: 18,
+                                fontWeight: AppFontWeight.fontWeight600,
+                                color: AppColors.whiteColor,
+                              ),
                             ),
+
+                            SizedBox(height: 10),
 
                             customDrawerWidget(
                               title: "Sanskar",
@@ -264,12 +322,19 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
 
                             SizedBox(height: 15,),
 
-                            CustomTextWidget(
-                              text:AppStrings.sqcDetails,
-                              fontSize: 18,
-                              fontWeight: AppFontWeight.fontWeight600,
-                              color: AppColors.primaryColor,
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: AppColors.color_E77728
+                              ),
+                              child:  CustomTextWidget(
+                                text:"  ${AppStrings.sqcDetails}  ",
+                                fontSize: 18,
+                                fontWeight: AppFontWeight.fontWeight600,
+                                color: AppColors.whiteColor,
+                              ),
                             ),
+
+                            SizedBox(height: 10),
 
                             customDrawerWidget(
                               title: "S.d pendse",

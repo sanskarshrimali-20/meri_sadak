@@ -86,7 +86,9 @@ class _AllFeedbackSecondScreen extends State<AllFeedbackSecondScreen> with Singl
                     ),
                     child: TabBar(
                       indicatorSize: TabBarIndicatorSize.tab, // This ensures the indicator covers the full width of the tab
-                      dividerColor: AppColors.whiteColor,
+                      dividerColor: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.whiteColor
+                          : AppColors.black,
                       controller: _tabController,
                       indicator: BoxDecoration(
                         gradient: LinearGradient(colors:  <Color>[
@@ -143,7 +145,9 @@ class _AllFeedbackSecondScreen extends State<AllFeedbackSecondScreen> with Singl
                                         CustomTextWidget(
                                           text: "Feedback ID: ${feedback['id']}",
                                           fontSize: AppDimensions.di_16,
-                                          color: AppColors.black,
+                                          color:  themeProvider.themeMode == ThemeMode.light
+                                              ? AppColors.black
+                                              : AppColors.whiteColor,
                                           fontWeight: AppFontWeight.fontWeight600,
                                         ),
                                         SizedBox(width: 10),
@@ -171,7 +175,9 @@ class _AllFeedbackSecondScreen extends State<AllFeedbackSecondScreen> with Singl
                                           ),
                                         ),
                                         Spacer(),
-                                        SvgPicture.asset(ImageAssetsPath.rightArrow),
+                                        SvgPicture.asset(ImageAssetsPath.rightArrow, color: themeProvider.themeMode == ThemeMode.light
+                                            ? AppColors.black
+                                            : AppColors.whiteColor,),
                                       ],
                                     ),
                                     SizedBox(height: 10),
@@ -218,8 +224,9 @@ class _AllFeedbackSecondScreen extends State<AllFeedbackSecondScreen> with Singl
                                         CustomTextWidget(
                                           text: "Feedback ID: ${feedback['id']}",
                                           fontSize: AppDimensions.di_16,
-                                          color: AppColors.black,
-                                          fontWeight: AppFontWeight.fontWeight600,
+                                          color:  themeProvider.themeMode == ThemeMode.light
+                                              ? AppColors.black
+                                              : AppColors.whiteColor,fontWeight: AppFontWeight.fontWeight600,
                                         ),
                                         SizedBox(width: 10),
                                         Container(
@@ -246,8 +253,9 @@ class _AllFeedbackSecondScreen extends State<AllFeedbackSecondScreen> with Singl
                                           ),
                                         ),
                                         Spacer(),
-                                        SvgPicture.asset(ImageAssetsPath.rightArrow),
-                                      ],
+                                        SvgPicture.asset(ImageAssetsPath.rightArrow, color: themeProvider.themeMode == ThemeMode.light
+                                            ? AppColors.black
+                                            : AppColors.whiteColor,),],
                                     ),
                                     SizedBox(height: 10),
                                     Divider(

@@ -12,7 +12,7 @@ class CustomDropdownField extends StatefulWidget {
   final TextStyle? dropdownTextStyle;
   final IconData? suffixIcon;
   final double? dropdownHeight;
-  final Color? dropdownBgColor;
+  final Color dropdownBgColor;
   final InputBorder? textFieldBorder;
   final EdgeInsetsGeometry? contentPadding;
   final bool isRequired;
@@ -31,7 +31,7 @@ class CustomDropdownField extends StatefulWidget {
     this.dropdownTextStyle,
     this.suffixIcon,
     this.dropdownHeight,
-    this.dropdownBgColor,
+    this.dropdownBgColor = Colors.grey,
     this.textFieldBorder,
     this.contentPadding,
     required this.isRequired,
@@ -194,7 +194,7 @@ class _CustomDropdownField extends State<CustomDropdownField> {
                         style:
                             widget.dropdownTextStyle ??
                             TextStyle(
-                              color: Colors.grey.shade800,
+                              color: widget.textColor,
                               fontSize: AppDimensions.di_16,
                             ),
                       ),
