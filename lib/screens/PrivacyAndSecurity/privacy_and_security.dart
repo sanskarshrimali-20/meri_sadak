@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_image_path.dart';
-import '../../providerData/permission_provider.dart';
 import '../../providerData/theme_provider.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/drawer_widget.dart';
@@ -26,7 +25,6 @@ class _PrivacyAndSecurityScreen extends State<PrivacyAndSecurityScreen> {
   Widget build(BuildContext context) {
 
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final permissionProvider = Provider.of<PermissionProvider>(context, listen: false);
 
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light

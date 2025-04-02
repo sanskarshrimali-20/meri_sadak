@@ -1,23 +1,24 @@
-import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:encrypt/encrypt.dart';
 
-class AESUtil {
+class EncryptionService {
+  final Key key;
+  final IV iv;
 
-  // Decrypt method using a fixed key
-  String decryptData(String encryptedData, String securityKey) {
-    final key = encrypt.Key.fromUtf8(securityKey.padRight(32, ' '));  // 32-byte key for AES-192
-    final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.ecb));  // ECB mode (no IV)
+  // Use demo key and IV
+  EncryptionService()
+      : key = Key.fromUtf8('my32lengthsupersecretnooneknows1'),
+        // 32 bytes for AES-256
+        iv = IV.fromUtf8('1234567890123456'); // 16 bytes for AES
 
-    final decrypted = encrypter.decrypt64(encryptedData);
-    return decrypted;
+  String encrypt(String plainText) {
+    final encrypter = Encrypter(AES(key));
+    final encrypted = encrypter.encrypt(plainText, iv: iv);
+    return encrypted.base64; // Return base64 encoded string
   }
 
-  // Encrypt method using a fixed key
-  String encryptData(String data, String securityKey) {
-    final key = encrypt.Key.fromUtf8(securityKey.padRight(32, ' '));  // 32-byte key for AES-192
-    final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.ecb));  // ECB mode (no IV)
-
-    final encrypted = encrypter.encrypt(data);
-    return encrypted.base64;  // Return Base64 encoded result
+  String decrypt(String encryptedText) {
+    final encrypter = Encrypter(AES(key));
+    final decrypted = encrypter.decrypt64(encryptedText, iv: iv);
+    return decrypted; // Return decrypted plain text
   }
-
 }

@@ -6,7 +6,6 @@ import '../../constants/app_image_path.dart';
 import '../../constants/app_strings.dart';
 import '../../providerData/permission_provider.dart';
 import '../../providerData/theme_provider.dart';
-import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_carousel_slider.dart';
 import '../../widgets/custom_expansion_tile.dart';

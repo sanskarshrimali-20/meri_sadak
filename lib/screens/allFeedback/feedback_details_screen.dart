@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:meri_sadak/constants/app_font_weight.dart';
 import 'package:meri_sadak/data/model/image_item_model.dart';
 import 'package:meri_sadak/utils/date_time_utils.dart';
 import 'package:meri_sadak/utils/device_size.dart';
-import 'package:meri_sadak/widgets/custom_button.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
@@ -14,20 +12,24 @@ import '../../constants/app_image_path.dart';
 import '../../constants/app_strings.dart';
 import '../../providerData/theme_provider.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
+import '../../services/EncryptionService/encryption_service.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/drawer_widget.dart';
 import '../registerFeedback/register_feedback_new_screen.dart';
 
 class FeedbackDetailsScreen extends StatefulWidget {
+
   final int id;
 
-  FeedbackDetailsScreen({super.key, required this.id});
+  const FeedbackDetailsScreen({super.key, required this.id});
 
   @override
   State<FeedbackDetailsScreen> createState() => _FeedbackDetailsScreen();
 }
 
 class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
+
+  final EncryptionService _encryptionService = EncryptionService();
   final dbHelper = DatabaseHelper();
   List<Map<String, dynamic>>?
   feedbackData; // Update to handle a list of feedback
@@ -137,7 +139,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
 
                             CustomTextWidget(
                               text:
-                              "Submitted: ${DateTimeUtil.formatDateTime(feedback["dateTime"])}",
+                              "Submitted: ${DateTimeUtil.formatDateTime(decryptString(feedback["dateTime"]))}",
                               // "submitted: ${feedback['categoryOfComplaint']}",
                               fontSize: 16,
                               fontWeight: AppFontWeight.fontWeight600,
@@ -159,11 +161,11 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                           : AppColors.whiteColor, ),
                                   ),
                                   TextSpan(
-                                    text: feedback['categoryOfComplaint'],
+                                    text: decryptString(feedback['categoryOfComplaint']),
                                     style: TextStyle( fontWeight: AppFontWeight.fontWeight400,
                                       color:  themeProvider.themeMode == ThemeMode.light
-                                          ? AppColors.black.withOpacity(0.8)
-                                          : AppColors.whiteColor.withOpacity(0.8),),
+                                          ? AppColors.black.withAlpha(200)
+                                          : AppColors.whiteColor.withAlpha(200), fontSize: AppDimensions.di_16),
                                   ),
                                 ],
                               ),
@@ -184,11 +186,12 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                           : AppColors.whiteColor, ),
                                   ),
                                   TextSpan(
-                                    text: feedback["roadName"]?.isEmpty ?? true ? feedback["staticRoadName"] : feedback["roadName"],
+                                    text: decryptText(feedback["roadName"]).isEmpty ? decryptText(feedback["staticRoadName"]) :
+                                    decryptText(feedback["roadName"]),
                                     style: TextStyle( fontWeight: AppFontWeight.fontWeight400,
                                       color:  themeProvider.themeMode == ThemeMode.light
-                                          ? AppColors.black.withOpacity(0.8)
-                                          : AppColors.whiteColor.withOpacity(0.8),                                    ),
+                                          ? AppColors.black.withAlpha(200)
+                                          : AppColors.whiteColor.withAlpha(200), fontSize: AppDimensions.di_16),
                                   ),
                                 ],
                               ),
@@ -209,11 +212,11 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                           : AppColors.whiteColor,),
                                   ),
                                   TextSpan(
-                                    text: feedback["feedback"],
+                                    text: decryptString(feedback["feedback"]),
                                     style: TextStyle( fontWeight: AppFontWeight.fontWeight400,
                                       color:  themeProvider.themeMode == ThemeMode.light
-                                          ? AppColors.black.withOpacity(0.8)
-                                          : AppColors.whiteColor.withOpacity(0.8),),
+                                          ? AppColors.black.withAlpha(200)
+                                          : AppColors.whiteColor.withAlpha(200), fontSize: AppDimensions.di_16),
                                   ),
                                 ],
                               ),
@@ -287,7 +290,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                             ),
 
                             customDrawerWidget(
-                                title: feedback["district"],
+                                title: decryptString(feedback["district"]),
                                 fontSize: AppDimensions.di_16,
                                 fontWeight: AppFontWeight.fontWeight600,
                               icon: ImageAssetsPath.locationPin,
@@ -304,7 +307,7 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                             ),
 
                             customDrawerWidget(
-                              title: feedback["state"],
+                              title: decryptString(feedback["state"]),
                                 fontSize: AppDimensions.di_16,
                                 fontWeight: AppFontWeight.fontWeight600,
                               icon: ImageAssetsPath.locationPin,
@@ -397,7 +400,6 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                 itemBuilder: (context, index) {
                                   ImageItem imageItem =
                                       feedback['images'][index];
-                                  debugPrint("Imagepath${imageItem.imagePath}");
                                   File imageFile = File(imageItem.imagePath);
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -474,4 +476,18 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
       ),
     );
   }
+
+  // Helper function for encryption
+  String decryptString(String? value) {
+    return _encryptionService.decrypt(value?.trim() ?? '');
+  }
+
+  String decryptText(String text) {
+    if (text.isEmpty) {
+      // Handle empty string - return an empty string or a default value
+      return '';
+    }
+    return decryptString(text); // Assuming decryptString is your decryption method
+  }
+
 }

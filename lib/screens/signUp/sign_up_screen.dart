@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/otpVerify/otp_screen.dart';
 import 'package:meri_sadak/screens/termAndPrivacy/terms_condition_privacy_policy.dart';
-import 'package:meri_sadak/viewmodels/forgotChangePassword/forgot_change_password_viewmodel.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
@@ -20,7 +19,6 @@ import '../../widgets/custom_login_signup_textfield.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_widget.dart';
 import '../../widgets/login_signup_bg_active.dart';
-import '../home/home_screen.dart';
 import '../login/login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -31,15 +29,11 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreen extends State<SignUpScreen> {
-  bool _isPasswordVisible = false;
   bool _isChecked = false;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmController =
-      TextEditingController();
   String? emailError;
   String? phoneError;
   String? fullNameError;
@@ -426,12 +420,6 @@ class _SignUpScreen extends State<SignUpScreen> {
         ),
       ),
     );
-  }
-
-  void _togglePasswordVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
   }
 
   Future<void> _onSignInClick(NetworkProviderController networkProvider) async {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meri_sadak/constants/app_colors.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
 import 'package:meri_sadak/constants/app_font_weight.dart';
@@ -15,17 +14,14 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../providerData/theme_provider.dart';
 import '../screens/AboutMeriSadak/about_meri_sadak.dart';
-import '../screens/AppVersion/app_version.dart';
-import '../screens/PrivacyAndSecurity/privacy_and_security.dart';
 import '../screens/login/login_screen.dart';
 import '../services/DatabaseHelper/database_helper.dart';
 import '../services/LocalStorageService/local_storage.dart';
-import '../utils/localization_provider.dart';
 import 'custom_base_dialog.dart';
 
 class CustomDrawer extends StatefulWidget {
 
-  CustomDrawer({super.key});
+  const CustomDrawer({super.key});
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
@@ -48,7 +44,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final localizationProvider = Provider.of<LocalizationProvider>(context);
+
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Drawer(

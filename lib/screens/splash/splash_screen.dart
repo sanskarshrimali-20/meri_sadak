@@ -3,13 +3,8 @@ import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/home/home_screen.dart';
 import 'package:meri_sadak/screens/login/login_screen.dart';
 import 'package:meri_sadak/utils/device_size.dart';
-import 'package:meri_sadak/utils/device_utils.dart';
-import 'package:provider/provider.dart';
-
 import '../../constants/app_colors.dart';
 import '../../services/LocalStorageService/local_storage.dart';
-import '../../viewmodels/login/login_view_model.dart';
-import '../../viewmodels/xmlData/xml_master_data.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -36,7 +31,7 @@ class _SplashScreen extends State<SplashScreen>
     // Start the animation
     _controller.forward().then((_) async {
 
-      final xmlMasterDataViewModel = Provider.of<XmlMasterDataViewModel>(context, listen: false);
+     /* final xmlMasterDataViewModel = Provider.of<XmlMasterDataViewModel>(context, listen: false);
 
       List<Map<String, dynamic>> states= await xmlMasterDataViewModel.getStatesFromDB();
       List<Map<String, dynamic>> districts= await xmlMasterDataViewModel.getStatesFromDB();
@@ -57,6 +52,8 @@ class _SplashScreen extends State<SplashScreen>
         debugPrint("blockssempty");
       }
 
+     */
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -64,24 +61,26 @@ class _SplashScreen extends State<SplashScreen>
         ),
       );
 
-     /* final isLoggedIn = await _checkLoginStatus();
+      /*final isLoggedIn = await _checkLoginStatus();
 
-        if(isLoggedIn){
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(), // Pass the profile data
-            ),
-          );
-        }
-        else{
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoginScreen(), // Pass the profile data
-            ),
-          );
-        }*/
+      // Ensure the widget is still mounted before accessing the context
+      if (!mounted) return;
+
+      if (isLoggedIn) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(), // Pass the profile data
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginScreen(), // Pass the profile data
+          ),
+        );
+      }*/
       // Check login status
     });
   }
@@ -115,18 +114,5 @@ class _SplashScreen extends State<SplashScreen>
         ),
       ),
     );
-    /* return Scaffold(
-      body: Stack(
-        children: [
-          // Background Image
-          Positioned.fill(
-            child: Image.asset(
-              ImageAssetsPath.splashScreen, // Background image path
-              fit: BoxFit.cover, // Make sure the background image covers the screen
-            ),
-          ),
-        ],
-      ),
-    );*/
   }
 }

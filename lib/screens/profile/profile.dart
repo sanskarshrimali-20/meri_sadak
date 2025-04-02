@@ -109,7 +109,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                   ),
 
                   CustomTextWidget(
-                    text: '${AppStrings.phoneNoO} : ${phone}', fontSize: AppDimensions.di_18,
+                    text: '${AppStrings.phoneNoO} : $phone', fontSize: AppDimensions.di_18,
                     fontWeight: AppFontWeight.fontWeight500,
                     color: themeProvider.themeMode == ThemeMode.light
                         ? AppColors.black
@@ -124,7 +124,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                   ),
 
                   CustomTextWidget(
-                    text: '${AppStrings.emailId} : ${email}', fontSize: AppDimensions.di_18,
+                    text: '${AppStrings.emailId} : $email', fontSize: AppDimensions.di_18,
                     fontWeight: AppFontWeight.fontWeight500,
                     color: themeProvider.themeMode == ThemeMode.light
                         ? AppColors.black

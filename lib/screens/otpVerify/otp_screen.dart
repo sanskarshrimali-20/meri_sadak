@@ -18,11 +18,12 @@ import '../../widgets/custom_snackbar.dart';
 import '../../widgets/login_signup_bg_active.dart';
 
 class OtpValidationScreen extends StatefulWidget {
-  String type;
-  Map<String, dynamic> userSignUpDetails;
-  String userCred;
 
-  OtpValidationScreen({
+  final String type;
+  final Map<String, dynamic> userSignUpDetails;
+  final String userCred;
+
+  const OtpValidationScreen({
     super.key,
     required this.type,
     this.userSignUpDetails = const {
@@ -218,8 +219,6 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
 
   // Function to validate OTP and navigate
   void _onContinuePressed(NetworkProviderController networkProvider) {
-    print("otp.length---${otp.length}");
-    print("widget.userSignUpDetails---${widget.userSignUpDetails}");
 
     if(networkProvider.status == ConnectivityStatus.online) {
       if (otp.length != 6) {
