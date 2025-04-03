@@ -65,6 +65,7 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: Image.asset(
+                      height: DeviceSize.getScreenHeight(context)* 0.6,
                       ImageAssetsPath.loginBg,
                       //  ImageAssetsPath.forgetPasswordBg,
                       fit:

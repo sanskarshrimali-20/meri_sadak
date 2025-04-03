@@ -231,7 +231,8 @@ class _AppearanceScreen extends State<AppearanceScreen> {
                       showCustomSelectionDialog(
                         title: "Select Language",
                         titleVisibility: false,
-                        content: AppStrings.selectLanguagePre,
+                        content: localizationProvider.localizedStrings['select_language'] ??
+                            AppStrings.selectLanguagePre,
                         icon: "assets/icons/language_icon.svg",
                         iconVisibility: false,
                         buttonLabels: [
@@ -283,7 +284,7 @@ class _AppearanceScreen extends State<AppearanceScreen> {
       "small": "Small",
       "regular": "Regular",
       "large": "Large",
-
+      "select_language": "Select your preferred language",
       // other English translations
     };
 
@@ -303,7 +304,7 @@ class _AppearanceScreen extends State<AppearanceScreen> {
       "small": "छोटा",
       "regular": "नियमित",
       "large": "बड़ा",
-
+      "select_language": "अपनी भाषा चुनें",
       // other Hindi translations
     };
 

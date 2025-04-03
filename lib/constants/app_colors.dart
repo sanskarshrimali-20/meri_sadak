@@ -21,7 +21,7 @@ class AppColors {
   static const Color bgColorGainsBoro =Color(0xFFE3E3E3);
 
   static const Color blueGradientColor1 =Color(0xFF00458E);//static const Color blueGradientColor1 =Color(0xFF453CC4);
-  static const Color blueGradientColor2 =Color(0xFF000328);//static const Color blueGradientColor2 =Color(0xFF211D5E);
+  static const Color blueGradientColor2 =Color(0xFF000549);//static const Color blueGradientColor2 =Color(0xFF211D5E);
   static const Color color_E77728 = Color(0xFFE77728);
   static const Color color_4E44E0 = Color(0xFF4E44E0);
   static const Color selectImageColor = Color(0xFFBFC1C5);
