@@ -92,7 +92,7 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                   style: TextStyle(
                     fontSize: AppDimensions.di_16,
                     fontWeight: FontWeight.bold,
-                    color: widget.refreshIconColor
+                    color: widget.refreshIconColor,
                   ),
                 ),
                 SizedBox(width: 5), // Space between text and image
@@ -366,6 +366,8 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                                           newPosition,
                                           initialPosition,
                                         );
+                                        print("initialPosition: $initialPosition");
+                                        print("details: ${details.globalPosition.distance}");
                                         final placemarks =
                                             await placemarkFromCoordinates(
                                               newPosition.latitude,
@@ -427,22 +429,19 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                         ),
                       )
                       : Text("Map Could not be loaded"),
-
-                  Padding(
-                    padding: EdgeInsets.all(AppDimensions.di_15),
-                    child: Container(
-                      padding: EdgeInsets.all(AppDimensions.di_5),
-                      decoration: BoxDecoration(
-                        color: AppColors.whiteColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(AppDimensions.di_5),
-                        ),
+                  SizedBox(height: 6.0),
+                  Container(
+                    padding: EdgeInsets.all(AppDimensions.di_4),
+                    decoration: BoxDecoration(
+                      color: AppColors.whiteColor,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(AppDimensions.di_5),
                       ),
-                      child: CustomTextWidget(
-                        text: permissionProvider.address,
-                        fontSize: AppDimensions.di_15,
-                        color: AppColors.black,
-                      ),
+                    ),
+                    child: CustomTextWidget(
+                      text: permissionProvider.address,
+                      fontSize: AppDimensions.di_15,
+                      color: AppColors.black,
                     ),
                   ),
                 ],
