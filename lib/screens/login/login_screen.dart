@@ -69,6 +69,7 @@ class _LoginScreen extends State<LoginScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: Image.asset(
+                      height: DeviceSize.getScreenHeight(context)* 0.6,
                       ImageAssetsPath.loginBg, // Path to the background image
                       fit:
                           BoxFit

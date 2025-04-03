@@ -54,14 +54,14 @@ class _SplashScreen extends State<SplashScreen>
 
      */
 
-      Navigator.pushReplacement(
+      /*Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomeScreen(), // Pass the profile data
         ),
-      );
+      );*/
 
-      /*final isLoggedIn = await _checkLoginStatus();
+      final isLoggedIn = await _checkLoginStatus();
 
       // Ensure the widget is still mounted before accessing the context
       if (!mounted) return;
@@ -80,7 +80,7 @@ class _SplashScreen extends State<SplashScreen>
             builder: (context) => LoginScreen(), // Pass the profile data
           ),
         );
-      }*/
+      }
       // Check login status
     });
   }
