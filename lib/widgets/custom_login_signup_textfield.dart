@@ -69,17 +69,6 @@ class _CustomLoginSignupTextFieldWidgetState
   // No need to track current/old controller values manually String? errorText;
   @override
   Widget build(BuildContext context) {
-    // Assuming `widget.controller` is your TextEditingController
-    String text =
-        widget.controller?.text ??
-            ""; // Get text from controller, default to empty string if null
-
-    // Check the length of the text and set the maxLength accordingly
-    int maxLength =
-    (text.length == 10 && RegExp(r'^[0-9]{10}$').hasMatch(text)) ? 10 : 25;
-
-    print("controller: ${widget.controller?.text.toString()}");
-    print("Max length is: $maxLength");
 
     // Set input formatters for numbers
     if (widget.keyboardType == TextInputType.number) {
@@ -136,7 +125,6 @@ class _CustomLoginSignupTextFieldWidgetState
         // Allow letters, numbers, @, ., _, +, -
       ];
     }
-    print("widget.keyboardType: ${widget.keyboardType}");
 
     return TextFormField(
       style: TextStyle(

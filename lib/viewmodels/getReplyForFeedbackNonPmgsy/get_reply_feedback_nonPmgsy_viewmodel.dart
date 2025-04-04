@@ -46,8 +46,7 @@ class GetReplyFileFeedbackViewModel extends ChangeNotifier {
 
       return "success";
     } catch (e, stackTrace) {
-      log("Error during login: $e");
-      debugPrintStack(stackTrace: stackTrace);
+      log("Error during login: $e $stackTrace");
 
       return "Failed to login. Please check your credentials and try again.";
     } finally {

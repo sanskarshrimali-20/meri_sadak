@@ -1,28 +1,27 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:meri_sadak/providerData/permission_provider.dart';
+import 'package:meri_sadak/utils/date_time_utils.dart';
 import '../data/model/image_item_model.dart';
 import '../services/DatabaseHelper/database_helper.dart';
 
 class ImagePickerProvider extends ChangeNotifier {
+
   final ImagePicker _picker = ImagePicker();
   List<ImageItem> _imageFiles = [];
 
   List<ImageItem> get imageFiles => _imageFiles;
-
   final dbHelper = DatabaseHelper();
+  final permissionProvider = PermissionProvider();
 
   // Load images from DB
   Future<void> loadImages() async {
     final imagesFromDb =
         await dbHelper.getAllImages(); // Replace with your DB fetch logic
-    print("Loaded images: $imagesFromDb"); // Debugging: Print fetched images
     _imageFiles.clear(); // Clear any existing images
     _imageFiles.addAll(imagesFromDb); // Add images from DB to list
     notifyListeners(); // Notify listeners (UI) about the change
-    print(
-      "Image files after load: $_imageFiles",
-    ); // Debugging: Print after loading images
+
   }
 
   // Pick an image from camera or gallery
@@ -32,12 +31,16 @@ class ImagePickerProvider extends ChangeNotifier {
     if (image != null) {
       if (_imageFiles.length < 3) {
         // Add image to the DB
+
         ImageItem newImage = ImageItem(
           imagePath: image.path,
           source: source == ImageSource.camera ? 'Camera' : 'Gallery',
+          lat: source == ImageSource.camera ? permissionProvider.latitude.toString(): '',
+          long: source == ImageSource.camera ? permissionProvider.longitude.toString() : '',
+          time: DateTimeUtil.getFormattedDateTime(),
         );
-        await dbHelper.insertImage(newImage);
 
+        await dbHelper.insertImage(newImage);
         // Update the image list
         await loadImages();
         return null;
@@ -52,13 +55,6 @@ class ImagePickerProvider extends ChangeNotifier {
   // Delete image from DB and list
   Future<void> deleteImage(int index) async {
     final image = _imageFiles[index];
-    if (kDebugMode) {
-      print("deleteImage: $index");
-      print(
-        "my_imageFiles: ${_imageFiles[index].id} :: my_imageFiles: ${_imageFiles[index].imagePath}",
-      );
-      print("deleteImageIdd: ${image.id}");
-    }
     await dbHelper.deleteImage(image.id!);
     _imageFiles.removeAt(index);
     notifyListeners();
@@ -86,6 +82,9 @@ class ImagePickerProvider extends ChangeNotifier {
               imagePath: imageData['image'],
               source: imageData['source'],
               id: imageData['id'],
+              lat: imageData['lat'],
+              long: imageData['long'],
+              time: imageData['time'],
             ),
           );
         }

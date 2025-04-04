@@ -1,8 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
-import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/registerFeedback/feedback_form_screen.dart';
 import 'package:meri_sadak/screens/registerFeedback/submit_feedback_screen.dart';
 import 'package:meri_sadak/screens/registerFeedback/upload_image_screen.dart';
@@ -10,7 +7,6 @@ import 'package:meri_sadak/utils/device_size.dart';
 import 'package:sadja_progress_stepper/sadja_progress_stepper.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_strings.dart';
-import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 
 class RegisterFeedbackScreen extends StatefulWidget {
@@ -88,11 +84,6 @@ class _RegisterFeedbackScreen extends State<RegisterFeedbackScreen> {
   }
 
   void changeCurrentStep(int stepValue) {
-    if (stepValue < 0 || stepValue > 3) {
-      if (kDebugMode) {
-        print("Step value out of bounds");
-      }
-    }
     setState(() {
       _currentStep = stepValue;
     });

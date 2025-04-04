@@ -28,15 +28,12 @@ class LocalizationProvider with ChangeNotifier {
 
   Future<void> initLocale() async {
     final storedLanguage = await _storage.getLanguage();
-    debugPrint("Current language 12: $storedLanguage");
 
     if (storedLanguage == 'en') {
       await setLocale(Locale('en', 'US'));
-      debugPrint("Current language en: $storedLanguage");
 
     } else if (storedLanguage == 'hi') {
       await setLocale(Locale('hi', 'IN'));
-      debugPrint("Current language hi: $storedLanguage");
 
     } else {
       // Default to English if no language is stored

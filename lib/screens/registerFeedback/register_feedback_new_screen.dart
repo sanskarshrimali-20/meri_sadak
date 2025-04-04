@@ -644,7 +644,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           onTap:
                               () => _showProfileImageDialog(
                                 context,
-                                imageItem.imagePath,
+                                imageItem,
                                 DeviceSize.getScreenHeight(context),
                                 DeviceSize.getScreenWidth(context),
                                 permissionProvider,
@@ -1450,7 +1450,6 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
       final provider = Provider.of<PermissionProvider>(context, listen: false);
       // Ensure permissionProvider is available
       await provider.requestLocationPermission();
-      print("feedbackdata: $feedbackData   and fid: ${widget.feedbackId} and isLocationFetched: ${!provider.isLocationFetched}");
       if (widget.feedbackId == null && !provider.isLocationFetched) {
         provider.fetchCurrentLocation();
       }
@@ -1463,13 +1462,13 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
 
   void _showProfileImageDialog(
     BuildContext context,
-    String picPath,
+    ImageItem imageItem,
     screenH,
     screenW,
     PermissionProvider permissionProvider,
     String imgSource,
   ) {
-    if (picPath.isNotEmpty) {
+    if (imageItem.imagePath.isNotEmpty) {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true, // Allows for custom height
@@ -1498,12 +1497,14 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                           ),
                           // Rounded corners for image
                           child: Image.file(
-                            File(picPath),
+                            File(imageItem.imagePath),
                             width: screenW * 0.8, // Image width responsive
                             height: screenH * 0.3, // Image height responsive
                             fit: BoxFit.contain,
                           ),
                         ),
+                        CustomTextWidget(text: imageItem.time, fontSize: AppDimensions.di_16, color: AppColors.black),
+                        CustomTextWidget(text: imageItem.lat, fontSize: AppDimensions.di_16, color: AppColors.black),
                         if (imgSource == 'Camera')
                           Padding(
                             padding: const EdgeInsets.symmetric(

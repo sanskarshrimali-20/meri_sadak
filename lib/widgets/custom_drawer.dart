@@ -7,6 +7,7 @@ import 'package:meri_sadak/constants/app_strings.dart';
 import 'package:meri_sadak/screens/aboutPmgsy/about_pmgsy.dart';
 import 'package:meri_sadak/screens/contactUs/contact_us.dart';
 import 'package:meri_sadak/screens/settings/setting_screen.dart';
+import 'package:meri_sadak/services/AppVersion/app_version_service.dart';
 import 'package:meri_sadak/utils/device_size.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:meri_sadak/widgets/drawer_widget.dart';
@@ -312,7 +313,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     builder: (context) => LoginScreen(),
                   ),
                 );
-              }, iconColor: Colors.red, textColor: Colors.red, visible: false, logoutVisible: false
+              }, iconColor: Colors.red, textColor: Colors.red, visible: false, logoutVisible: false,
+                versionNumber: AppVersionService().version ?? '1.0.0'
             ),
           ],
         ),

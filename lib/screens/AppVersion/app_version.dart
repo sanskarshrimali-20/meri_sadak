@@ -8,6 +8,7 @@ import '../../constants/app_font_weight.dart';
 import '../../constants/app_image_path.dart';
 import '../../constants/app_strings.dart';
 import '../../providerData/theme_provider.dart';
+import '../../services/AppVersion/app_version_service.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_expansion_tile.dart';
 import '../../widgets/custom_text_widget.dart';
@@ -36,7 +37,7 @@ class _AppVersionState extends State<AppVersion> {
           children: [
             // Use CustomExpansionTile for "About PMGSY"
             CustomExpansionTile(
-              title: 'Version 6.2.4', //AppStrings.aboutPMGSYHeading,
+              title: "Version ${AppVersionService().version ?? '1.0.0'}", //AppStrings.aboutPMGSYHeading,
               subheading: '', //AppStrings.aboutMeriSadakSubHeading,
               textColor: themeProvider.themeMode == ThemeMode.light
                   ? AppColors.black

@@ -466,7 +466,6 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
     PermissionProvider permissionProvider,
     String imgSource,
   ) {
-    print("imgSource--$imgSource");
 
     if (picPath.isNotEmpty) {
       showModalBottomSheet(

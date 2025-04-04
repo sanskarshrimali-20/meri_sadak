@@ -1,12 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
-import '../../services/ApiService/api_service.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 
 class LoginViewModel extends ChangeNotifier {
-  final ApiService _apiService = ApiService();
+
   final LocalSecureStorage _localStorage = LocalSecureStorage();
 
   final dbHelper = DatabaseHelper();
@@ -56,9 +55,6 @@ class LoginViewModel extends ChangeNotifier {
       String password = profile?['password'] ?? 'No Name';  // Replace 'name' with actual field name
       String email = profile?['email'] ?? 'No Name';  // Replace 'email' with actual field name
 
-      debugPrint("profileValue$profile");
-      debugPrint("password$password");
-      debugPrint("passwordValue$passwordValue");
 
       if((phoneNo == username || email == username) && password == passwordValue){
         _localStorage.setLoggingState("true");
@@ -69,8 +65,7 @@ class LoginViewModel extends ChangeNotifier {
       }
       // return "success";
     } catch (e, stackTrace) {
-      log("Error during login: $e");
-      debugPrintStack(stackTrace: stackTrace);
+      log("Error during login: $e $stackTrace");
 
       return "Failed to login. Please check your credentials and try again.";
     } finally {
@@ -83,10 +78,6 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _setError(String message) {
-    _errorMessage = message;
-    notifyListeners();
-  }
 
   String responseMessage(String decryptedResponseBody){
     final jsonResponse = json.decode(decryptedResponseBody);

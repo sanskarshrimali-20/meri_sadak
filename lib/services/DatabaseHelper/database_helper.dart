@@ -18,9 +18,13 @@ class DatabaseHelper {
   DatabaseHelper._internal();
 
   static const table = 'images';
-  static const columnId = 'id';
-  static const columnImage = 'image';
-  static const columnSource = 'source';
+  static const imageId = 'id';
+  static const imagePath = 'image';
+  static const imageSource = 'source';
+  static const imageLat = 'lat';
+  static const imageLong = 'long';
+  static const imageTime = 'time';
+
 
   static const tableStatus = 'imagesStatus';
   static const columnIdStatus = 'idStatus';
@@ -112,9 +116,12 @@ class DatabaseHelper {
 
         await db.execute('''
          CREATE TABLE $table (
-          $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
-          $columnImage TEXT NOT NULL,
-          $columnSource TEXT NOT NULL
+          $imageId INTEGER PRIMARY KEY AUTOINCREMENT,
+          $imagePath TEXT,
+          $imageSource TEXT,
+          $imageLat TEXT,
+          $imageLong TEXT,
+          $imageTime TEXT
         )
       ''');
 
@@ -194,8 +201,7 @@ class DatabaseHelper {
       return "Success";
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to insert user profile");
-        print(stackTrace);
+        log("Exception $e while attempting to insert user profile $stackTrace");
         return "Error";
       }
     }
@@ -216,13 +222,11 @@ class DatabaseHelper {
       if (result.isNotEmpty) {
         return result.first; // Return the user profile with the matching ID
       } else {
-        debugPrint("No user profile found for id: $userId");
         return null; // Return null if no record exists
       }
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to get user profile by id");
-        print(stackTrace);
+        log("Exception $e while attempting to get user profile by id $stackTrace");
       }
       return null; // Return null on error
     }
@@ -248,16 +252,13 @@ class DatabaseHelper {
       );
 
       if (updatedRows > 0) {
-        debugPrint("Password updated successfully");
         return "Success";
       } else {
-        debugPrint("No user found with this identifier");
         return "No user found with this identifier";
       }
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to update password");
-        print(stackTrace);
+        log("Exception $e while attempting to update password $stackTrace");
       }
       return "Error";
     }
@@ -281,7 +282,7 @@ class DatabaseHelper {
   // Delete image by ID
   Future<int> deleteImage(int id) async {
     Database db = await database;
-    return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+    return await db.delete(table, where: '$imageId = ?', whereArgs: [id]);
   }
 
   // Clear all images
@@ -411,8 +412,7 @@ class DatabaseHelper {
       return "Success";
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to get user profile");
-        print(stackTrace);
+        log("Exception $e while attempting to get user profile $stackTrace");
       }
       return "Error"; // Return null on error
     }
@@ -481,8 +481,7 @@ class DatabaseHelper {
       return "Success";
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to update feedback");
-        print(stackTrace);
+        log("Exception $e while attempting to update feedback $stackTrace");
       }
       return "Error"; // Return error message if something goes wrong
     }
@@ -526,12 +525,10 @@ class DatabaseHelper {
         where: 'isFinalSubmit = ?',
         whereArgs: [statusValue],
       );
-      print("Feedbacks with isFinalSubmit = $isFinalSubmit: $feedbacks");
       return feedbacks;
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while fetching feedbacks with isFinalSubmit = $isFinalSubmit");
-        print(stackTrace);
+        log("Exception $e while fetching feedbacks with isFinalSubmit = $isFinalSubmit $stackTrace");
       }
       return []; // Return an empty list on error
     }
@@ -549,8 +546,7 @@ class DatabaseHelper {
     }
     catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to get user profile");
-        print(stackTrace);
+        log("Exception $e while attempting to get user profile $stackTrace");
       }
     }
   }
@@ -564,8 +560,7 @@ class DatabaseHelper {
     }
     catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to get user profile");
-        print(stackTrace);
+        log("Exception $e while attempting to get user profile $stackTrace");
       }
       return [];
     }
@@ -581,8 +576,7 @@ class DatabaseHelper {
     }
     catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to get user profile");
-        print(stackTrace);
+        log("Exception $e while attempting to get user profile $stackTrace");
       }
     }
   }
@@ -600,8 +594,7 @@ class DatabaseHelper {
     }
     catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to get user profile");
-        print(stackTrace);
+        log("Exception $e while attempting to get user profile $stackTrace");
       }
       return [];
     }
@@ -617,8 +610,7 @@ class DatabaseHelper {
     }
     catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to get user profile");
-        print(stackTrace);
+        log("Exception $e while attempting to get user profile $stackTrace");
       }
     }
   }
@@ -637,8 +629,7 @@ class DatabaseHelper {
     }
     catch (e, stackTrace) {
       if (kDebugMode) {
-        log("Exception $e while attempting to get user profile");
-        print(stackTrace);
+        log("Exception $e while attempting to get user profile $stackTrace");
       }
       return [];
     }

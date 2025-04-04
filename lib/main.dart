@@ -4,6 +4,7 @@ import 'package:meri_sadak/providerData/image_picker_provider.dart';
 import 'package:meri_sadak/providerData/permission_provider.dart';
 import 'package:meri_sadak/providerData/theme_provider.dart';
 import 'package:meri_sadak/screens/splash/splash_screen.dart';
+import 'package:meri_sadak/services/AppVersion/app_version_service.dart';
 import 'package:meri_sadak/utils/fontsize_provider.dart';
 import 'package:meri_sadak/utils/localization_provider.dart';
 import 'package:meri_sadak/utils/network_provider.dart';
@@ -13,7 +14,6 @@ import 'package:meri_sadak/viewmodels/signup/sign_up_viewmodel.dart';
 import 'package:meri_sadak/viewmodels/xmlData/xml_master_data.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'constants/app_theme.dart';
 
 Future<void> main() async {
@@ -27,6 +27,8 @@ Future<void> main() async {
 
   final fontSizeProvider = FontSizeProvider();
   await fontSizeProvider.loadFontSize();
+
+  await AppVersionService().initialize();  // Initialize version data
 
   runApp(MyApp(localizationProvider: localizationProvider, themeProvider:themeProvider, fontSizeProvider: fontSizeProvider,));
 }

@@ -17,6 +17,7 @@ Widget customDrawerWidget({
   bool visible = true,
   bool logoutVisible = true,
   bool prefixVisible = true,
+  String versionNumber = "1.0.0",
   required VoidCallback onClick, // Add the callback here
 }) {
   return // Trigger the callback when clicked
@@ -55,7 +56,7 @@ Widget customDrawerWidget({
           logoutVisible
               ? Text("")
               : Text(
-                "V 6.2.4",
+                "V $versionNumber",
                 style: TextStyle(fontSize: AppDimensions.di_17),
               ),
         ],

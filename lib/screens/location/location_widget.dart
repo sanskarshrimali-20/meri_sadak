@@ -1,21 +1,16 @@
 import 'dart:developer';
-import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_cache/flutter_map_cache.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_map_dragmarker/flutter_map_dragmarker.dart';
 import 'package:meri_sadak/constants/app_dimensions.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../../constants/app_colors.dart';
 import '../../providerData/permission_provider.dart';
-import '../../services/LocalStorageService/local_storage.dart';
 
 class CustomLocationWidget extends StatefulWidget {
   final String labelText;
@@ -366,25 +361,20 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                                           newPosition,
                                           initialPosition,
                                         );
-                                        print("initialPosition: $initialPosition");
-                                        print("details: ${details.globalPosition.distance}");
-                                        final placemarks =
+
+                                        final placeMarks =
                                             await placemarkFromCoordinates(
                                               newPosition.latitude,
                                               newPosition.longitude,
                                             );
 
                                         if (distance <= allowedRadius) {
-                                          print("newPosition--$newPosition");
                                           // Update marker position and fetch address
                                           setState(() {
                                             markerPosition = newPosition;
                                             permissionProvider.address =
-                                                '${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.administrativeArea} - ${placemarks.first.postalCode}, ${placemarks.first.country}.';
+                                                '${placeMarks.first.street}, ${placeMarks.first.locality}, ${placeMarks.first.administrativeArea} - ${placeMarks.first.postalCode}, ${placeMarks.first.country}.';
                                           });
-                                          print(
-                                            "markerPosition--$markerPosition",
-                                          );
 
                                           widget.onMapTap(newPosition);
                                         } else {
@@ -414,7 +404,6 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                                           });
                                         }
                                       } catch (e) {
-                                        print("onDragEnd Error: $e");
                                         setState(() {
                                           permissionProvider.address =
                                               'Failed to fetch location: ${e.toString()}';
@@ -458,10 +447,10 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
 
       // Safely parse latitude and longitude
       final double lat = double.parse(
-        widget.latitude?.toString() ?? '36.090092',
+        widget.latitude?.toString() ?? '0.0',
       );
       final double lng = double.parse(
-        widget.longitude?.toString() ?? '-79.294617',
+        widget.longitude?.toString() ?? '0.0',
       );
       setState(() {
         // Set the marker position if values are valid
@@ -469,13 +458,11 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
         provider.address = widget.initialAddress;
         initialPosition = LatLng(lat, lng);
       });
-      debugPrint("markerPosition: $markerPosition");
       if (kDebugMode) {
         log("Initial Marker Position $initialPosition");
       }
     } catch (e) {
       // Handle parsing error
-      debugPrint("Error parsing latitude or longitude: $e");
       markerPosition = LatLng(0.0, 0.0); // Default to (0,0) if parsing fails
     }
   }

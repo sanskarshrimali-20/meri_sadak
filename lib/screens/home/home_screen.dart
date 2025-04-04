@@ -346,10 +346,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     // Request location permission
-    await permissionProvider.requestLocationPermissionNew(context);
+    await permissionProvider.requestLocationPermission();
 
     // Request camera permission
-    await permissionProvider.requestCameraPermissionNew(context);
+    await permissionProvider.requestCameraPermission();
   }
 
 /*  Future<void> _fetchData(BuildContext context) async {
