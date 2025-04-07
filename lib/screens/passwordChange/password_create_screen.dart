@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:meri_sadak/constants/app_image_path.dart';
 import 'package:meri_sadak/screens/home/home_screen.dart';
 import 'package:meri_sadak/screens/login/login_screen.dart';
+import 'package:meri_sadak/utils/device_utils.dart';
 import 'package:meri_sadak/viewmodels/signup/sign_up_viewmodel.dart';
 import 'package:meri_sadak/widgets/custom_text_widget.dart';
 import 'package:provider/provider.dart';
@@ -354,6 +355,8 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
       else{
         widget.userSignUpDetails["password"] = _passwordController.text;
       }
+
+      // widget.userSignUpDetails["deviceId"] = DeviceIUtils.getId();
 
       final signUpViewModel = Provider.of<SignUpViewModel>(context, listen: false);
 

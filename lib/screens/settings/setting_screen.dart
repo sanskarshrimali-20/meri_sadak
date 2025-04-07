@@ -39,14 +39,15 @@ class _SettingScreen extends State<SettingScreen> {
       ),*/
       body: CustomBodyWithGradient(
         title: AppStrings.settings,
-        childHeight: DeviceSize.getScreenHeight(context) * 0.4,
+        childHeight: DeviceSize.getScreenHeight(context) * 0.36,
         child: Padding(
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(
             decoration: BoxDecoration(
               color: themeProvider.themeMode == ThemeMode.light
                   ? AppColors.whiteColor
-                  : AppColors.boxDarkModeColor,              borderRadius: BorderRadius.all(
+                  : AppColors.boxDarkModeColor,
+              borderRadius: BorderRadius.all(
                 Radius.circular(AppDimensions.di_20), // Rounded corners
               ),
             ),
@@ -55,7 +56,7 @@ class _SettingScreen extends State<SettingScreen> {
               child: Column(
                 children: [
 
-                  SizedBox(height: AppDimensions.di_15),
+                  SizedBox(height: AppDimensions.di_10),
 
                   customDrawerWidget(
                     fontSize: fontSizeProvider.fontSize,
@@ -169,6 +170,8 @@ class _SettingScreen extends State<SettingScreen> {
                       );
                     },
                   ),
+                  SizedBox(height: AppDimensions.di_10),
+
                 ],
               ),
             ),

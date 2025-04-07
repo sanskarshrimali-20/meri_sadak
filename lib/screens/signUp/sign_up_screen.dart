@@ -357,7 +357,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                                 textAlign: TextAlign.center,
                                 onClick: () async {
                                   if (fullNameError == null && emailError == null && phoneError == null) {
-                                    _onSignInClick(networkProvider);
+                                    _onSignUpClick(networkProvider);
                                   }
                                 },
                               ),
@@ -423,7 +423,7 @@ class _SignUpScreen extends State<SignUpScreen> {
     );
   }
 
-  Future<void> _onSignInClick(NetworkProviderController networkProvider) async {
+  Future<void> _onSignUpClick(NetworkProviderController networkProvider) async {
 
     if (_isChecked == false) {
       showErrorDialog(

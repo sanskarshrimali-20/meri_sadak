@@ -65,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
         // ),
         drawer: Padding(
           padding: const EdgeInsets.only(
-            bottom: AppDimensions.di_50,
             top: AppDimensions.di_50,
           ),
           // Add space outside the drawer
