@@ -75,7 +75,7 @@ class _AppearanceScreen extends State<AppearanceScreen> {
       body: CustomBodyWithGradient(
         title:
             localizationProvider.localizedStrings['appearance'] ?? "Appearance",
-        childHeight: DeviceSize.getScreenHeight(context) * 0.3,
+        childHeight: DeviceSize.getScreenHeight(context) * 0.29,
         child: Padding(
           padding: EdgeInsets.all(AppDimensions.di_5),
           child: Container(

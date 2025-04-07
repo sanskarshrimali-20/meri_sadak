@@ -37,7 +37,8 @@ class _LegalPolicyScreen extends State<LegalPolicyScreen> {
     return Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light
           ? AppColors.bgColorGainsBoro
-          : AppColors.bgDarkModeColor,      body: CustomBodyWithGradient(
+          : AppColors.bgDarkModeColor,
+      body: CustomBodyWithGradient(
         title: AppStrings.legalAndPolicies,
         childHeight: DeviceSize.getScreenHeight(context) * 0.7,
         child: Padding(

@@ -64,6 +64,7 @@ class AppDimensions {
   static const double di_80 = 80.0;
   static const double di_90 = 90.0;
   static const double di_100 = 100.0;
+  static const double di_130 = 130.0;
   static const double di_150 = 150.0;
   static const double di_200 = 200.0;
   static const double di_300 = 300.0;

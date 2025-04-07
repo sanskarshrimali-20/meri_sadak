@@ -49,6 +49,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Drawer(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(AppDimensions.di_20),
+        ),
+      ),
       width:
           DeviceSize.getScreenWidth(context) -
           (DeviceSize.getScreenWidth(context) * 0.10),
@@ -58,7 +63,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           children: [
             Container(
               padding: EdgeInsets.all(AppDimensions.di_16),
-              height: AppDimensions.di_150,
+              height: AppDimensions.di_130,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -76,8 +81,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               child: Row(
                 children: [
                   Container(
-                    width: 80, // Width of the circle (2 * radius)
-                    height: 80, // Height of the circle (2 * radius)
+                    width: 70, // Width of the circle (2 * radius)
+                    height: 70, // Height of the circle (2 * radius)
                     decoration: BoxDecoration(
                       shape: BoxShape.circle, // Make the container a circle
                       border: Border.all(
@@ -92,36 +97,36 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         char, // First character of the name
                         style: TextStyle(
                           color: AppColors.blueGradientColor1, // Color of the text
-                          fontSize: AppDimensions.di_50, // Text size
+                          fontSize: AppDimensions.di_40, // Text size
                           fontWeight: AppFontWeight.fontWeight600, // Text weight
                         ),
                       ),
                     ),
                   ),
 
-                  SizedBox(width: AppDimensions.di_10),
+                  SizedBox(width: AppDimensions.di_15),
                   SizedBox(
                     width: DeviceSize.getScreenWidth(context) * 0.40,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: AppDimensions.di_20),
+                        SizedBox(height: AppDimensions.di_16),
                         CustomTextWidget(
                           maxlines: 1,
                           text: name,
-                          fontSize: AppDimensions.di_20,
+                          fontSize: AppDimensions.di_18,
                           color: AppColors.whiteColor,
                         ),
                         SizedBox(height: AppDimensions.di_5),
                         CustomTextWidget(
                           text: phone,
-                          fontSize: AppDimensions.di_14,
+                          fontSize: AppDimensions.di_13,
                           color: AppColors.whiteColor,
                           maxlines: 1,
                         ),
                         CustomTextWidget(
                           text: email,
-                          fontSize: AppDimensions.di_14,
+                          fontSize: AppDimensions.di_13,
                           color: AppColors.whiteColor,
                           maxlines: 1,
                         ),
@@ -299,7 +304,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
               indent: AppDimensions.di_10, // Space from the left
               endIndent: AppDimensions.di_10, // Space from the right
             ),
-
 
             customDrawerWidget(
               title: AppStrings.logout,

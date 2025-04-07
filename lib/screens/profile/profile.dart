@@ -43,111 +43,115 @@ class _ProfileScreen extends State<ProfileScreen> {
           ? AppColors.bgColorGainsBoro
           : AppColors.bgDarkModeColor,      body: CustomBodyWithGradient(
         title: AppStrings.myProfile,
-        childHeight: DeviceSize.getScreenHeight(context) * 0.6,
-        child: Padding(
-          padding: EdgeInsets.all(AppDimensions.di_5),
-          child: Container(
-            decoration: BoxDecoration(
-              color: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.whiteColor
-                  : AppColors.boxDarkModeColor,
-              borderRadius: BorderRadius.all(
-                Radius.circular(AppDimensions.di_20), // Rounded corners
+        childHeight: 0.0,
+        child: Wrap(
+          children: [ Padding(
+            padding: EdgeInsets.all(AppDimensions.di_5),
+            child: Container(
+              decoration: BoxDecoration(
+                color: themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.whiteColor
+                    : AppColors.boxDarkModeColor,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(AppDimensions.di_20), // Rounded corners
+                ),
               ),
-            ),
 
-            padding: EdgeInsets.all(AppDimensions.di_18),
+              padding: EdgeInsets.all(AppDimensions.di_18),
 
-            child: SizedBox(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+              child: SizedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
 
-                  SizedBox(height: AppDimensions.di_15),
+                    SizedBox(height: AppDimensions.di_10),
 
-                  Center(
-                    child: Container(
-                      width: 90, // Width of the circle (2 * radius)
-                      height: 90, // Height of the circle (2 * radius)
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle, // Make the container a circle
-                        border: Border.all(
-                          color: AppColors.toastBgColorGreen, // Color of the border
-                          width: 2, // Stroke width
+                    Center(
+                      child: Container(
+                        width: 90, // Width of the circle (2 * radius)
+                        height: 90, // Height of the circle (2 * radius)
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle, // Make the container a circle
+                          border: Border.all(
+                            color: AppColors.toastBgColorGreen, // Color of the border
+                            width: 2, // Stroke width
+                          ),
                         ),
-                      ),
-                      child: CircleAvatar(
-                        radius: 50, // Radius of the avatar (half of the container size)
-                        backgroundColor: AppColors.whiteColor, // Background color for the circle
-                        child: Text(
-                          char, // First character of the name
-                          style: TextStyle(
-                            color: AppColors.blueGradientColor1, // Color of the text
-                            fontSize: AppDimensions.di_50, // Text size
-                            fontWeight: AppFontWeight.fontWeight600, // Text weight
+                        child: CircleAvatar(
+                          radius: 50, // Radius of the avatar (half of the container size)
+                          backgroundColor: AppColors.whiteColor, // Background color for the circle
+                          child: Text(
+                            char, // First character of the name
+                            style: TextStyle(
+                              color: AppColors.blueGradientColor1, // Color of the text
+                              fontSize: AppDimensions.di_50, // Text size
+                              fontWeight: AppFontWeight.fontWeight600, // Text weight
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
 
-                  SizedBox(height: AppDimensions.di_30),
+                    SizedBox(height: AppDimensions.di_30),
 
-                  CustomTextWidget(
-                   text: '${AppStrings.name} : $name', fontSize: AppDimensions.di_18,
-                    fontWeight: AppFontWeight.fontWeight500,
-                    color: themeProvider.themeMode == ThemeMode.light
+                    CustomTextWidget(
+                     text: '${AppStrings.name} : $name', fontSize: AppDimensions.di_18,
+                      fontWeight: AppFontWeight.fontWeight500,
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black
+                          : AppColors.whiteColor,
+                    ),
+
+                    Divider(
+                      color: Colors.grey.withAlpha(60), // Line color
+                      thickness: AppDimensions.di_1, // Line thickness
+                      indent: AppDimensions.di_1, // Space from the left
+                      endIndent: AppDimensions.di_1, // Space from the right
+                    ),
+
+                    CustomTextWidget(
+                      text: '${AppStrings.phoneNoO} : $phone', fontSize: AppDimensions.di_18,
+                      fontWeight: AppFontWeight.fontWeight500,
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black
+                          : AppColors.whiteColor,
+                    ),
+
+                    Divider(
+                      color: Colors.grey.withAlpha(60), // Line color
+                      thickness: AppDimensions.di_1, // Line thickness
+                      indent: AppDimensions.di_1, // Space from the left
+                      endIndent: AppDimensions.di_1, // Space from the right
+                    ),
+
+                    CustomTextWidget(
+                      text: '${AppStrings.emailId} : $email', fontSize: AppDimensions.di_18,
+                      fontWeight: AppFontWeight.fontWeight500,
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black
+                          : AppColors.whiteColor,
+                    ),
+
+                    Divider(
+                      color: Colors.grey.withAlpha(60), // Line color
+                      thickness: AppDimensions.di_1, // Line thickness
+                      indent: AppDimensions.di_1, // Space from the left
+                      endIndent: AppDimensions.di_1, // Space from the right
+                    ),
+
+                    CustomTextWidget(
+                      text: '${AppStrings.address} : CDAC Pune', fontSize: AppDimensions.di_18,
+                      fontWeight: AppFontWeight.fontWeight500, color: themeProvider.themeMode == ThemeMode.light
                         ? AppColors.black
                         : AppColors.whiteColor,
-                  ),
+                    ),
+                    SizedBox(height: AppDimensions.di_10),
 
-                  Divider(
-                    color: Colors.grey.withAlpha(60), // Line color
-                    thickness: AppDimensions.di_1, // Line thickness
-                    indent: AppDimensions.di_1, // Space from the left
-                    endIndent: AppDimensions.di_1, // Space from the right
-                  ),
-
-                  CustomTextWidget(
-                    text: '${AppStrings.phoneNoO} : $phone', fontSize: AppDimensions.di_18,
-                    fontWeight: AppFontWeight.fontWeight500,
-                    color: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.black
-                        : AppColors.whiteColor,
-                  ),
-
-                  Divider(
-                    color: Colors.grey.withAlpha(60), // Line color
-                    thickness: AppDimensions.di_1, // Line thickness
-                    indent: AppDimensions.di_1, // Space from the left
-                    endIndent: AppDimensions.di_1, // Space from the right
-                  ),
-
-                  CustomTextWidget(
-                    text: '${AppStrings.emailId} : $email', fontSize: AppDimensions.di_18,
-                    fontWeight: AppFontWeight.fontWeight500,
-                    color: themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.black
-                        : AppColors.whiteColor,
-                  ),
-
-                  Divider(
-                    color: Colors.grey.withAlpha(60), // Line color
-                    thickness: AppDimensions.di_1, // Line thickness
-                    indent: AppDimensions.di_1, // Space from the left
-                    endIndent: AppDimensions.di_1, // Space from the right
-                  ),
-
-                  CustomTextWidget(
-                    text: '${AppStrings.address} : CDAC Pune', fontSize: AppDimensions.di_18,
-                    fontWeight: AppFontWeight.fontWeight500, color: themeProvider.themeMode == ThemeMode.light
-                      ? AppColors.black
-                      : AppColors.whiteColor,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
+          ),]
         ),
       ),
     );

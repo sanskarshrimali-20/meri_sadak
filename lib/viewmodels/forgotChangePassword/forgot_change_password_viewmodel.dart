@@ -26,6 +26,12 @@ class ForgotChangePasswordViewModel extends ChangeNotifier {
     try {
       _setLoading(true);
 
+     /* final requestBody = {
+        "username": userCred,
+        "password": password,
+      };
+      final response = await _apiService.post(ApiEndPoints.login, requestBody);*/
+
       final signUpOperation = await dbHelper.updatePassword(userCred, password);
 
       if(signUpOperation == "Success"){
