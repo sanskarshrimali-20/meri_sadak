@@ -183,7 +183,7 @@ class AppStrings {
   static const large = "Large";
   static const selectLanguagePre = 'Select your preferred language.';
   static const termsAndPrivacy = 'Terms, Conditions & Privacy Policy';
-  static const areYouSure = "Are you sure you want to submit your feedback?";
+  static const areYouSure = "Are you sure want to submit your feedback?";
   static const areYouSureSaveFeedback =
       "Are you sure you want to save your feedback?";
   static const freeUpSpace = "Free up space by clearing cache.";
