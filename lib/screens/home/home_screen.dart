@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Align(
                 alignment: Alignment.center,
                 child: CustomButton(
-                  text: "New Register Feedback",
+                  text: "Register Feedback",
                   onPressed: () async {
                     Navigator.push(
                       context,
@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Align(
                 alignment: Alignment.center,
                 child: CustomButton(
-                  text: "All Feedback",
+                  text: "Feedback Status",
                   onPressed: () async {
                     Navigator.push(
                       context,
