@@ -354,7 +354,12 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
       }
       else{
         widget.userSignUpDetails["password"] = _passwordController.text;
+        widget.userSignUpDetails['gender'] = '';
+        widget.userSignUpDetails['address'] = '';
       }
+
+
+
 
       // widget.userSignUpDetails["deviceId"] = DeviceIUtils.getId();
 
@@ -398,6 +403,7 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
 
       if(signUpOperationResultMessage == "Success"){
 
+        _localStorage.checkedTermsPolicy("unChecked",);
         _localStorage.setLoginUser(widget.userSignUpDetails["phoneNo"]);
 
         showErrorDialog(

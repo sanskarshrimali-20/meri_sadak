@@ -81,8 +81,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               child: Row(
                 children: [
                   Container(
-                    width: 70, // Width of the circle (2 * radius)
-                    height: 70, // Height of the circle (2 * radius)
+                    width: 67, // Width of the circle (2 * radius)
+                    height: 67, // Height of the circle (2 * radius)
                     decoration: BoxDecoration(
                       shape: BoxShape.circle, // Make the container a circle
                       border: Border.all(
@@ -110,12 +110,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: AppDimensions.di_16),
+                        SizedBox(height: AppDimensions.di_12),
                         CustomTextWidget(
                           maxlines: 1,
                           text: name,
-                          fontSize: AppDimensions.di_18,
+                          fontSize: AppDimensions.di_20,
                           color: AppColors.whiteColor,
+                          fontWeight: AppFontWeight.fontWeight600,
                         ),
                         SizedBox(height: AppDimensions.di_5),
                         CustomTextWidget(

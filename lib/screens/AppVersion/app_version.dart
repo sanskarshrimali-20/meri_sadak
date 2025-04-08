@@ -11,6 +11,7 @@ import '../../providerData/theme_provider.dart';
 import '../../services/AppVersion/app_version_service.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/custom_expansion_tile.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_text_widget.dart';
 
 class AppVersion extends StatefulWidget {
@@ -71,22 +72,31 @@ class _AppVersionState extends State<AppVersion> {
                       : AppColors.boxDarkModeColor,
                   borderRadius: BorderRadius.circular(15.0),
                 ),
-                child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomTextWidget(
-                   text:   AppStrings.appVersionUpdate,
-                      fontSize: AppDimensions.di_16,
-                      color:  themeProvider.themeMode == ThemeMode.light
+                child: GestureDetector(
+                  onTap: () {
+                    showErrorDialog(
+                      context,
+                      "You are in latest version",
+                      backgroundColor: Colors.green,
+                    );
+                  },
+                  child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomTextWidget(
+                     text:   AppStrings.appVersionUpdate,
+                        fontSize: AppDimensions.di_16,
+                        color:  themeProvider.themeMode == ThemeMode.light
+                            ? AppColors.black
+                            : AppColors.whiteColor,
+                        fontWeight: AppFontWeight.fontWeight600,
+                        // textAlign: AppFontSizeWeight.textAlignJustify,
+                        // letterSpacing: AppFontSizeWeight.letterSpacing_0_5,
+                      ),
+                      SvgPicture.asset(ImageAssetsPath.replace, color:  themeProvider.themeMode == ThemeMode.light
                           ? AppColors.black
-                          : AppColors.whiteColor,
-                      fontWeight: AppFontWeight.fontWeight600,
-                      // textAlign: AppFontSizeWeight.textAlignJustify,
-                      // letterSpacing: AppFontSizeWeight.letterSpacing_0_5,
-                    ),
-                    SvgPicture.asset(ImageAssetsPath.replace, color:  themeProvider.themeMode == ThemeMode.light
-                        ? AppColors.black
-                        : AppColors.whiteColor,)
-                  ],
+                          : AppColors.whiteColor,)
+                    ],
+                  ),
                 ),
               ),
             ),

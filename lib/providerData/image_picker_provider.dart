@@ -82,9 +82,9 @@ class ImagePickerProvider extends ChangeNotifier {
               imagePath: imageData['image'],
               source: imageData['source'],
               id: imageData['id'],
-              lat: imageData['lat'],
-              long: imageData['long'],
-              time: imageData['time'],
+              lat: imageData['lat'] ?? '',
+              long: imageData['long'] ?? '',
+              time: imageData['time'] ?? '',
             ),
           );
         }

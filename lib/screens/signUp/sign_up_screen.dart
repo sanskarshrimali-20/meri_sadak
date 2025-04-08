@@ -102,7 +102,7 @@ class _SignUpScreen extends State<SignUpScreen> {
 
                   Container(
                     margin: EdgeInsets.only(
-                      top: DeviceSize.getScreenHeight(context) * 0.04,
+                      top: DeviceSize.getScreenHeight(context) * 0.1,
                     ), // Space for the image
                     child: Center(
                       child: Image.asset(
@@ -118,7 +118,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                     backgroundColor: themeProvider.themeMode == ThemeMode.light
                         ? AppColors.whiteColor
                         : AppColors.authDarkModeColor,
-                    marginHeight: 0.25,
+                    marginHeight: 0.40,
                     height: DeviceSize.getScreenHeight(context),
                     // Set remaining height for the container (full height - image height)
                     child: Column(
@@ -465,7 +465,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                     userSignUpDetails: {
                       'fullName': fullName,
                       'phoneNo': phoneNo,
-                      'email': email
+                      'email': email,
                     },), // Navigate to home screen
             ),
           );

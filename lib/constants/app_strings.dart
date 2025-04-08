@@ -91,6 +91,7 @@ class AppStrings {
   static const contactNumberOne = "+91-11-26714001";
   static const contactNumberTwo = "+91-11-26714002";
   static const emailId = "Email-Id";
+  static const gender = "Gender";
   static const timings = "Timings";
   static const didntReceiveOtp = "Didn’t receive an OTP?";
   static const resendOtp = " Resend OTP";
@@ -211,5 +212,8 @@ class AppStrings {
   static const feedbackDetails = "Feedback Information";
   static const piuDetails = "PIU Information";
   static const sqcDetails = "SQC Information";
+
+  static const selectGender = "Select gender";
+  static const enterAddress = "Enter Address";
 
 }
