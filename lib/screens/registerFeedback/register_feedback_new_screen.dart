@@ -466,7 +466,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                       // if (feedbackData == null &&
                       //     feedbackData!.state!.isEmpty &&
                       //         widget.feedbackId == null) {
-                        if(widget.feedbackId == null){
+                        if(widget.feedbackId == null && !permissionProvider.address.toLowerCase().contains( 'error',)){
                         _stateController.text = permissionProvider.state;
                         selectedState = permissionProvider.state;
 
