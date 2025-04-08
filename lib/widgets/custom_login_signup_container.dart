@@ -17,7 +17,7 @@ class CustomLoginSignupContainer extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.all(AppDimensions.di_12),
-      height: height - (height * marginHeight),
+      //height: height - (height * marginHeight),
       margin: EdgeInsets.only(top: height * marginHeight), // Apply 32% margin from the top
       decoration: BoxDecoration(
         color: backgroundColor, // White background
@@ -26,11 +26,9 @@ class CustomLoginSignupContainer extends StatelessWidget {
           topRight: Radius.circular(AppDimensions.di_25), // Rounded top-right corner
         ),
       ),
-      child: SingleChildScrollView( // Make content scrollable
-        child: Padding(
-          padding: EdgeInsets.all(AppDimensions.di_20), // Padding inside the container
-          child: child, // This is where the passed child widget will be displayed
-        ),
+      child: Padding(
+        padding: EdgeInsets.all(AppDimensions.di_20), // Padding inside the container
+        child: child, // This is where the passed child widget will be displayed
       ),
     );
   }
