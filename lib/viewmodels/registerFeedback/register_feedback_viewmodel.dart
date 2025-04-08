@@ -6,6 +6,7 @@ import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/LocalStorageService/local_storage.dart';
 
 class RegisterFeedbackViewModel extends ChangeNotifier {
+
   final ApiService _apiService = ApiService();
   final LocalSecureStorage _localStorage = LocalSecureStorage();
 
@@ -20,7 +21,6 @@ class RegisterFeedbackViewModel extends ChangeNotifier {
   String? get userName => _userName;
 
   final dbHelper = DatabaseHelper();
-
 
   Future<String?> registerFeedback(
     Map<String, dynamic> feeBackDetails,
@@ -45,6 +45,42 @@ class RegisterFeedbackViewModel extends ChangeNotifier {
       final response = await _apiService.post(
         ApiEndPoints.regFeedback,
         feedbackWrapper,
+      );
+
+      if (kDebugMode) {
+        log("Response status code: ${response.statusCode}");
+        log("Response body: ${response.body}");
+      }
+
+      // Handle the database insertion based on platform
+
+
+      // Set local storage logging state
+      // await _localStorage.setLoggingState('true');/
+      log("Local storage set to 'true'");
+
+      return "success";
+    } catch (e, stackTrace) {
+      log("Error during login: $e $stackTrace");
+
+      return "Failed to login. Please check your credentials and try again.";
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  Future<String> getRoadList(String blockCode) async {
+    try {
+      _setLoading(true);
+
+      final requestRoadList = {
+        'blockCode': blockCode,
+      };
+
+      // Make API call
+      final response = await _apiService.post(
+        ApiEndPoints.getRoadListByBlock,
+        requestRoadList,
       );
 
       if (kDebugMode) {

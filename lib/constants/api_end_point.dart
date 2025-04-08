@@ -21,5 +21,6 @@ class ApiEndPoints {
   static const registerReminderClarificationReply = '$feedback/registerReminderClarificationReply';
   static const getReplyFileOfFeedback = '$feedback/getReplyFileOfFeedback?feedbackID=';
 
+  static const getRoadListByBlock = '$feedback/getRoadListByBlock?blockCode=';
 
 }

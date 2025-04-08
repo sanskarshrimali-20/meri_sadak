@@ -1503,8 +1503,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                             fit: BoxFit.contain,
                           ),
                         ),
-                        CustomTextWidget(text: imageItem.time, fontSize: AppDimensions.di_16, color: AppColors.black),
-                        CustomTextWidget(text: imageItem.lat, fontSize: AppDimensions.di_16, color: AppColors.black),
+                        /*CustomTextWidget(text: imageItem.time, fontSize: AppDimensions.di_16, color: AppColors.black),
+                        CustomTextWidget(text: imageItem.lat, fontSize: AppDimensions.di_16, color: AppColors.black),*/
                         if (imgSource == 'Camera')
                           Padding(
                             padding: const EdgeInsets.symmetric(
@@ -1540,7 +1540,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                                       onMapReady: () {},
                                     ),
                           ),
-                        if (imgSource == 'Camera')
+                       /* if (imgSource == 'Camera')
                           Container(
                             color: Colors.yellow[100],
                             padding: EdgeInsets.all(AppDimensions.di_8),
@@ -1556,7 +1556,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                                 ),
                               ],
                             ),
-                          ),
+                          ),*/
                         SizedBox(height: AppDimensions.di_16),
                       ],
                     ),
