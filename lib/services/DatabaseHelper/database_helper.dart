@@ -51,7 +51,9 @@ class DatabaseHelper {
             fullName TEXT,
             phoneNo TEXT,
             email TEXT,
-            password TEXT
+            password TEXT,
+            gender TEXT,
+            address TEXT
           )
         ''');
 
@@ -206,6 +208,46 @@ class DatabaseHelper {
       }
     }
     return "Error";
+  }
+
+  Future<String> updateSignupDetails(Map<String, dynamic> signUp, String? user) async {
+    try {
+      final db = await database;
+      debugPrint("User Details $signUp");
+
+      // Assuming 'id' is the unique identifier for each sign-up record.
+      // Update the record where the id matches, or insert if no record exists.
+      final result = await db.update(
+        'sign_up',               // Table name
+        signUp,                  // The data to update
+        where: 'id = ?',         // Condition to match the record (e.g., 'id' is unique)
+        whereArgs: [user], // The value of 'id' to match
+      );
+      debugPrint("User profile try to update");
+
+
+      if (result == 0) {
+        debugPrint("User profile try to update second");
+
+        // If no rows were updated, it means the record didn't exist, so we insert a new one.
+        await db.insert(
+          'sign_up',
+          signUp,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        debugPrint("User profile try to update third");
+
+      }
+
+      debugPrint("User profile updated successfully");
+
+      return "Success";
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Exception $e while attempting to update user profile $stackTrace");
+      }
+      return "Error";
+    }
   }
 
   Future<Map<String, dynamic>?> getSignupDetails(String userId) async {

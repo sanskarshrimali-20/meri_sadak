@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meri_sadak/utils/device_size.dart';
 
 import '../constants/app_colors.dart';
 import '../constants/app_dimensions.dart';
@@ -90,6 +91,8 @@ class CustomContainerText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: DeviceSize.getScreenWidth(context),
+      height: 50,
       padding: const EdgeInsets.all(AppDimensions.di_8),
       decoration: BoxDecoration(
         color: boxBgColor,
@@ -99,13 +102,16 @@ class CustomContainerText extends StatelessWidget {
           width: AppDimensions.di_1,
         ),
       ),
-      child: Text(
-        label,
-        //textAlign: TextAlign.start,
-        style: TextStyle(
-          color: textColor,
-          fontSize: fontSize,
-          fontWeight: AppFontWeight.fontWeight500,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          label,
+          //textAlign: TextAlign.start,
+          style: TextStyle(
+            color: textColor,
+            fontSize: fontSize,
+            fontWeight: AppFontWeight.fontWeight500,
+          ),
         ),
       ),
     );

@@ -193,7 +193,13 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
                                   ),
                                   // Highlight color for the clickable text
                                   recognizer:
-                                      TapGestureRecognizer()..onTap = () {},
+                                      TapGestureRecognizer()..onTap = () {
+                                        showErrorDialog(
+                                          context,
+                                          "OTP resent successfully",
+                                          backgroundColor: Colors.green,
+                                        );
+                                      },
                                 ),
                               ],
                             ),

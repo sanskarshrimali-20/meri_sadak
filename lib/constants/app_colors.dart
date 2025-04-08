@@ -47,6 +47,8 @@ class AppColors {
   static const Color boxDarkModeColor  = Color(0xFF0B0B0B);
   static const Color textBoxDarkModeColor  = Color(0xFF2B2B2B);
 
+  static const Color colorF6F6F6 = Color(0xFFF6F6F6);
+
 
 // #FE6B0A #E9E330
 
