@@ -9,7 +9,9 @@ class CustomLoginSignupContainer extends StatelessWidget {
   final Color backgroundColor;
 
   // Constructor that accepts height and child widget
-  const CustomLoginSignupContainer({super.key, required this.height, required this.child, required this.marginHeight, this.backgroundColor = AppColors.textColor});
+  const CustomLoginSignupContainer({
+    super.key, required this.height, required this.child, required this.marginHeight, this.backgroundColor = AppColors.textColor
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -19,11 +19,6 @@ class AboutPMGSY extends StatefulWidget {
 }
 
 class _AboutPMGSYState extends State<AboutPMGSY> {
-  List<String> imageList = [
-    ImageAssetsPath.pmgsyBanner,
-    ImageAssetsPath.pmgsyBanner,
-    ImageAssetsPath.pmgsyBanner,
-  ];
 
   @override
   void initState() {
@@ -49,9 +44,9 @@ class _AboutPMGSYState extends State<AboutPMGSY> {
               // Carousel Slider
               CustomCarouselSlider(
                 imageList: [
-                  ImageAssetsPath.pmgsyBanner,
                   ImageAssetsPath.pmgsyBannerOne,
-                  ImageAssetsPath.pmgsyBannerTwo,
+                  ImageAssetsPath.pmgsyBannerThree,
+                  ImageAssetsPath.pmgsyBannerOne,
                   ImageAssetsPath.pmgsyBannerThree,
                 ],
               ),

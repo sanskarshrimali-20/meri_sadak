@@ -22,12 +22,6 @@ class _SubmittedFeedbackScreeState extends State<SubmittedFeedbackScree> {
               MaterialPageRoute(builder: (context) => HomeScreen()),
             );
           },
-          child: Image.asset(
-            ImageAssetsPath.submittedFeedbackScreen,
-            fit:
-                BoxFit
-                    .cover, // This will ensure the image covers the whole screen
-          ),
         ),
       ),
     );

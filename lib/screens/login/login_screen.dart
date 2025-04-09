@@ -69,14 +69,18 @@ class _LoginScreen extends State<LoginScreen> {
               // Image covering the top 30% of the screen
               Stack(
                 children: [
-                  SizedBox(
+                  Container(
                     width: double.infinity,
-                    child: Image.asset(
-                      height: DeviceSize.getScreenHeight(context)* 0.6,
-                      ImageAssetsPath.loginBg, // Path to the background image
-                      fit:
-                          BoxFit
-                              .cover, // Make sure the image covers the container
+                    height: DeviceSize.getScreenHeight(context),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.blueGradientColor1,
+                          AppColors.blueGradientColor2,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                     ),
                   ),
                   Container(
