@@ -44,7 +44,7 @@ class _AppVersionState extends State<AppVersion> {
                   ? AppColors.black
                   : AppColors.whiteColor,
               content: Text(
-                AppStrings.appVersionDesc,
+                "Meri Sadak ${AppVersionService().version ?? '1.0.0'}${AppStrings.appVersionDesc}",
                 textAlign: TextAlign.justify,
                 style: TextStyle(
                   color:  themeProvider.themeMode == ThemeMode.light

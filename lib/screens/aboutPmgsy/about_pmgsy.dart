@@ -43,81 +43,84 @@ class _AboutPMGSYState extends State<AboutPMGSY> {
       body: CustomBodyWithGradient(
         title: AppStrings.aboutTitle,
         childHeight: DeviceSize.getScreenHeight(context) * 0.85,
-        child: ListView(
-          children: [
-            // Carousel Slider
-            CustomCarouselSlider(
-              imageList: [
-                ImageAssetsPath.pmgsyBanner,
-                ImageAssetsPath.pmgsyBannerOne,
-                ImageAssetsPath.pmgsyBannerTwo,
-                ImageAssetsPath.pmgsyBannerThree,
-              ],
-            ),
-
-            // Use CustomExpansionTile for "About PMGSY"
-            CustomExpansionTile(
-              title: AppStrings.aboutPMGSYHeading,
-              subheading: AppStrings.aboutPMGSYSubHeading,
-              content:
-              Container(), // Content can be empty or add custom widgets here
-              initiallyExpanded: true,
-              backgroundColor: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.whiteColor
-                  : AppColors.boxDarkModeColor,
-              textColor: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.black
-                  : AppColors.whiteColor,
-            ),
-
-            // Use CustomExpansionTile for "How to identify PMGSY Roads"
-            CustomExpansionTile(
-              title: AppStrings.aboutPMGSYRoadIdentifyHeading,
-              subheading: AppStrings.aboutPMGSYRoadIdentifySubHeading,
-              content: Image.asset(ImageAssetsPath.pmgsyAndPmgsySignBoards),
-              imagePath: ImageAssetsPath.pmgsyAndPmgsySignBoards,
-              backgroundColor: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.whiteColor
-                  : AppColors.boxDarkModeColor,
-              textColor: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.black
-                  : AppColors.whiteColor,
-            ),
-
-            // Use CustomExpansionTile for "Find Nearby PMGSY Roads"
-            CustomExpansionTile(
-              title: AppStrings.aboutPMGSYRoadNearbyHeading,
-              subheading: provider.address.toString(),
-              backgroundColor: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.whiteColor
-                  : AppColors.boxDarkModeColor,
-              textColor: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.black
-                  : AppColors.whiteColor,
-              content: provider.isLoading
-                  ? Align(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator())
-                  : CustomLocationWidget(
-                labelText: 'Current Location:',
-                isRequired: true,
-                latitude: provider.latitude,
-                longitude: provider.longitude,
-                initialAddress: provider.address.toString(),
-                isLoading: provider.isLoading,
-                mapHeight: DeviceSize.getScreenHeight(context) * 0.5,
-                mapWidth: DeviceSize.getScreenWidth(context) * 0.8,
-                onRefresh: () async {
-                  await provider.fetchCurrentLocation();
-                },
-                onMapTap: (point) async {
-                  await provider.setLocation(
-                      point.latitude, point.longitude);
-                }, onMapReady: () {  },
-
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Carousel Slider
+              CustomCarouselSlider(
+                imageList: [
+                  ImageAssetsPath.pmgsyBanner,
+                  ImageAssetsPath.pmgsyBannerOne,
+                  ImageAssetsPath.pmgsyBannerTwo,
+                  ImageAssetsPath.pmgsyBannerThree,
+                ],
               ),
-            ),
-          ],
+
+              // Use CustomExpansionTile for "About PMGSY"
+              SizedBox(height: 10,),
+              CustomExpansionTile(
+                title: AppStrings.aboutPMGSYHeading,
+                subheading: AppStrings.aboutPMGSYSubHeading,
+                content:
+                Container(), // Content can be empty or add custom widgets here
+                initiallyExpanded: true,
+                backgroundColor: themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.whiteColor
+                    : AppColors.boxDarkModeColor,
+                textColor: themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.black
+                    : AppColors.whiteColor,
+              ),
+
+              // Use CustomExpansionTile for "How to identify PMGSY Roads"
+              CustomExpansionTile(
+                title: AppStrings.aboutPMGSYRoadIdentifyHeading,
+                subheading: AppStrings.aboutPMGSYRoadIdentifySubHeading,
+                content: Image.asset(ImageAssetsPath.pmgsyAndPmgsySignBoards),
+                imagePath: ImageAssetsPath.pmgsyAndPmgsySignBoards,
+                backgroundColor: themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.whiteColor
+                    : AppColors.boxDarkModeColor,
+                textColor: themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.black
+                    : AppColors.whiteColor,
+              ),
+
+              // Use CustomExpansionTile for "Find Nearby PMGSY Roads"
+              CustomExpansionTile(
+                title: AppStrings.aboutPMGSYRoadNearbyHeading,
+                subheading: provider.address.toString(),
+                backgroundColor: themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.whiteColor
+                    : AppColors.boxDarkModeColor,
+                textColor: themeProvider.themeMode == ThemeMode.light
+                    ? AppColors.black
+                    : AppColors.whiteColor,
+                content: provider.isLoading
+                    ? Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator())
+                    : CustomLocationWidget(
+                  labelText: 'Current Location:',
+                  isRequired: true,
+                  latitude: provider.latitude,
+                  longitude: provider.longitude,
+                  initialAddress: provider.address.toString(),
+                  isLoading: provider.isLoading,
+                  mapHeight: DeviceSize.getScreenHeight(context) * 0.5,
+                  mapWidth: DeviceSize.getScreenWidth(context) * 0.8,
+                  onRefresh: () async {
+                    await provider.fetchCurrentLocation();
+                  },
+                  onMapTap: (point) async {
+                    await provider.setLocation(
+                        point.latitude, point.longitude);
+                  }, onMapReady: () {  },
+
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

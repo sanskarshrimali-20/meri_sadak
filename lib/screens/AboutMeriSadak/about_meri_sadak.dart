@@ -21,53 +21,55 @@ class AboutMeriSadak extends StatefulWidget {
 class _AboutMeriSadakState extends State<AboutMeriSadak> {
   @override
   Widget build(BuildContext context) {
-
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: themeProvider.themeMode == ThemeMode.light
-          ? AppColors.bgColorGainsBoro
-          : AppColors.bgDarkModeColor,
-      body: CustomBodyWithGradient(
+        backgroundColor: themeProvider.themeMode == ThemeMode.light
+        ? AppColors.bgColorGainsBoro
+            : AppColors.bgDarkModeColor,
+        body: CustomBodyWithGradient(
         title: AppStrings.aboutMeriSadakHeading,
         childHeight: DeviceSize.getScreenHeight(context) * 0.85,
-        child: ListView(
-          children: [
-            // Carousel Slider
-            CustomCarouselSlider(
-              imageList: [
-                ImageAssetsPath.aboutMeriSadakFrame1,
-                ImageAssetsPath.aboutMeriSadakFrame2,
-              ],
-            ),
+    child: SingleChildScrollView(
+    child: Column(
+    children: [
+    // Carousel Slider
+    CustomCarouselSlider(
+    imageList: [
+    ImageAssetsPath.aboutMeriSadakFrame1,
+    ImageAssetsPath.aboutMeriSadakFrame2,
+    ],
+    ),
 
-            // Use CustomExpansionTile for "About PMGSY"
-            CustomExpansionTile(
-              backgroundColor: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.whiteColor
-                  : AppColors.boxDarkModeColor,
-              textColor: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.black
-                  : AppColors.whiteColor,
-              title: AppStrings.aboutMeriSadakHeading,
-              subheading: '', //AppStrings.aboutMeriSadakSubHeading,
-              content: Text(
-                AppStrings.aboutMeriSadakSubHeading,
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  color: themeProvider.themeMode == ThemeMode.light
-                      ? AppColors.black
-                      : AppColors.whiteColor,
-                  fontSize: AppDimensions.di_14,
-                  fontWeight: AppFontWeight.fontWeight400,
-                ),
-              ),
-              // Container(), // Content can be empty or add custom widgets here
-              initiallyExpanded: true,
-            ),
-          ],
-        ),
-      ),
+    // Use CustomExpansionTile for "About PMGSY"
+      SizedBox(height: 10,),
+
+      CustomExpansionTile(
+    backgroundColor: themeProvider.themeMode == ThemeMode.light
+    ? AppColors.whiteColor
+        : AppColors.boxDarkModeColor,
+    textColor: themeProvider.themeMode == ThemeMode.light
+    ? AppColors.black
+        : AppColors.whiteColor,
+    title: AppStrings.aboutMeriSadakHeading,
+    subheading: '', //AppStrings.aboutMeriSadakSubHeading,
+    content: Text(
+    AppStrings.aboutMeriSadakSubHeading,
+    textAlign: TextAlign.justify,
+    style: TextStyle(
+    color: themeProvider.themeMode == ThemeMode.light
+    ? AppColors.black
+        : AppColors.whiteColor,
+    fontSize: AppDimensions.di_14,
+    fontWeight: AppFontWeight.fontWeight400,
+    ),
+    ),
+    // Container(), // Content can be empty or add custom widgets here
+    initiallyExpanded: true,
+    ),
+    ],
+    )),
+    ),
     );
   }
 }
