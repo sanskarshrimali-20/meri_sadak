@@ -48,16 +48,20 @@ class _TermsConditionPrivacyPolicyScreen
           onTap: () => Navigator.pop(context),
           child: Stack(
             children: [
-              Image.asset(
-                ImageAssetsPath.tAndCScreen,
-                fit:
-                    BoxFit
-                        .cover, // This will ensure the image covers the whole screen
-                width: DeviceSize.getScreenWidth(context),
+              Container(
+                width: double.infinity,
                 height: DeviceSize.getScreenHeight(context),
-
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.blueGradientColor1,
+                      AppColors.blueGradientColor2,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
               ),
-
               Container(
                 height: DeviceSize.getScreenHeight(context),
                 decoration: BoxDecoration(

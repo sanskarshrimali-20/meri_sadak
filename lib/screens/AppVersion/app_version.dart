@@ -34,73 +34,75 @@ class _AppVersionState extends State<AppVersion> {
       body: CustomBodyWithGradient(
         title: AppStrings.appVersion,
         childHeight: DeviceSize.getScreenHeight(context),
-        child: ListView(
-          children: [
-            // Use CustomExpansionTile for "About PMGSY"
-            CustomExpansionTile(
-              title: "Version ${AppVersionService().version ?? '1.0.0'}", //AppStrings.aboutPMGSYHeading,
-              subheading: '', //AppStrings.aboutMeriSadakSubHeading,
-              textColor: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.black
-                  : AppColors.whiteColor,
-              content: Text(
-                "Meri Sadak ${AppVersionService().version ?? '1.0.0'}${AppStrings.appVersionDesc}",
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  color:  themeProvider.themeMode == ThemeMode.light
+        child: SingleChildScrollView(
+          child: Column(
+              children: [
+                // Use CustomExpansionTile for "About PMGSY"
+                CustomExpansionTile(
+                  title: "Version ${AppVersionService().version ?? '1.0.0'}", //AppStrings.aboutPMGSYHeading,
+                  subheading: '', //AppStrings.aboutMeriSadakSubHeading,
+                  textColor: themeProvider.themeMode == ThemeMode.light
                       ? AppColors.black
                       : AppColors.whiteColor,
-                  fontSize: AppDimensions.di_14,
-                  fontWeight: AppFontWeight.fontWeight400,
-                ),
-              ),
-              // Container(), // Content can be empty or add custom widgets here
-              initiallyExpanded: true,
-              backgroundColor: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.whiteColor
-                  : AppColors.boxDarkModeColor,
-            ),
-
-            Card(
-              elevation: 2.0,
-              child: Container(
-                height: 50,
-                padding: EdgeInsets.only(left: AppDimensions.di_10, right: AppDimensions.di_10, top: AppDimensions.di_5, bottom: AppDimensions.di_5),
-                decoration: BoxDecoration(
-                  color: themeProvider.themeMode == ThemeMode.light
+                  content: Text(
+                    "Meri Sadak ${AppVersionService().version ?? '1.0.0'}${AppStrings.appVersionDesc}",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      color:  themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.black
+                          : AppColors.whiteColor,
+                      fontSize: AppDimensions.di_14,
+                      fontWeight: AppFontWeight.fontWeight400,
+                    ),
+                  ),
+                  // Container(), // Content can be empty or add custom widgets here
+                  initiallyExpanded: true,
+                  backgroundColor: themeProvider.themeMode == ThemeMode.light
                       ? AppColors.whiteColor
                       : AppColors.boxDarkModeColor,
-                  borderRadius: BorderRadius.circular(15.0),
                 ),
-                child: GestureDetector(
-                  onTap: () {
-                    showErrorDialog(
-                      context,
-                      "You are in latest version",
-                      backgroundColor: Colors.green,
-                    );
-                  },
-                  child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomTextWidget(
-                     text:   AppStrings.appVersionUpdate,
-                        fontSize: AppDimensions.di_16,
-                        color:  themeProvider.themeMode == ThemeMode.light
-                            ? AppColors.black
-                            : AppColors.whiteColor,
-                        fontWeight: AppFontWeight.fontWeight600,
-                        // textAlign: AppFontSizeWeight.textAlignJustify,
-                        // letterSpacing: AppFontSizeWeight.letterSpacing_0_5,
+
+                Card(
+                  elevation: 2.0,
+                  child: Container(
+                    height: 50,
+                    padding: EdgeInsets.only(left: AppDimensions.di_10, right: AppDimensions.di_10, top: AppDimensions.di_5, bottom: AppDimensions.di_5),
+                    decoration: BoxDecoration(
+                      color: themeProvider.themeMode == ThemeMode.light
+                          ? AppColors.whiteColor
+                          : AppColors.boxDarkModeColor,
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        showErrorDialog(
+                          context,
+                          "You are in latest version",
+                          backgroundColor: Colors.green,
+                        );
+                      },
+                      child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomTextWidget(
+                         text:   AppStrings.appVersionUpdate,
+                            fontSize: AppDimensions.di_16,
+                            color:  themeProvider.themeMode == ThemeMode.light
+                                ? AppColors.black
+                                : AppColors.whiteColor,
+                            fontWeight: AppFontWeight.fontWeight600,
+                            // textAlign: AppFontSizeWeight.textAlignJustify,
+                            // letterSpacing: AppFontSizeWeight.letterSpacing_0_5,
+                          ),
+                          SvgPicture.asset(ImageAssetsPath.replace, color:  themeProvider.themeMode == ThemeMode.light
+                              ? AppColors.black
+                              : AppColors.whiteColor,)
+                        ],
                       ),
-                      SvgPicture.asset(ImageAssetsPath.replace, color:  themeProvider.themeMode == ThemeMode.light
-                          ? AppColors.black
-                          : AppColors.whiteColor,)
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
         ),
       ),
     );

@@ -10,11 +10,13 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_dimensions.dart';
 import '../../constants/app_image_path.dart';
 import '../../constants/app_strings.dart';
+import '../../providerData/permission_provider.dart';
 import '../../providerData/theme_provider.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
 import '../../services/EncryptionService/encryption_service.dart';
 import '../../widgets/custom_body_with_gradient.dart';
 import '../../widgets/drawer_widget.dart';
+import '../location/location_widget.dart';
 import '../registerFeedback/register_feedback_new_screen.dart';
 
 class FeedbackDetailsScreen extends StatefulWidget {
@@ -407,15 +409,27 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
                                     ),
                                     child: Column(
                                       children: [
-                                        SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: Image.file(
-                                            imageFile,
+                                        GestureDetector(
+                                          onTap: () {
+                                            _showProfileImageDialog(
+                                              context,
+                                              imageItem,
+                                              DeviceSize.getScreenHeight(context),
+                                              DeviceSize.getScreenWidth(context),
+                                              Provider.of<PermissionProvider>(context, listen: false),
+                                              imageItem.source,
+                                            );
+                                          },
+                                          child: SizedBox(
                                             width: 100,
                                             height: 100,
-                                            fit: BoxFit.cover,
-                                          ), // Use Image.file to load the image from the file system// Placeholder image
+                                            child: Image.file(
+                                              imageFile,
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.cover,
+                                            ), // Use Image.file to load the image from the file system// Placeholder image
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -488,6 +502,146 @@ class _FeedbackDetailsScreen extends State<FeedbackDetailsScreen> {
       return '';
     }
     return decryptString(text); // Assuming decryptString is your decryption method
+  }
+
+  void _showProfileImageDialog(
+      BuildContext context,
+      ImageItem imageItem,
+      screenH,
+      screenW,
+      PermissionProvider permissionProvider,
+      String imgSource,
+      ) {
+    if (imageItem.imagePath.isNotEmpty) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true, // Allows for custom height
+        builder:
+            (context) => Container(
+          height: imgSource == 'Camera' ? screenH * 0.75 : screenH * 0.5,
+          width: screenW,
+          padding: EdgeInsets.all(AppDimensions.di_8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppDimensions.di_30),
+            ), // Rounded top corners
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: AppDimensions.di_10,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.di_15,
+                      ),
+                      // Rounded corners for image
+                      child: Image.file(
+                        File(imageItem.imagePath),
+                        width: screenW * 0.8, // Image width responsive
+                        height: screenH * 0.3, // Image height responsive
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    /*CustomTextWidget(text: imageItem.time, fontSize: AppDimensions.di_16, color: AppColors.black),
+                        CustomTextWidget(text: imageItem.lat, fontSize: AppDimensions.di_16, color: AppColors.black),*/
+                    if (imgSource == 'Camera')
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppDimensions.di_8,
+                        ),
+                        child:
+                        permissionProvider.isLoading
+                            ? Align(
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(),
+                        )
+                            : CustomLocationWidget(
+                          labelText:
+                          AppStrings.confirmTheRoadLocation,
+                          isRequired: false,
+                          latitude: permissionProvider.latitude,
+                          longitude: permissionProvider.longitude,
+                          initialAddress:
+                          permissionProvider.address.toString(),
+                          isLoading: permissionProvider.isLoading,
+                          mapHeight: screenH * 0.2,
+                          mapWidth: screenW,
+                          onRefresh: () async {
+                            await permissionProvider
+                                .fetchCurrentLocation();
+                          },
+                          onMapTap: (point) async {
+                            await permissionProvider.setLocation(
+                              point.latitude,
+                              point.longitude,
+                            );
+                          },
+                          onMapReady: () {},
+                        ),
+                      ),
+                    /* if (imgSource == 'Camera')
+                          Container(
+                            color: Colors.yellow[100],
+                            padding: EdgeInsets.all(AppDimensions.di_8),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              spacing: AppDimensions.di_4,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.location_pin, color: Colors.red),
+                                Flexible(
+                                  child: Text(permissionProvider.address),
+                                ),
+                              ],
+                            ),
+                          ),*/
+                    SizedBox(height: AppDimensions.di_16),
+                  ],
+                ),
+              ),
+              Positioned(
+                right: 1,
+                top: 2,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: CircleAvatar(
+                    radius: AppDimensions.di_20,
+                    backgroundColor: Colors.redAccent,
+                    child: const Icon(Icons.close, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      showCustomSnackBar(
+        context,
+        AppStrings.noProfileImageAvailable,
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  void showCustomSnackBar(
+      BuildContext context,
+      String message, {
+        Color backgroundColor = Colors.red,
+      }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: backgroundColor,
+      ),
+    );
   }
 
 }
