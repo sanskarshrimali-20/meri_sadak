@@ -50,6 +50,9 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.whiteColor
+          : AppColors.authDarkModeColor,
       body: SingleChildScrollView(
         // Wrap everything in SingleChildScrollView
         child: Form(
