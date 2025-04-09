@@ -56,6 +56,9 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
             : "OTP sent to your phone $maskedPhone and email $maskedEmail";
 
     return Scaffold(
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.whiteColor
+          : AppColors.authDarkModeColor,
       body: SingleChildScrollView(
         // Wrap everything in SingleChildScrollView
         child: Column(

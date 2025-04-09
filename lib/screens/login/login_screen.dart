@@ -57,6 +57,9 @@ class _LoginScreen extends State<LoginScreen> {
       return false; // Return false to prevent the default back navigation
     },
     child: Scaffold(
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.whiteColor
+          : AppColors.authDarkModeColor,
       body: SingleChildScrollView(
         // Wrap everything in SingleChildScrollView
         child: Form(

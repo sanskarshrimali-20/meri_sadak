@@ -57,7 +57,7 @@ class _OTPInputFieldState extends State<OTPInputField> {
         return SizedBox(
           width: AppDimensions.di_45,
           height: AppDimensions.di_45,
-          child: TextField(
+          child: TextFormField(
             style: TextStyle(color: themeProvider.themeMode == ThemeMode.light
                 ? AppColors.textColor
                 : AppColors.authDarkModeTextColor,),
@@ -71,12 +71,14 @@ class _OTPInputFieldState extends State<OTPInputField> {
               counterText: "",
               border: OutlineInputBorder(),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue),
+                borderSide: BorderSide(color: AppColors.blueGradientColor1),
               ),
+              contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0), // Adjust padding
             ),
+            cursorColor: AppColors.blueGradientColor1,
             textAlign: TextAlign.center,
             onChanged: (value) => _onChanged(value, index),
-            onSubmitted: (value) {
+            onFieldSubmitted: (value) {
               // Move to next field on submission
               if (index < widget.length - 1) {
                 FocusScope.of(context).requestFocus(focusNodes[index + 1]);

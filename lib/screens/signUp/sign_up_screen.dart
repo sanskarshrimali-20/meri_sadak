@@ -69,6 +69,9 @@ class _SignUpScreen extends State<SignUpScreen> {
     final networkProvider = Provider.of<NetworkProviderController>(context);
 
     return Scaffold(
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? AppColors.whiteColor
+          : AppColors.authDarkModeColor,
       body: SingleChildScrollView(
         // Wrap everything in SingleChildScrollView
         child: Form(

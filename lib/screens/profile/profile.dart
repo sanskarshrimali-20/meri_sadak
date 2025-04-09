@@ -58,64 +58,69 @@ class _ProfileScreen extends State<ProfileScreen> {
       backgroundColor: themeProvider.themeMode == ThemeMode.light
           ? AppColors.bgColorGainsBoro
           : AppColors.bgDarkModeColor,
-      body: CustomBodyWithGradient(
-        title: AppStrings.myProfile,
-        childHeight: isEditing
-        ? DeviceSize.getScreenHeight(context) * 0.85 // If in edit mode
-           : (address.isEmpty && gender.isEmpty)
-            ? DeviceSize.getScreenHeight(context) * 0.6  // If both are empty in view mode
-            : (address.isNotEmpty && gender.isEmpty) || (address.isEmpty && gender.isNotEmpty)
-            ? DeviceSize.getScreenHeight(context) * 0.8  // If one is empty in view mode
-            : DeviceSize.getScreenHeight(context) * 0.8  ,// If both are non-empty in view mode
-
-        child: Padding(
-          padding: EdgeInsets.all(AppDimensions.di_5),
-          child: Container(
-            decoration: BoxDecoration(
-              color: themeProvider.themeMode == ThemeMode.light
-                  ? AppColors.whiteColor
-                  : AppColors.boxDarkModeColor,
-              borderRadius: BorderRadius.all(
-                Radius.circular(AppDimensions.di_20), // Rounded corners
-              ),
-            ),
-            padding: EdgeInsets.all(AppDimensions.di_18),
-            child: SizedBox(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: AppDimensions.di_10),
-                  Center(
-                    child: Container(
-                      width: 90, // Width of the circle (2 * radius)
-                      height: 90, // Height of the circle (2 * radius)
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle, // Make the container a circle
-                        border: Border.all(
-                          color: AppColors.toastBgColorGreen, // Color of the border
-                          width: 2, // Stroke width
-                        ),
-                      ),
-                      child: CircleAvatar(
-                        radius: 50, // Radius of the avatar (half of the container size)
-                        backgroundColor: AppColors.whiteColor, // Background color for the circle
-                        child: Text(
-                          char, // First character of the name
-                          style: TextStyle(
-                            color: AppColors.blueGradientColor1, // Color of the text
-                            fontSize: AppDimensions.di_50, // Text size
-                            fontWeight: AppFontWeight.fontWeight600, // Text weight
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: DeviceSize.getScreenHeight(context),
+          child: CustomBodyWithGradient(
+            title: AppStrings.myProfile,
+            childHeight: isEditing
+            ? DeviceSize.getScreenHeight(context) * 0.85 // If in edit mode
+               : (address.isEmpty && gender.isEmpty)
+                ? DeviceSize.getScreenHeight(context) * 0.6  // If both are empty in view mode
+                : (address.isNotEmpty && gender.isEmpty) || (address.isEmpty && gender.isNotEmpty)
+                ? DeviceSize.getScreenHeight(context) * 0.8  // If one is empty in view mode
+                : DeviceSize.getScreenHeight(context) * 0.8  ,// If both are non-empty in view mode
+        
+            child: Padding(
+              padding: EdgeInsets.all(AppDimensions.di_5),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: themeProvider.themeMode == ThemeMode.light
+                      ? AppColors.whiteColor
+                      : AppColors.boxDarkModeColor,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(AppDimensions.di_20), // Rounded corners
+                  ),
+                ),
+                padding: EdgeInsets.all(AppDimensions.di_18),
+                child: SizedBox(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: AppDimensions.di_10),
+                      Center(
+                        child: Container(
+                          width: 90, // Width of the circle (2 * radius)
+                          height: 90, // Height of the circle (2 * radius)
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle, // Make the container a circle
+                            border: Border.all(
+                              color: AppColors.toastBgColorGreen, // Color of the border
+                              width: 2, // Stroke width
+                            ),
+                          ),
+                          child: CircleAvatar(
+                            radius: 50, // Radius of the avatar (half of the container size)
+                            backgroundColor: AppColors.whiteColor, // Background color for the circle
+                            child: Text(
+                              char, // First character of the name
+                              style: TextStyle(
+                                color: AppColors.blueGradientColor1, // Color of the text
+                                fontSize: AppDimensions.di_50, // Text size
+                                fontWeight: AppFontWeight.fontWeight600, // Text weight
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      SizedBox(height: AppDimensions.di_30),
+                      // Show the appropriate widget based on the isEditing state
+                      isEditing
+                          ? buildProfileDetails(name, phone, email, gender, address, themeProvider)
+                          : profileDetails(name, phone, email, gender, address, themeProvider),
+                    ],
                   ),
-                  SizedBox(height: AppDimensions.di_30),
-                  // Show the appropriate widget based on the isEditing state
-                  isEditing
-                      ? buildProfileDetails(name, phone, email, gender, address, themeProvider)
-                      : profileDetails(name, phone, email, gender, address, themeProvider),
-                ],
+                ),
               ),
             ),
           ),
