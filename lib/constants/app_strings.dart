@@ -124,7 +124,7 @@ class AppStrings {
   static const appVersion = 'App Version';
   static const appVersionText = '1.0.0';
   static const appVersionDesc =
-      "Meri Sadak 6.2.4 enhances performance, fixes bugs, and improves user experience. Citizens can register and track road complaints for PMGSY & non-PMGSY roads with image support. Check the Google Play Store for updates.";
+      " enhances performance, fixes bugs, and improves user experience. Citizens can register and track road complaints for PMGSY & non-PMGSY roads with image support. Check the Google Play Store for updates.";
   static const appVersionUpdate = 'Check version update';
 
   //-----Privacy and Security Screen----
