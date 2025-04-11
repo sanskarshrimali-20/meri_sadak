@@ -1503,8 +1503,7 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                             fit: BoxFit.contain,
                           ),
                         ),
-                        /*CustomTextWidget(text: imageItem.time, fontSize: AppDimensions.di_16, color: AppColors.black),
-                        CustomTextWidget(text: imageItem.lat, fontSize: AppDimensions.di_16, color: AppColors.black),*/
+
                         if (imgSource == 'Camera')
                           Padding(
                             padding: const EdgeInsets.symmetric(
@@ -1517,7 +1516,8 @@ class _RegisterFeedbackNewScreen extends State<RegisterFeedbackNewScreen> {
                                       child: CircularProgressIndicator(),
                                     )
                                     : CustomLocationWidget(
-                                      labelText:
+                                  labelTextVisibility: false,
+                                  labelText:
                                           AppStrings.confirmTheRoadLocation,
                                       isRequired: false,
                                       latitude: permissionProvider.latitude,
