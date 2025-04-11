@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
+import 'package:meri_sadak/services/EncryptionService/encryption_service.dart';
 import '../../constants/api_end_point.dart';
 import '../../services/ApiService/api_service.dart';
 import '../../services/DatabaseHelper/database_helper.dart';
@@ -29,26 +31,30 @@ class SignUpViewModel extends ChangeNotifier {
     try {
       _setLoading(true);
 
-     /* if (kDebugMode) {
-        log("Request body: $signUp");
+     /* final requestBody = json.encode(signUp);
+
+      if (kDebugMode) {
+        log("Request body: $requestBody");
       }
 
+      final encryptedRequestBody = EncryptionService().encrypt(requestBody);
+
       // Make API call
-      final response = await _apiService.post(ApiEndPoints.userRegister, signUp);
+      final response = await _apiService.postV1(ApiEndPoints.userRegister, encryptedRequestBody);
 
       if (kDebugMode) {
         log("Response status code: ${response.statusCode}");
         log("Response body: ${response.body}");
       }
 
-      // Handle the database insertion based on platform
+      bool isSuccessStatus = [200, 201, 203, 204, 205].contains(response.statusCode);
 
+      // Decrypt the response body
+      final decryptedResponseBody = EncryptionService().decrypt(response.body);
 
-      // Set local storage logging state
-      // await _localStorage.setLoggingState('true');/
-      log("Local storage set to 'true'");
+      var deserializedResponse = jsonDecode(decryptedResponseBody);
 
-      return "Success";*/
+*/
 
         final signUpOperation = await dbHelper.setSignupDetails(signUp);
 

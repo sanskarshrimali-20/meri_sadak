@@ -66,9 +66,10 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
               // Image covering the top 30% of the screen
               Stack(
                 children: [
+
                   Container(
                     width: double.infinity,
-                    height: DeviceSize.getScreenHeight(context),
+                    height: DeviceSize.getScreenHeight(context) * 0.5,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -362,27 +363,20 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
         widget.userSignUpDetails["password"] = _passwordController.text;
         widget.userSignUpDetails['gender'] = '';
         widget.userSignUpDetails['address'] = '';
+        widget.userSignUpDetails["deviceId"] = DeviceIUtils.getId();
       }
 
-
-
-
-      // widget.userSignUpDetails["deviceId"] = DeviceIUtils.getId();
 
       final signUpViewModel = Provider.of<SignUpViewModel>(context, listen: false);
 
       String? signUpOperationResultMessage = await signUpViewModel.performSignUp(widget.userSignUpDetails);
 
-/*    if (kDebugMode) {
-      log("Inside login screen");
-      log(loginOperationResultMessage!);
-    }
-
-    if (!loginOperationResultMessage!.toLowerCase().contains("success")) {
+/*
+    if (!signUpOperationResultMessage!.toLowerCase().contains("success")) {
       ToastUtil().showToast(
         // ignore: use_build_context_synchronously
         context,
-        loginOperationResultMessage,
+        signUpOperationResultMessage,
         Icons.error_outline,
         AppColors.toastBgColorRed,
       );
@@ -448,5 +442,6 @@ class _PasswordCreateScreen extends State<PasswordCreateScreen> {
         backgroundColor: Colors.red,
       );
     }
+
   }
 }

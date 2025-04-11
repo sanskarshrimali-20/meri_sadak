@@ -68,7 +68,7 @@ class _OtpValidationScreen extends State<OtpValidationScreen> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: DeviceSize.getScreenHeight(context),
+                  height: DeviceSize.getScreenHeight(context) * 0.5,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [

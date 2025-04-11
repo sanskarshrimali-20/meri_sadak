@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -44,11 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        // When the back button is pressed, exit the app
-        SystemNavigator.pop(); // Exits the app
-        return false; // Return false to prevent the default back navigation
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
+        exit(0);
       },
       child: Scaffold(
         key: _scaffoldKey,
