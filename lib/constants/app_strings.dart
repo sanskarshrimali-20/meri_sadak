@@ -173,7 +173,7 @@ class AppStrings {
   static const themeMode = "Dark and Light Mode";
   static const fontSize = "Font Size";
   static const language = "Language ";
-  static const verify = "Verify";
+  static const verify = "Click to Verify";
   static const pleaseSelectImage = "Please Select At Least One Image";
   static const pleaseSelectState = "Please Select State";
   static const pleaseSelectDistrict = "Please Select District";

@@ -15,6 +15,34 @@ class ApiService {
     'Access-Control-Allow-Origin': '*',
   };
 
+  Future<http.Response> postV1(String endpoint, String body) async {
+    String url = '${BaseUrlConfig.baseUrlDemoDevelopment}$endpoint';
+    if (kDebugMode) {
+      print("sending post request to $endpoint");
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'text/plain',"Accept":'*/*'},
+        body: body,
+      );
+      if (kDebugMode) {
+        print("Post v1 response ${response.statusCode}");
+      }
+
+      return response;
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        log("Error while sending post request to url $endpoint");
+        print(stackTrace);
+      }
+
+      throw Exception('Error making request: $e');
+    }
+  }
+
+
   Future<http.Response> post(String endpoint, Map<String, dynamic> body) async {
     String url = '${BaseUrlConfig.rootUrl}/$endpoint';
 

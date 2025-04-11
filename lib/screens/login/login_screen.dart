@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,8 +39,8 @@ class _LoginScreen extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController(/*text: "Sanssdjj12@dkl"*/);
   final LocalSecureStorage _localStorage = LocalSecureStorage();
 
-  final FocusNode _usernameFocusNode =
-      FocusNode(); // FocusNode for the text field
+  final FocusNode _usernameFocusNode = FocusNode();
+  // FocusNode for the text field
   String? emailPhoneError;
   String? passwordError;
   bool isPhoneNumberField =
@@ -50,12 +52,14 @@ class _LoginScreen extends State<LoginScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final networkProvider = Provider.of<NetworkProviderController>(context);
 
-    return WillPopScope(
-        onWillPop: () async {
-      // When the back button is pressed, exit the app
-      SystemNavigator.pop();  // Exits the app
-      return false; // Return false to prevent the default back navigation
-    },
+    return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            return;
+          }
+          exit(0);
+          },
     child: Scaffold(
       backgroundColor: themeProvider.themeMode == ThemeMode.light
           ? AppColors.whiteColor
@@ -71,7 +75,7 @@ class _LoginScreen extends State<LoginScreen> {
                 children: [
                   Container(
                     width: double.infinity,
-                    height: DeviceSize.getScreenHeight(context),
+                    height: DeviceSize.getScreenHeight(context) * 0.5,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -83,6 +87,7 @@ class _LoginScreen extends State<LoginScreen> {
                       ),
                     ),
                   ),
+
                   Container(
                     margin: EdgeInsets.only(
                       top: DeviceSize.getScreenHeight(context) * 0.1,
@@ -121,6 +126,7 @@ class _LoginScreen extends State<LoginScreen> {
                           padding: const EdgeInsets.all(AppDimensions.di_16),
                           child: Column(
                             children: [
+
                               CustomLoginSignupTextFieldWidget(
                                 textColor: themeProvider.themeMode == ThemeMode.light
                                     ? AppColors.textColor

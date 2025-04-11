@@ -83,7 +83,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                 children: [
                   Container(
                     width: double.infinity,
-                    height: DeviceSize.getScreenHeight(context),
+                    height: DeviceSize.getScreenHeight(context) * 0.5,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -124,7 +124,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                     backgroundColor: themeProvider.themeMode == ThemeMode.light
                         ? AppColors.whiteColor
                         : AppColors.authDarkModeColor,
-                    marginHeight: 0.40,
+                    marginHeight: 0.30,
                     height: DeviceSize.getScreenHeight(context),
                     // Set remaining height for the container (full height - image height)
                     child: Column(

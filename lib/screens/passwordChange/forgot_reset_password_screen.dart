@@ -64,7 +64,7 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                 children: [
                   Container(
                     width: double.infinity,
-                    height: DeviceSize.getScreenHeight(context),
+                    height: DeviceSize.getScreenHeight(context) * 0.5,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -207,9 +207,9 @@ class _ForgotResetPasswordScreen extends State<ForgotResetPasswordScreen> {
                                       ),
                                       borderRadius: BorderRadius.circular(AppDimensions.di_100),
                                       buttonHeight: AppDimensions.di_35,
-                                      buttonWidth: AppDimensions.di_80,
-                                      backgroundColor: AppColors.toastBgColorGreen,
-                                      backgroundColorOne: AppColors.toastBgColorGreen,
+                                      buttonWidth: AppDimensions.di_100,
+                                      backgroundColor: AppColors.blueGradientColor1,
+                                      backgroundColorOne: AppColors.blueGradientColor2,
                                     ),
                                 ),
 

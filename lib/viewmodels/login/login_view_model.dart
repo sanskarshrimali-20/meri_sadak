@@ -21,33 +21,38 @@ class LoginViewModel extends ChangeNotifier {
   String? get userName => _userName;
 
 
-  Future<String?> performLogin(String username, String passwordValue) async {
+  Future<String?> performLogin(String username, String passwordV) async {
     try {
       _setLoading(true);
 
-     /* final requestBody = {
+      /*
+       final requestBody = json.encode({
         "username": username,
-        "password": password,
-      };
+        "password": passwordV,
+      });
+
 
       if (kDebugMode) {
         log("Request body: $requestBody");
       }
 
+      final encryptedRequestBody = EncryptionService().encrypt(requestBody);
+
       // Make API call
-      final response = await _apiService.post(ApiEndPoints.login, requestBody);
+      final response = await _apiService.postV1(ApiEndPoints.userRegister, encryptedRequestBody);
 
       if (kDebugMode) {
         log("Response status code: ${response.statusCode}");
         log("Response body: ${response.body}");
       }
 
-      // Handle the database insertion based on platform
+      bool isSuccessStatus = [200, 201, 203, 204, 205].contains(response.statusCode);
 
+      // Decrypt the response body
+      final decryptedResponseBody = EncryptionService().decrypt(response.body);
 
-      // Set local storage logging state
-      // await _localStorage.setLoggingState('true');/
-      log("Local storage set to 'true'");
+      var deserializedResponse = jsonDecode(decryptedResponseBody);
+
 */
 
       final profile = await dbHelper.getSignupDetails(username);
@@ -56,7 +61,7 @@ class LoginViewModel extends ChangeNotifier {
       String email = profile?['email'] ?? 'No Name';  // Replace 'email' with actual field name
 
 
-      if((phoneNo == username || email == username) && password == passwordValue){
+      if((phoneNo == username || email == username) && password == passwordV){
         _localStorage.setLoggingState("true");
         return "Success";
       }
