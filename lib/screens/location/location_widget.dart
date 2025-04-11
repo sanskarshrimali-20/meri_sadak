@@ -27,6 +27,7 @@ class CustomLocationWidget extends StatefulWidget {
   final Function() onRefresh;
   final VoidCallback? onMapReady;
   final Function(LatLng) onMapTap;
+  final labelTextVisibility;
 
   // ignore: use_super_parameters
   const CustomLocationWidget({
@@ -45,6 +46,7 @@ class CustomLocationWidget extends StatefulWidget {
     required this.onRefresh,
     this.onMapReady,
     required this.onMapTap,
+    this.labelTextVisibility = true,
   }) : super(key: key);
 
   @override
@@ -79,7 +81,7 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
         ? Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            widget.labelTextVisibility ? Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
@@ -120,7 +122,7 @@ class _CustomLocationWidgetState extends State<CustomLocationWidget> {
                       onPressed: widget.onRefresh,
                     ),
               ],
-            ),
+            ): SizedBox.shrink(),
             Container(
               padding: const EdgeInsets.all(AppDimensions.di_4),
               decoration: BoxDecoration(

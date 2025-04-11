@@ -1,5 +1,6 @@
 class AppStrings {
   static const appName = 'Meri Sadak';
+  static const encryptKeyProd  = "SrsiKXx1lNIr5ywcEQG5b9ggbU8EpOCw";
   static const citizenFeedbackSystem = 'Citizen Feedback System';
   static const welcomeMessage = 'Welcome to the app!';
   static const namePattern = r"^[a-zA-Z\s'-]+$";
